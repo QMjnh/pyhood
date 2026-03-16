@@ -12,15 +12,12 @@ Built for automated trading — with auth that doesn't break, proper error handl
 
 ## Why hood?
 
-[robin_stocks](https://github.com/jmfernandes/robin_stocks) by [Josh Fernandes](https://github.com/jmfernandes) was the original Python library for Robinhood and served the community well. But it's effectively unmaintained — 300+ open issues, no releases since 2023, and auth that silently fails.
-
-**hood** started from that foundation and rebuilds it for reliability:
-
-- 🔐 **Auth that works** — Login timeouts, automatic token refresh, clear failure modes (no more infinite hangs)
-- 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly
-- 🛡️ **Built-in rate limiting** — Never get throttled
-- 📊 **Options-first** — Deep options chain support with Greeks, unusual activity detection
-- 🧪 **Tested** — Actual tests, CI/CD, not "it works on my machine"
+- 🔐 **Auth that just works** — Login with timeouts, automatic token refresh, and session persistence. Authenticate once, stay connected for days. No more scripts that hang forever waiting for device approval.
+- 🔄 **Automatic token refresh** — hood uses OAuth refresh tokens to renew your session silently — no credentials, no device approval, no human in the loop. Built for unattended automation.
+- 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly. No more guessing what's in a dict.
+- 🛡️ **Built-in rate limiting** — Automatic request throttling and retry logic so you don't get locked out.
+- 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration.
+- 🧪 **Tested and maintained** — 58+ tests, CI across Python 3.10-3.13, linted with ruff. If it breaks, we know immediately.
 
 ## Quick Start
 
@@ -48,7 +45,7 @@ balance = client.get_buying_power()
 
 ## Authentication
 
-Robinhood requires **device approval** on first login and whenever your session token expires (~24 hours).
+Robinhood requires **device approval** on first login. After that, hood keeps your session alive automatically.
 
 ### First Login
 
@@ -68,16 +65,21 @@ session = hood.login(
 )
 ```
 
-### Subsequent Logins
+### Staying Authenticated
 
-Once authenticated, hood reuses the cached token automatically:
+Once you've approved the device, hood handles the rest:
 
 ```python
-# Uses cached token — no device approval needed
+# Reuses cached session — no approval needed
 session = hood.login(username="you@email.com", password="your_password")
+
+# Or refresh explicitly — no credentials needed at all
+session = hood.refresh()
 ```
 
-The cached session typically lasts several days (observed ~5-6 days). When it expires, hood will attempt to refresh automatically. Device approval is only needed if the refresh token has also expired.
+Sessions last several days (observed 5-8 days). When the access token expires, hood automatically refreshes it using the stored refresh token — **no device approval, no credentials, no human interaction**. This is what makes hood safe for automated scripts and cron jobs.
+
+Device approval is only needed again if the refresh token itself expires (typically much longer than the access token).
 
 ### Error Handling
 
@@ -85,10 +87,11 @@ hood raises specific exceptions so you know exactly what went wrong:
 
 ```python
 from hood.exceptions import (
-    LoginTimeoutError,        # Timed out waiting for device approval
+    LoginTimeoutError,            # Timed out waiting for device approval
     DeviceApprovalRequiredError,  # Approval prompt sent but not completed
-    MFARequiredError,         # SMS/email code needed — pass mfa_code parameter
-    AuthError,                # Generic auth failure
+    MFARequiredError,             # SMS/email code needed — pass mfa_code parameter
+    TokenExpiredError,            # Refresh token expired — full re-login needed
+    AuthError,                    # Generic auth failure
 )
 
 try:
@@ -119,11 +122,17 @@ pip install hood
 
 ## Status
 
-🚧 **Early development** — Core auth + market data modules are functional. Options trading and full order management in progress.
+🚧 **Early development** — Core auth, token refresh, and market data modules are functional. Options trading and full order management in progress.
 
 ## Acknowledgments
 
-This project builds on the work done by [Josh Fernandes](https://github.com/jmfernandes) and the [robin_stocks](https://github.com/jmfernandes/robin_stocks) community. Their library made Robinhood accessible to Python developers for years and laid the groundwork that hood continues from.
+hood stands on the shoulders of the community that figured out Robinhood's unofficial API:
+
+- [**robin_stocks**](https://github.com/jmfernandes/robin_stocks) by [Josh Fernandes](https://github.com/jmfernandes) — The most widely used Python library for Robinhood. Its auth flow, endpoint mapping, and API patterns laid the groundwork that hood builds from.
+- [**pyrh**](https://github.com/robinhood-unofficial/pyrh) by [Robinhood Unofficial](https://github.com/robinhood-unofficial) — An early Python client that pioneered OAuth token refresh and session management patterns for the Robinhood API.
+- [**Robinhood**](https://github.com/sanko/Robinhood) by [Sanko](https://github.com/sanko) — The original unofficial API documentation that mapped out Robinhood's endpoints and made all of these libraries possible.
+
+These projects made Robinhood accessible to developers. hood continues that mission with a focus on reliability and automation.
 
 ## License
 
