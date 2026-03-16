@@ -5,6 +5,17 @@ All notable changes to pyhood will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Crypto Trading API** — Full support for Robinhood's official Crypto Trading API (v2)
+  - ED25519 API key authentication (no device approval needed)
+  - `CryptoClient` with all endpoints: accounts, market data, holdings, orders
+  - Typed models: `CryptoAccount`, `CryptoQuote`, `CryptoHolding`, `CryptoOrder`, `TradingPair`, `EstimatedPrice`
+  - Token bucket rate limiting (100 req/min, 300 burst)
+  - Cursor-based pagination
+  - 28 new tests (86 total)
+
 ## [0.1.0] - 2026-03-16
 
 ### Added

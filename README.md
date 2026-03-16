@@ -21,12 +21,14 @@ Built for automated trading — with auth that doesn't break, proper error handl
 
 ## Why pyhood?
 
+- 🪙 **Dual API support** — The only Python library that wraps both Robinhood's unofficial stocks/options API and their official Crypto Trading API. One library, full coverage.
+
 - 🔐 **Auth that just works** — Login with timeouts, automatic token refresh, and session persistence. Authenticate once, stay connected for days. No more scripts that hang forever waiting for device approval.
 - 🔄 **Automatic token refresh** — pyhood uses OAuth refresh tokens to renew your session silently — no credentials, no device approval, no human in the loop. Built for unattended automation.
 - 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly. No more guessing what's in a dict.
 - 🛡️ **Built-in rate limiting** — Automatic request throttling and retry logic so you don't get locked out.
 - 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration.
-- 🧪 **Tested and maintained** — 58+ tests, CI across Python 3.10-3.13, linted with ruff. If it breaks, we know immediately.
+- 🧪 **Tested and maintained** — 86+ tests, CI across Python 3.10-3.13, linted with ruff. If it breaks, we know immediately.
 
 ## Quick Start
 
@@ -129,9 +131,39 @@ Robinhood aggressively rate-limits authentication. If login fails:
 pip install pyhood
 ```
 
+## Crypto Trading (Official API)
+
+pyhood also supports Robinhood's **official** Crypto Trading API — no device approval needed, just API keys.
+
+```python
+from pyhood.crypto import CryptoClient
+
+# API key auth — generate keys at robinhood.com/account/crypto
+crypto = CryptoClient(api_key="rh-api-...", private_key_base64="...")
+
+# Market data
+quotes = crypto.get_best_bid_ask("BTC-USD", "ETH-USD")
+price = crypto.get_estimated_price("BTC-USD", "buy", 0.001)
+
+# Account & holdings
+account = crypto.get_account()
+holdings = crypto.get_holdings(account.account_number, "BTC")
+
+# Place an order
+order = crypto.place_order(
+    account_number=account.account_number,
+    side="buy",
+    order_type="market",
+    symbol="BTC-USD",
+    order_config={"asset_quantity": "0.001"},
+)
+```
+
+Generate your API keys at [robinhood.com/account/crypto](https://robinhood.com/account/crypto). See the [Crypto documentation](https://jamestford.github.io/pyhood/crypto/) for full details.
+
 ## Status
 
-🚧 **Early development** — Core auth, token refresh, and market data modules are functional. Options trading and full order management in progress.
+🚧 **Early development** — Stocks/options (unofficial API) and crypto trading (official API) are functional. Full order management for stocks/options in progress.
 
 ## Acknowledgments
 
