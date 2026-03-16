@@ -8,8 +8,8 @@ import pytest
 import responses
 
 from hood import urls
-from hood.auth import TokenStore, generate_device_token, login, logout, get_session
-from hood.exceptions import AuthError, LoginTimeoutError
+from hood.auth import TokenStore, generate_device_token, login, logout, refresh, get_session
+from hood.exceptions import AuthError, LoginTimeoutError, TokenExpiredError
 
 
 class TestGenerateDeviceToken:
@@ -342,6 +342,109 @@ class TestLogout:
             get_session()
 
         assert not token_path.exists()
+
+
+class TestRefresh:
+    @responses.activate
+    def test_refresh_success(self):
+        """Refresh with valid refresh token gets new tokens."""
+        token_path = Path("/tmp/hood-test-refresh.json")
+        with open(token_path, "w") as f:
+            json.dump({
+                "access_token": "old-access",
+                "token_type": "Bearer",
+                "refresh_token": "old-refresh",
+                "device_token": "my-device",
+                "saved_at": time.time(),
+            }, f)
+
+        responses.add(
+            responses.POST,
+            urls.LOGIN,
+            json={
+                "access_token": "new-access-token",
+                "token_type": "Bearer",
+                "refresh_token": "new-refresh-token",
+                "expires_in": 86400,
+                "scope": "internal",
+            },
+            status=200,
+        )
+
+        session = refresh(token_path=token_path)
+        assert session.is_authenticated
+        assert "Bearer new-access-token" in session.headers.get("Authorization", "")
+
+        # Verify tokens were rotated on disk
+        with open(token_path) as f:
+            stored = json.load(f)
+        assert stored["access_token"] == "new-access-token"
+        assert stored["refresh_token"] == "new-refresh-token"
+        assert stored["device_token"] == "my-device"  # device token preserved
+
+        token_path.unlink()
+
+    @responses.activate
+    def test_refresh_token_expired(self):
+        """Refresh with expired refresh token raises TokenExpiredError."""
+        token_path = Path("/tmp/hood-test-refresh-expired.json")
+        with open(token_path, "w") as f:
+            json.dump({
+                "access_token": "old-access",
+                "token_type": "Bearer",
+                "refresh_token": "expired-refresh",
+                "device_token": "my-device",
+                "saved_at": time.time(),
+            }, f)
+
+        # Robinhood returns verification_workflow when refresh token is expired
+        responses.add(
+            responses.POST,
+            urls.LOGIN,
+            json={
+                "verification_workflow": {"id": "some-workflow-id"},
+            },
+            status=200,
+        )
+
+        with pytest.raises(TokenExpiredError, match="Refresh token expired"):
+            refresh(token_path=token_path)
+
+        token_path.unlink()
+
+    def test_refresh_no_stored_session(self):
+        """Refresh without stored tokens raises AuthError."""
+        token_path = Path("/tmp/hood-test-refresh-none.json")
+        if token_path.exists():
+            token_path.unlink()
+
+        with pytest.raises(AuthError, match="No refresh token"):
+            refresh(token_path=token_path)
+
+    @responses.activate
+    def test_refresh_empty_response(self):
+        """Empty response from refresh endpoint raises AuthError."""
+        token_path = Path("/tmp/hood-test-refresh-empty.json")
+        with open(token_path, "w") as f:
+            json.dump({
+                "access_token": "old",
+                "token_type": "Bearer",
+                "refresh_token": "old-refresh",
+                "device_token": "dev",
+                "saved_at": time.time(),
+            }, f)
+
+        responses.add(
+            responses.POST,
+            urls.LOGIN,
+            json={},
+            status=200,
+        )
+
+        with pytest.raises(AuthError, match="Empty response"):
+            refresh(token_path=token_path)
+
+        token_path.unlink()
 
 
 class TestGetSession:

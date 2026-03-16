@@ -292,8 +292,15 @@ def login(
                 _active_store = store
                 return session
             except Exception:
-                logger.info("Cached session expired, logging in fresh")
+                logger.info("Cached session expired, trying refresh...")
                 session.clear_auth()
+
+                # Try refresh before falling back to full re-login
+                if cached.get("refresh_token"):
+                    try:
+                        return refresh(token_path=token_path, timeout=timeout)
+                    except Exception as refresh_err:
+                        logger.info(f"Refresh failed ({refresh_err}), falling back to full login")
 
     # Need credentials for fresh login
     if not username or not password:
@@ -370,6 +377,88 @@ def login(
             signal.alarm(0)
             if original_handler is not None:
                 signal.signal(signal.SIGALRM, original_handler)
+
+
+def refresh(
+    token_path: Path | str | None = None,
+    timeout: float = 30,
+) -> Session:
+    """Refresh the session using the stored refresh token.
+
+    This avoids a full re-login and does NOT require device approval.
+    The refresh token is exchanged for a new access_token + refresh_token pair.
+
+    Args:
+        token_path: Custom path for token storage. Default: ~/.hood/session.json.
+        timeout: Max seconds to wait. Default: 30s.
+
+    Returns:
+        Authenticated Session object with new tokens.
+
+    Raises:
+        AuthError: No stored session or refresh token.
+        TokenExpired: Refresh token has expired (full re-login needed).
+    """
+    global _active_session, _active_store
+
+    store = TokenStore(Path(token_path) if token_path else None)
+    cached = store.load()
+
+    if not cached or not cached.get("refresh_token"):
+        raise AuthError("No refresh token available. Call hood.login() first.")
+
+    session = Session(timeout=timeout)
+    device_token = cached.get("device_token", "")
+
+    refresh_payload = {
+        "grant_type": "refresh_token",
+        "refresh_token": cached["refresh_token"],
+        "scope": "internal",
+        "client_id": CLIENT_ID,
+        "device_token": device_token,
+        "expires_in": 86400,
+    }
+
+    logger.info("Refreshing session with refresh token...")
+
+    try:
+        data = session.post(
+            urls.LOGIN,
+            data=refresh_payload,
+            accept_codes=(400, 401, 403),
+        )
+    except Exception as e:
+        raise AuthError(f"Refresh request failed: {e}") from e
+
+    if not data:
+        raise AuthError("Empty response from refresh endpoint")
+
+    # If Robinhood demands verification, the refresh token may be expired
+    if "verification_workflow" in data:
+        from hood.exceptions import TokenExpiredError
+        raise TokenExpiredError(
+            "Refresh token expired — Robinhood is requesting device approval. "
+            "Call hood.login() with username and password."
+        )
+
+    if "access_token" not in data:
+        raise AuthError(f"Refresh failed — unexpected response: {list(data.keys())}")
+
+    # Set auth on session
+    session.set_auth(data["token_type"], data["access_token"])
+
+    # Persist new tokens (refresh tokens rotate — save the new one)
+    store.save(
+        access_token=data["access_token"],
+        token_type=data["token_type"],
+        refresh_token=data["refresh_token"],
+        device_token=device_token,
+    )
+
+    _active_session = session
+    _active_store = store
+    logger.info("Session refreshed successfully")
+    return session
 
 
 def logout() -> None:
