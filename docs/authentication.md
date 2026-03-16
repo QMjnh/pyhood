@@ -78,7 +78,7 @@ The `timeout` parameter controls how long pyhood waits for approval:
 session = pyhood.login(username="...", password="...", timeout=120)
 ```
 
-If you don't approve in time, hood raises `LoginTimeoutError`.
+If you don't approve in time, pyhood raises `LoginTimeoutError`.
 
 ## Session Storage
 

@@ -10,7 +10,7 @@ For development:
 
 ```bash
 git clone https://github.com/jamestford/pyhood.git
-cd hood
+cd pyhood
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
@@ -87,4 +87,4 @@ session = pyhood.login(
 ```
 
 !!! warning "Never commit `.env` files"
-    hood's `.gitignore` blocks `.env` and `*.json` by default. Double-check before pushing to a remote repo.
+    pyhood's `.gitignore` blocks `.env` and `*.json` by default. Double-check before pushing to a remote repo.

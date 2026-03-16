@@ -8,7 +8,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in hood, please report it responsibly.
+If you discover a security vulnerability in pyhood, please report it responsibly.
 
 **Do NOT open a public GitHub issue for security vulnerabilities.**
 
@@ -27,15 +27,15 @@ We will acknowledge receipt within 48 hours and aim to provide a fix within 7 da
 
 - pyhood stores OAuth tokens in `~/.pyhood/session.json` with standard file permissions
 - **Never commit** token files, `.env` files, or credentials to version control
-- hood's `.gitignore` blocks `*.json` and `.env` by default
+- pyhood's `.gitignore` blocks `*.json` and `.env` by default
 - Tokens are stored as plaintext JSON — ensure your machine has appropriate access controls
 
 ### Token Lifecycle
 
 - Access tokens expire after several days (observed 5-8 days)
 - Refresh tokens have a longer lifetime but will eventually expire
-- hood rotates both tokens on each refresh — old tokens are invalidated
-- Call `hood.logout()` to revoke tokens and delete stored credentials
+- pyhood rotates both tokens on each refresh — old tokens are invalidated
+- Call `pyhood.logout()` to revoke tokens and delete stored credentials
 
 ### Network Security
 
@@ -45,7 +45,7 @@ We will acknowledge receipt within 48 hours and aim to provide a fix within 7 da
 
 ### Dependencies
 
-- hood uses a minimal dependency set: `requests`, `python-dotenv`, `cryptography`
+- pyhood uses a minimal dependency set: `requests`, `python-dotenv`, `cryptography`
 - Dependencies are monitored via GitHub Dependabot (see `.github/dependabot.yml`)
 - We recommend running `pip audit` periodically to check for known vulnerabilities
 

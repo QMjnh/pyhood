@@ -1,12 +1,12 @@
 # Contributing
 
-hood is in early development and we welcome contributions.
+pyhood is in early development and we welcome contributions.
 
 ## Development Setup
 
 ```bash
 git clone https://github.com/jamestford/pyhood.git
-cd hood
+cd pyhood
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
@@ -20,7 +20,7 @@ pip install responses  # for tests
 pytest -v
 
 # With coverage
-pytest --cov=hood --cov-report=term-missing -v
+pytest --cov=pyhood --cov-report=term-missing -v
 
 # Single test file
 pytest tests/test_auth.py -v
@@ -30,17 +30,17 @@ pytest tests/test_auth.py -v
 
 ```bash
 # Check
-ruff check hood/
+ruff check pyhood/
 
 # Auto-fix
-ruff check --fix hood/
+ruff check --fix pyhood/
 ```
 
 ## Project Structure
 
 ```
-hood/
-├── hood/
+pyhood/
+├── pyhood/
 │   ├── __init__.py      # Public API (login, logout, refresh)
 │   ├── auth.py          # Authentication + token management
 │   ├── client.py        # HoodClient — high-level API

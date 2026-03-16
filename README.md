@@ -11,10 +11,10 @@ A modern, reliable Python client for the Robinhood API.
 
 Built for automated trading — with auth that doesn't break, proper error handling, and sane defaults.
 
-## Why hood?
+## Why pyhood?
 
 - 🔐 **Auth that just works** — Login with timeouts, automatic token refresh, and session persistence. Authenticate once, stay connected for days. No more scripts that hang forever waiting for device approval.
-- 🔄 **Automatic token refresh** — hood uses OAuth refresh tokens to renew your session silently — no credentials, no device approval, no human in the loop. Built for unattended automation.
+- 🔄 **Automatic token refresh** — pyhood uses OAuth refresh tokens to renew your session silently — no credentials, no device approval, no human in the loop. Built for unattended automation.
 - 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly. No more guessing what's in a dict.
 - 🛡️ **Built-in rate limiting** — Automatic request throttling and retry logic so you don't get locked out.
 - 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration.
@@ -53,7 +53,7 @@ Robinhood requires **device approval** on first login. After that, hood keeps yo
 1. Have the **Robinhood mobile app** open on your phone
 2. Call `pyhood.login()` — it will trigger a device approval request
 3. Tap **"Yes, it's me"** in the Robinhood app when prompted
-4. hood saves the session token to `~/.hood/session.json` for reuse
+4. pyhood saves the session token to `~/.pyhood/session.json` for reuse
 
 ```python
 import pyhood
@@ -68,7 +68,7 @@ session = pyhood.login(
 
 ### Staying Authenticated
 
-Once you've approved the device, hood handles the rest:
+Once you've approved the device, pyhood handles the rest:
 
 ```python
 # Reuses cached session — no approval needed
@@ -78,7 +78,7 @@ session = pyhood.login(username="you@email.com", password="your_password")
 session = pyhood.refresh()
 ```
 
-Sessions last several days (observed 5-8 days). When the access token expires, hood automatically refreshes it using the stored refresh token — **no device approval, no credentials, no human interaction**. This is what makes hood safe for automated scripts and cron jobs.
+Sessions last several days (observed 5-8 days). When the access token expires, pyhood automatically refreshes it using the stored refresh token — **no device approval, no credentials, no human interaction**. This is what makes pyhood safe for automated scripts and cron jobs.
 
 Device approval is only needed again if the refresh token itself expires (typically much longer than the access token).
 
