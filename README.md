@@ -77,7 +77,7 @@ Once authenticated, hood reuses the cached token automatically:
 session = hood.login(username="you@email.com", password="your_password")
 ```
 
-The cached session lasts ~24 hours. When it expires, you'll need to approve again.
+The cached session typically lasts several days (observed ~5-6 days). When it expires, hood will attempt to refresh automatically. Device approval is only needed if the refresh token has also expired.
 
 ### Error Handling
 
