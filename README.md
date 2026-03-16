@@ -1,8 +1,8 @@
 # hood
 
+[![CI](https://github.com/jamestford/hood/actions/workflows/ci.yml/badge.svg)](https://github.com/jamestford/hood/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-54%20passed-brightgreen.svg)](#)
 [![Coverage](https://img.shields.io/badge/coverage-79%25-yellow.svg)](#)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
