@@ -14,7 +14,15 @@ from pyhood import urls
 from pyhood.auth import get_session
 from pyhood.exceptions import OrderError, SymbolNotFound
 from pyhood.http import Session
-from pyhood.models import Earnings, OptionContract, OptionsChain, Order, Position, Quote
+from pyhood.models import (
+    Candle,
+    Earnings,
+    OptionContract,
+    OptionsChain,
+    Order,
+    Position,
+    Quote,
+)
 
 logger = logging.getLogger("pyhood")
 
@@ -175,6 +183,130 @@ class PyhoodClient:
             calls=sorted(calls, key=lambda c: c.strike),
             puts=sorted(puts, key=lambda p: p.strike),
         )
+
+    # ── Historicals ─────────────────────────────────────────────────────
+
+    def get_stock_historicals(
+        self,
+        symbol: str,
+        interval: str = "day",
+        span: str = "year",
+        bounds: str = "regular",
+    ) -> list[Candle]:
+        """Get historical OHLCV data for a stock.
+
+        Args:
+            symbol: Ticker symbol.
+            interval: Candle interval. One of '5minute', '10minute',
+                'hour', 'day', 'week'. Default: 'day'.
+            span: Time range. One of 'day', 'week', 'month', '3month',
+                'year', '5year'. Default: 'year'.
+            bounds: Trading hours. One of 'regular', 'extended',
+                'trading'. Default: 'regular'. Extended/trading
+                only valid with span='day'.
+
+        Returns:
+            List of Candle dataclasses with OHLCV data.
+        """
+        valid_intervals = ("5minute", "10minute", "hour", "day", "week")
+        valid_spans = ("day", "week", "month", "3month", "year", "5year")
+        valid_bounds = ("regular", "extended", "trading")
+
+        if interval not in valid_intervals:
+            raise ValueError(
+                f"interval must be one of {valid_intervals}, got '{interval}'"
+            )
+        if span not in valid_spans:
+            raise ValueError(
+                f"span must be one of {valid_spans}, got '{span}'"
+            )
+        if bounds not in valid_bounds:
+            raise ValueError(
+                f"bounds must be one of {valid_bounds}, got '{bounds}'"
+            )
+        if bounds in ("extended", "trading") and span != "day":
+            raise ValueError(
+                "extended/trading bounds can only be used with span='day'"
+            )
+
+        data = self._session.get(
+            urls.HISTORICALS,
+            params={
+                "symbols": symbol.upper(),
+                "interval": interval,
+                "span": span,
+                "bounds": bounds,
+            },
+        )
+
+        results = data.get("results", [])
+        candles: list[Candle] = []
+
+        for item in results:
+            sym = item.get("symbol", symbol.upper())
+            for h in item.get("historicals", []):
+                candles.append(Candle(
+                    symbol=sym,
+                    begins_at=h.get("begins_at", ""),
+                    open_price=float(h.get("open_price", 0)),
+                    close_price=float(h.get("close_price", 0)),
+                    high_price=float(h.get("high_price", 0)),
+                    low_price=float(h.get("low_price", 0)),
+                    volume=int(h.get("volume", 0)),
+                    session=h.get("session", "reg"),
+                    interpolated=h.get("interpolated", False),
+                ))
+
+        return candles
+
+    def get_stock_historicals_batch(
+        self,
+        symbols: list[str],
+        interval: str = "day",
+        span: str = "year",
+        bounds: str = "regular",
+    ) -> dict[str, list[Candle]]:
+        """Get historical data for multiple stocks in one request.
+
+        Args:
+            symbols: List of ticker symbols.
+            interval: Candle interval. Default: 'day'.
+            span: Time range. Default: 'year'.
+            bounds: Trading hours. Default: 'regular'.
+
+        Returns:
+            Dict mapping symbol to list of Candle dataclasses.
+        """
+        data = self._session.get(
+            urls.HISTORICALS,
+            params={
+                "symbols": ",".join(s.upper() for s in symbols),
+                "interval": interval,
+                "span": span,
+                "bounds": bounds,
+            },
+        )
+
+        result: dict[str, list[Candle]] = {}
+        for item in data.get("results", []):
+            sym = item.get("symbol", "")
+            candles = []
+            for h in item.get("historicals", []):
+                candles.append(Candle(
+                    symbol=sym,
+                    begins_at=h.get("begins_at", ""),
+                    open_price=float(h.get("open_price", 0)),
+                    close_price=float(h.get("close_price", 0)),
+                    high_price=float(h.get("high_price", 0)),
+                    low_price=float(h.get("low_price", 0)),
+                    volume=int(h.get("volume", 0)),
+                    session=h.get("session", "reg"),
+                    interpolated=h.get("interpolated", False),
+                ))
+            if sym:
+                result[sym] = candles
+
+        return result
 
     # ── Earnings ────────────────────────────────────────────────────────
 

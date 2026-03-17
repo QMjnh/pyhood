@@ -94,6 +94,20 @@ class Order:
 
 
 @dataclass(frozen=True)
+class Candle:
+    """Single OHLCV price candle."""
+    symbol: str
+    begins_at: str
+    open_price: float
+    close_price: float
+    high_price: float
+    low_price: float
+    volume: int
+    session: str = "reg"
+    interpolated: bool = False
+
+
+@dataclass(frozen=True)
 class Earnings:
     """Upcoming earnings info."""
     symbol: str

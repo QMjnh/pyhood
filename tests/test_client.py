@@ -673,3 +673,124 @@ class TestOrderManagement:
 
         with pytest.raises(OrderError, match="Insufficient buying power"):
             client.buy_stock("AAPL", 100000, price=150.00)
+
+
+class TestStockHistoricals:
+    @responses.activate
+    def test_get_stock_historicals(self, client):
+        responses.add(
+            responses.GET,
+            urls.HISTORICALS,
+            json={
+                "results": [
+                    {
+                        "symbol": "AAPL",
+                        "historicals": [
+                            {
+                                "begins_at": "2026-03-10T00:00:00Z",
+                                "open_price": "250.00",
+                                "close_price": "252.00",
+                                "high_price": "253.50",
+                                "low_price": "249.00",
+                                "volume": 50000000,
+                                "session": "reg",
+                                "interpolated": False,
+                            },
+                            {
+                                "begins_at": "2026-03-11T00:00:00Z",
+                                "open_price": "252.00",
+                                "close_price": "255.00",
+                                "high_price": "256.00",
+                                "low_price": "251.00",
+                                "volume": 48000000,
+                                "session": "reg",
+                                "interpolated": False,
+                            },
+                        ],
+                    }
+                ]
+            },
+            status=200,
+        )
+
+        candles = client.get_stock_historicals("AAPL", interval="day", span="week")
+        assert len(candles) == 2
+        assert candles[0].symbol == "AAPL"
+        assert candles[0].open_price == 250.00
+        assert candles[0].close_price == 252.00
+        assert candles[0].high_price == 253.50
+        assert candles[0].low_price == 249.00
+        assert candles[0].volume == 50000000
+        assert candles[1].close_price == 255.00
+
+    @responses.activate
+    def test_get_stock_historicals_batch(self, client):
+        responses.add(
+            responses.GET,
+            urls.HISTORICALS,
+            json={
+                "results": [
+                    {
+                        "symbol": "AAPL",
+                        "historicals": [
+                            {
+                                "begins_at": "2026-03-10T00:00:00Z",
+                                "open_price": "250.00",
+                                "close_price": "252.00",
+                                "high_price": "253.00",
+                                "low_price": "249.00",
+                                "volume": 50000000,
+                            },
+                        ],
+                    },
+                    {
+                        "symbol": "MSFT",
+                        "historicals": [
+                            {
+                                "begins_at": "2026-03-10T00:00:00Z",
+                                "open_price": "420.00",
+                                "close_price": "422.00",
+                                "high_price": "425.00",
+                                "low_price": "418.00",
+                                "volume": 30000000,
+                            },
+                        ],
+                    },
+                ]
+            },
+            status=200,
+        )
+
+        result = client.get_stock_historicals_batch(["AAPL", "MSFT"])
+        assert "AAPL" in result
+        assert "MSFT" in result
+        assert len(result["AAPL"]) == 1
+        assert result["AAPL"][0].close_price == 252.00
+        assert result["MSFT"][0].close_price == 422.00
+
+    def test_invalid_interval(self, client):
+        with pytest.raises(ValueError, match="interval must be"):
+            client.get_stock_historicals("AAPL", interval="invalid")
+
+    def test_invalid_span(self, client):
+        with pytest.raises(ValueError, match="span must be"):
+            client.get_stock_historicals("AAPL", span="invalid")
+
+    def test_invalid_bounds(self, client):
+        with pytest.raises(ValueError, match="bounds must be"):
+            client.get_stock_historicals("AAPL", bounds="invalid")
+
+    def test_extended_bounds_requires_day_span(self, client):
+        with pytest.raises(ValueError, match="extended/trading"):
+            client.get_stock_historicals("AAPL", bounds="extended", span="week")
+
+    @responses.activate
+    def test_empty_historicals(self, client):
+        responses.add(
+            responses.GET,
+            urls.HISTORICALS,
+            json={"results": [{"symbol": "AAPL", "historicals": []}]},
+            status=200,
+        )
+        candles = client.get_stock_historicals("AAPL")
+        assert candles == []
