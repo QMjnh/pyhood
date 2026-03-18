@@ -97,14 +97,26 @@ class PyhoodClient:
 
     def get_options_expirations(self, symbol: str) -> list[str]:
         """Get available options expiration dates for a symbol."""
-        # Get chain info for the symbol
-        chains = self._session.get(
-            urls.OPTIONS_CHAINS, params={"symbol": symbol.upper()}
+        # Get instrument ID first
+        inst_data = self._session.get(
+            urls.INSTRUMENTS, params={"symbol": symbol.upper()}
         )
-        results = chains.get("results", [chains] if "expiration_dates" in chains else [])
-        for chain in results:
-            if chain.get("symbol", "").upper() == symbol.upper():
-                return chain.get("expiration_dates", [])
+        inst_results = inst_data.get("results", [])
+        if not inst_results:
+            return []
+
+        inst_id = inst_results[0].get("id", "")
+        if not inst_id:
+            return []
+
+        # Get chains using instrument ID
+        chains = self._session.get(
+            urls.OPTIONS_CHAINS,
+            params={"equity_instrument_ids": inst_id},
+        )
+        results = chains.get("results", [])
+        if results:
+            return results[0].get("expiration_dates", [])
         return []
 
     def get_options_chain(
@@ -135,17 +147,35 @@ class PyhoodClient:
         puts: list[OptionContract] = []
 
         # Get market data in batches
-        inst_ids = [inst.get("id", "") for inst in instruments if inst.get("id")]
+        # Market data endpoint requires full instrument URLs, not IDs
+        inst_urls = [
+            inst.get("url", "") for inst in instruments if inst.get("url")
+        ]
+        inst_id_map = {
+            inst.get("url", ""): inst.get("id", "")
+            for inst in instruments
+        }
         market_data_map: dict[str, dict] = {}
 
-        batch_size = 50
-        for i in range(0, len(inst_ids), batch_size):
-            batch = inst_ids[i : i + batch_size]
-            md_url = f"{urls.OPTIONS_MARKET_DATA}"
-            md_data = self._session.get(md_url, params={"instruments": ",".join(batch)})
+        batch_size = 17  # Robinhood rejects large batches
+        for i in range(0, len(inst_urls), batch_size):
+            batch = inst_urls[i : i + batch_size]
+            md_data = self._session.get(
+                urls.OPTIONS_MARKET_DATA,
+                params={"instruments": ",".join(batch)},
+            )
             for item in md_data.get("results", []):
-                if item and item.get("instrument_id"):
-                    market_data_map[item["instrument_id"]] = item
+                if not item:
+                    continue
+                # Map by instrument_id or instrument URL
+                iid = item.get("instrument_id", "")
+                if iid:
+                    market_data_map[iid] = item
+                inst = item.get("instrument", "")
+                if inst:
+                    mapped_id = inst_id_map.get(inst, "")
+                    if mapped_id:
+                        market_data_map[mapped_id] = item
 
         for inst in instruments:
             inst_id = inst.get("id", "")
