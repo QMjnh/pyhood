@@ -143,12 +143,14 @@ class TestGetOptionsChain:
                 "results": [
                     {
                         "id": "opt-1",
+                        "url": "https://api.robinhood.com/options/instruments/opt-1/",
                         "type": "call",
                         "strike_price": "200.00",
                         "expiration_date": "2026-04-17",
                     },
                     {
                         "id": "opt-2",
+                        "url": "https://api.robinhood.com/options/instruments/opt-2/",
                         "type": "put",
                         "strike_price": "190.00",
                         "expiration_date": "2026-04-17",
