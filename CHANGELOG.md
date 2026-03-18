@@ -5,7 +5,7 @@ All notable changes to pyhood will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-03-18
 
 ### Added
 - **Crypto Trading API** — Full support for Robinhood's official Crypto Trading API (v2)
@@ -13,8 +13,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `CryptoClient` with all endpoints: accounts, market data, holdings, orders
   - Typed models: `CryptoAccount`, `CryptoQuote`, `CryptoHolding`, `CryptoOrder`, `TradingPair`, `EstimatedPrice`
   - Token bucket rate limiting (100 req/min, 300 burst)
-  - Cursor-based pagination
-  - 28 new tests (86 total)
+- **Stock/Options Order Management** — buy, sell, cancel stocks and options
+  - Market, limit, stop, stop-limit orders
+  - Options with position effects and legs format
+  - Order listing and cancellation
+- **Stock Historicals** — OHLCV candle data up to 5 years
+  - Single and batch symbol fetching
+  - Intervals: 5min, 10min, hour, day, week
+- **Backtesting Engine** — Test strategies against historical data
+  - 3 built-in strategies: EMA crossover, RSI mean reversion, Bollinger breakout
+  - Full scorecard: Sharpe, drawdown, win rate, profit factor, alpha
+  - Strategy comparison and ranking tools
+  - Pure Python — no pandas/numpy required
+
+### Fixed
+- **Options expirations** — Fixed `get_options_expirations()` to use `equity_instrument_ids` (symbol param returned unfiltered results)
+- **Options market data** — Fixed `get_options_chain()` to pass full instrument URLs (IDs were rejected with 400)
+- **Market data batch size** — Reduced to 17 per request (Robinhood rejects larger batches)
 
 ## [0.1.0] - 2026-03-16
 
