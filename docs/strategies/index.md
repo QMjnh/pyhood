@@ -25,6 +25,13 @@ All strategies benchmarked with default parameters, $10,000 initial capital, 10y
 | [RSI(2) Connors](rsi2-connors.md) | 66.9% / 0.62 ❌ | 101.9% / 0.59 ❌ | 110.0% / 0.51 ❌ | 12.7% / 0.21 ❌ | 93.6% / 0.30 ❌ |
 | [MA+ATR Mean Reversion](ma-atr-mean-reversion.md) | 51.9% / 0.67 ❌ | 84.8% / 0.72 ❌ | 41.6% / 0.37 ❌ | -13.9% / 0.08 ❌ | 535.2% / 0.70 ❌ |
 
+### Volume / Pattern
+
+| Strategy | SPY | QQQ | AAPL | TSLA | BTC |
+|---|---|---|---|---|---|
+| [Volume Confirmed Breakout](volume-confirmed-breakout.md) | TBD | TBD | TBD | TBD | TBD |
+| [Bull Flag Breakout](bull-flag-breakout.md) | TBD | TBD | TBD | TBD | TBD |
+
 ### Volatility
 
 | Strategy | SPY | QQQ | AAPL | TSLA | BTC |
@@ -45,6 +52,12 @@ All strategies benchmarked with default parameters, $10,000 initial capital, 10y
 - **MACD on TSLA (2952%) came closest** to beating TSLA buy & hold (2343%) — one of the rare ✅ where active trading actually added value.
 - **Mean reversion is a trap:** RSI, RSI(2) Connors, and MA+ATR all underperformed across every ticker. High win rates, low returns. Feels good, makes less money.
 - **The honest conclusion:** For most people, buying and holding beats active trading. These strategies are most useful for risk management (lower drawdowns) or as components of more complex systems — not as standalone approaches.
+
+## Tools
+
+| Tool | Description |
+|---|---|
+| [Parameter Sensitivity](parameter-sensitivity.md) | Sweep a parameter to detect overfitting and measure strategy robustness |
 
 Run `examples/strategy_catalog.py` to reproduce these results with live data.
 

@@ -612,6 +612,256 @@ def bollinger_breakout(period: int = 20, std_dev: float = 2.0) -> Callable:
     return strategy_fn
 
 
+def _calculate_net_distribution(
+    candles: list, period: int = 20, top_pct: float = 0.25
+) -> float:
+    """Calculate Net Distribution — volume direction indicator.
+
+    Looks at the highest-volume bars over a lookback period and measures
+    whether those high-volume bars were predominantly up days or down days.
+
+    Args:
+        candles: List of Candle objects (needs close_price, open_price, volume)
+        period: Lookback period (default 20)
+        top_pct: Fraction of bars to consider as "high volume" (default 0.25)
+
+    Returns:
+        Ratio of up-days among high-volume bars (0.0 to 1.0).
+        Values > 0.5 indicate bullish volume direction.
+        Returns 0.5 if insufficient data or no high-volume bars.
+    """
+    if len(candles) < period:
+        return 0.5
+
+    recent = candles[-period:]
+
+    # Sort by volume descending, take top_pct
+    sorted_by_vol = sorted(recent, key=lambda c: c.volume, reverse=True)
+    n_top = max(1, int(period * top_pct))
+    high_vol_bars = sorted_by_vol[:n_top]
+
+    up_days = sum(1 for c in high_vol_bars if c.close_price > c.open_price)
+    total = len(high_vol_bars)
+
+    if total == 0:
+        return 0.5
+
+    return up_days / total
+
+
+def volume_confirmed_breakout(
+    volume_period: int = 20,
+    top_pct: float = 0.25,
+    threshold: float = 0.6,
+    sma_period: int = 50,
+) -> Callable:
+    """Volume Confirmed Breakout Strategy.
+
+    Combines SMA trend direction with a volume direction filter
+    (Net Distribution). The key insight from analysing 370K chart patterns:
+    volume *direction* matters more than volume magnitude.
+
+    Buy when close crosses above the SMA AND high-volume bars are
+    predominantly up days. Sell when close crosses below SMA OR high-volume
+    bars turn bearish.
+
+    Args:
+        volume_period: Lookback for Net Distribution (default 20)
+        top_pct: Fraction of bars treated as high-volume (default 0.25)
+        threshold: Net Distribution threshold for bullish confirmation
+            (default 0.6 — 60 %+ of high-volume days were up)
+        sma_period: SMA period for trend filter (default 50)
+
+    Returns:
+        Strategy function compatible with Backtester.run()
+    """
+    min_bars = max(sma_period, volume_period) + 1
+
+    def strategy_fn(candles: list[Candle], position: dict | None) -> str | None:
+        if len(candles) < min_bars:
+            return None
+
+        prices = [c.close_price for c in candles]
+        sma = _calculate_sma(prices, sma_period)
+
+        if sma[-1] is None or sma[-2] is None:
+            return None
+
+        nd = _calculate_net_distribution(candles, volume_period, top_pct)
+        current_price = prices[-1]
+        prev_price = prices[-2]
+
+        # Buy: close crosses above SMA AND net distribution is bullish
+        if (prev_price <= sma[-2] and current_price > sma[-1]
+                and nd > threshold and position is None):
+            return 'buy'
+
+        # Sell: close crosses below SMA OR volume turns bearish
+        if position and position['side'] == 'long':
+            if current_price < sma[-1] or nd < (1 - threshold):
+                return 'sell'
+
+        return None
+
+    return strategy_fn
+
+
+def _detect_bull_flag(
+    candles: list,
+    pole_min_pct: float = 5.0,
+    flag_max_bars: int = 15,
+    flag_retrace_max: float = 0.5,
+) -> dict | None:
+    """Detect a bull flag pattern at the current bar.
+
+    A bull flag has two parts:
+      1. Pole: a sharp upward move (>= pole_min_pct) over a short period
+      2. Flag: consolidation / slight pullback that retraces <= flag_retrace_max
+         of the pole, lasting <= flag_max_bars
+
+    Args:
+        candles: List of Candle objects (at least 30 bars recommended)
+        pole_min_pct: Minimum gain for the pole in percent (default 5.0)
+        flag_max_bars: Maximum bars the flag may last (default 15)
+        flag_retrace_max: Maximum fraction of the pole the flag may retrace
+            (default 0.5)
+
+    Returns:
+        Dict with 'flag_high' and 'flag_low' if pattern detected, else None.
+    """
+    lookback = 30
+    if len(candles) < lookback:
+        return None
+
+    window = candles[-lookback:]
+
+    # Try to find a pole ending at various points, followed by a flag up to now
+    for pole_end in range(5, lookback - 3):
+        # Pole: search backwards from pole_end for the pole start
+        for pole_start in range(0, pole_end - 1):
+            pole_low = window[pole_start].low_price
+            pole_high = window[pole_end].high_price
+            pole_gain_pct = ((pole_high - pole_low) / pole_low) * 100
+
+            if pole_gain_pct < pole_min_pct:
+                continue
+
+            # Flag: bars from pole_end+1 to end of window
+            flag_bars = window[pole_end + 1:]
+            if not flag_bars or len(flag_bars) > flag_max_bars:
+                continue
+
+            flag_high = max(c.high_price for c in flag_bars)
+            flag_low = min(c.low_price for c in flag_bars)
+
+            # Flag should not retrace more than flag_retrace_max of pole
+            pole_height = pole_high - pole_low
+            retrace = pole_high - flag_low
+            if pole_height > 0 and retrace / pole_height > flag_retrace_max:
+                continue
+
+            # Flag high should not extend significantly above pole high
+            if flag_high > pole_high * 1.02:
+                continue
+
+            return {'flag_high': flag_high, 'flag_low': flag_low}
+
+    return None
+
+
+def bull_flag_breakout(
+    pole_min_pct: float = 5.0,
+    flag_max_bars: int = 15,
+    flag_retrace_max: float = 0.5,
+    volume_confirm: bool = True,
+) -> Callable:
+    """Bull Flag Breakout Strategy.
+
+    Detects bull flag continuation patterns and trades the breakout.
+    The bull flag is the highest-performing continuation pattern found
+    in the 370K chart pattern study.
+
+    Buy when a bull flag is detected and close breaks above the flag's
+    upper boundary. Uses time-based exit (20 bars), stop loss (flag low),
+    and profit target (10%).
+
+    Args:
+        pole_min_pct: Minimum pole gain percentage (default 5.0)
+        flag_max_bars: Maximum flag duration in bars (default 15)
+        flag_retrace_max: Maximum flag retracement as fraction of pole
+            (default 0.5)
+        volume_confirm: Require net_distribution > 0.5 during flag
+            (default True)
+
+    Returns:
+        Strategy function compatible with Backtester.run()
+    """
+    # Mutable state for tracking entry
+    state = {
+        'entry_price': None,
+        'entry_bar': 0,
+        'flag_low': None,
+        'bars_since_entry': 0,
+    }
+
+    def strategy_fn(candles: list[Candle], position: dict | None) -> str | None:
+        if len(candles) < 31:
+            return None
+
+        current_price = candles[-1].close_price
+
+        # If in a position, check exit conditions
+        if position and position['side'] == 'long':
+            state['bars_since_entry'] += 1
+
+            # Stop loss: close drops below flag low
+            if state['flag_low'] is not None and current_price < state['flag_low']:
+                state['entry_price'] = None
+                state['flag_low'] = None
+                return 'sell'
+
+            # Time exit: 20 bars after entry
+            if state['bars_since_entry'] >= 20:
+                state['entry_price'] = None
+                state['flag_low'] = None
+                return 'sell'
+
+            # Profit target: 10% above entry
+            if (state['entry_price'] is not None
+                    and current_price > state['entry_price'] * 1.1):
+                state['entry_price'] = None
+                state['flag_low'] = None
+                return 'sell'
+
+            return None
+
+        # Not in position — look for bull flag
+        if position is not None:
+            return None
+
+        # Detect pattern on bars BEFORE current bar; current bar is the breakout candle
+        flag = _detect_bull_flag(candles[:-1], pole_min_pct, flag_max_bars, flag_retrace_max)
+        if flag is None:
+            return None
+
+        # Volume confirmation
+        if volume_confirm:
+            nd = _calculate_net_distribution(candles[:-1], period=20)
+            if nd <= 0.5:
+                return None
+
+        # Breakout: current close above flag high
+        if current_price > flag['flag_high']:
+            state['entry_price'] = current_price
+            state['flag_low'] = flag['flag_low']
+            state['bars_since_entry'] = 0
+            return 'buy'
+
+        return None
+
+    return strategy_fn
+
+
 def ma_atr_mean_reversion(
     ma_period: int = 40,
     atr_length: int = 14,

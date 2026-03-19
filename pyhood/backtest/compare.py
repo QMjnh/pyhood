@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
 from dataclasses import replace
 
 from pyhood.backtest.models import BacktestResult
@@ -217,3 +218,110 @@ def rank_backtests(results: list[BacktestResult], by: str = "sharpe_ratio") -> l
 
     key_fn, reverse = sort_configs[by]
     return sorted(results, key=key_fn, reverse=reverse)
+
+
+def sensitivity_test(
+    backtester,
+    strategy_factory: Callable,
+    param_name: str,
+    param_values: list,
+    base_params: dict | None = None,
+    strategy_name: str = "Strategy",
+) -> list[BacktestResult]:
+    """Test how a strategy's performance changes across parameter values.
+
+    Sweeps a single parameter while holding others constant. Useful for
+    detecting overfitting — if results vary wildly across small parameter
+    changes, the strategy may be curve-fitted to noise.
+
+    Args:
+        backtester: A Backtester instance with loaded candle data
+        strategy_factory: Strategy factory function (e.g. ema_crossover)
+        param_name: Name of the parameter to sweep
+        param_values: List of values to test for that parameter
+        base_params: Dict of other parameters to hold constant.
+            Defaults to {} (use factory defaults for everything else).
+        strategy_name: Base name for labelling results
+
+    Returns:
+        List of BacktestResult objects, one per parameter value.
+
+    Example:
+        bt = Backtester.from_yfinance('SPY', period='10y')
+        results = sensitivity_test(bt, ema_crossover, 'fast', [5, 7, 9, 11, 13, 15])
+    """
+    if base_params is None:
+        base_params = {}
+
+    results: list[BacktestResult] = []
+    for value in param_values:
+        params = {**base_params, param_name: value}
+        strategy_fn = strategy_factory(**params)
+        label = f"{strategy_name} ({param_name}={value})"
+        result = backtester.run(strategy_fn, label)
+        results.append(result)
+
+    return results
+
+
+def sensitivity_report(results: list[BacktestResult], param_name: str) -> str:
+    """Format a sensitivity analysis report from sensitivity_test results.
+
+    Shows how return, Sharpe, win rate, and trade count change across
+    parameter values. Includes a stability score (std dev of Sharpe ratios)
+    — lower values indicate a more robust strategy.
+
+    Args:
+        results: List of BacktestResult from sensitivity_test
+        param_name: Parameter name (for display)
+
+    Returns:
+        Formatted report string.
+    """
+    if not results:
+        return "No results to report."
+
+    lines = [f"=== Sensitivity Analysis: {param_name} ===", ""]
+
+    headers = [param_name, "Return %", "Sharpe", "Win Rate %", "Trades"]
+    col_widths = [max(len(h), 12) for h in headers]
+
+    lines.append("  ".join(h.ljust(w) for h, w in zip(headers, col_widths)))
+    lines.append("  ".join("-" * w for w in col_widths))
+
+    sharpe_values = []
+    for r in results:
+        # Extract param value from strategy name "Strategy (param=val)"
+        name = r.strategy_name
+        if f"{param_name}=" in name:
+            val_str = name.split(f"{param_name}=")[1].rstrip(")")
+        else:
+            val_str = name
+
+        row = [
+            val_str,
+            f"{r.total_return:.1f}",
+            f"{r.sharpe_ratio:.2f}",
+            f"{r.win_rate:.1f}",
+            str(r.total_trades),
+        ]
+        lines.append("  ".join(v.ljust(w) for v, w in zip(row, col_widths)))
+        sharpe_values.append(r.sharpe_ratio)
+
+    # Stability score
+    lines.append("")
+    if len(sharpe_values) > 1:
+        mean_sharpe = sum(sharpe_values) / len(sharpe_values)
+        variance = sum((s - mean_sharpe) ** 2 for s in sharpe_values) / len(sharpe_values)
+        stability = math.sqrt(variance)
+        lines.append(f"Stability score (Sharpe std dev): {stability:.4f}")
+        if stability > 0.3:
+            lines.append("WARNING: High variance — possible overfitting.")
+        elif stability < 0.1:
+            lines.append("Good: Low variance — parameter choice is robust.")
+        else:
+            lines.append("Moderate variance — results are somewhat sensitive to this parameter.")
+    else:
+        lines.append("Stability score: N/A (need >= 2 parameter values)")
+
+    return "\n".join(lines)

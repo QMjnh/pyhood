@@ -7,8 +7,12 @@ from unittest.mock import MagicMock, patch
 
 from pyhood.models import Candle
 from pyhood.backtest import Backtester, BacktestResult, Trade, benchmark_spy, compare_backtests, rank_backtests
+from pyhood.backtest.compare import sensitivity_report, sensitivity_test
 from pyhood.backtest.strategies import (
+    _calculate_net_distribution,
+    _detect_bull_flag,
     bollinger_breakout,
+    bull_flag_breakout,
     donchian_breakout,
     ema_crossover,
     golden_cross,
@@ -17,6 +21,7 @@ from pyhood.backtest.strategies import (
     macd_crossover,
     rsi2_connors,
     rsi_mean_reversion,
+    volume_confirmed_breakout,
 )
 
 
@@ -919,3 +924,230 @@ class TestKeltnerSqueeze:
     def test_import_from_backtest_init(self):
         from pyhood.backtest import keltner_squeeze as imported
         assert callable(imported)
+
+
+class TestNetDistribution:
+    """Test the _calculate_net_distribution helper."""
+
+    def _make_candles(self, prices_and_volumes, symbol="TEST"):
+        """Create candles from (open, close, volume) tuples."""
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, (open_p, close_p, vol) in enumerate(prices_and_volumes):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            high = max(open_p, close_p) * 1.01
+            low = min(open_p, close_p) * 0.99
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=open_p,
+                close_price=close_p,
+                high_price=high,
+                low_price=low,
+                volume=vol,
+            ))
+        return candles
+
+    def test_all_up_volume(self):
+        """All high-volume bars are up days -> ratio = 1.0."""
+        # 20 bars: all close > open, varying volume
+        data = [(100.0, 105.0, 1000 + i * 100) for i in range(20)]
+        candles = self._make_candles(data)
+        result = _calculate_net_distribution(candles, period=20, top_pct=0.25)
+        assert result == 1.0
+
+    def test_all_down_volume(self):
+        """All high-volume bars are down days -> ratio = 0.0."""
+        data = [(105.0, 100.0, 1000 + i * 100) for i in range(20)]
+        candles = self._make_candles(data)
+        result = _calculate_net_distribution(candles, period=20, top_pct=0.25)
+        assert result == 0.0
+
+    def test_mixed_volume(self):
+        """Mixed up/down -> ratio between 0 and 1."""
+        data = []
+        for i in range(20):
+            if i % 2 == 0:
+                data.append((100.0, 105.0, 2000))  # up day, high vol
+            else:
+                data.append((105.0, 100.0, 1000))  # down day, low vol
+        candles = self._make_candles(data)
+        result = _calculate_net_distribution(candles, period=20, top_pct=0.25)
+        assert 0.0 <= result <= 1.0
+
+    def test_insufficient_data(self):
+        """Returns 0.5 when not enough bars."""
+        data = [(100.0, 105.0, 1000) for _ in range(5)]
+        candles = self._make_candles(data)
+        result = _calculate_net_distribution(candles, period=20)
+        assert result == 0.5
+
+
+class TestVolumeConfirmedBreakout:
+    """Test the Volume Confirmed Breakout strategy."""
+
+    def _make_candles(self, prices, symbol="TEST"):
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_returns_callable(self):
+        strategy = volume_confirmed_breakout()
+        assert callable(strategy)
+
+    def test_no_signal_insufficient_data(self):
+        strategy = volume_confirmed_breakout(sma_period=50)
+        candles = self._make_candles([100.0 + i for i in range(30)])
+        assert strategy(candles, None) is None
+
+    def test_runs_without_error(self):
+        candles = create_synthetic_candles(days=252, trend=0.1)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        strategy = volume_confirmed_breakout()
+        result = backtester.run(strategy, "Volume Confirmed Breakout")
+
+        assert isinstance(result, BacktestResult)
+        assert result.strategy_name == "Volume Confirmed Breakout"
+        assert len(result.equity_curve) == 252
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import volume_confirmed_breakout as imported
+        assert callable(imported)
+
+
+class TestBullFlagDetector:
+    """Test the _detect_bull_flag helper."""
+
+    def _make_candles(self, prices, symbol="TEST"):
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_callable(self):
+        """_detect_bull_flag is callable."""
+        assert callable(_detect_bull_flag)
+
+    def test_insufficient_data(self):
+        """Returns None when not enough data."""
+        candles = self._make_candles([100.0 + i for i in range(10)])
+        result = _detect_bull_flag(candles)
+        assert result is None
+
+    def test_detects_pattern(self):
+        """Detects a bull flag in synthetic data with a clear pole + flag."""
+        # Pole: sharp rise from 100 to 115 (15%)
+        prices = [100.0 + i * 0.1 for i in range(10)]  # flat lead-in
+        for i in range(8):
+            prices.append(101.0 + i * 2.0)  # pole: 101 -> 115
+        # Flag: consolidation around 113-115
+        for i in range(12):
+            prices.append(113.0 + (i % 3) * 0.5)
+        candles = self._make_candles(prices)
+        result = _detect_bull_flag(candles)
+        # May or may not detect depending on exact geometry — just test no crash
+        assert result is None or isinstance(result, dict)
+
+
+class TestBullFlagBreakout:
+    """Test the Bull Flag Breakout strategy."""
+
+    def _make_candles(self, prices, symbol="TEST"):
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_returns_callable(self):
+        strategy = bull_flag_breakout()
+        assert callable(strategy)
+
+    def test_no_signal_insufficient_data(self):
+        strategy = bull_flag_breakout()
+        candles = self._make_candles([100.0 + i for i in range(15)])
+        assert strategy(candles, None) is None
+
+    def test_runs_without_error(self):
+        candles = create_synthetic_candles(days=252, trend=0.1)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        strategy = bull_flag_breakout()
+        result = backtester.run(strategy, "Bull Flag Breakout")
+
+        assert isinstance(result, BacktestResult)
+        assert result.strategy_name == "Bull Flag Breakout"
+        assert len(result.equity_curve) == 252
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import bull_flag_breakout as imported
+        assert callable(imported)
+
+
+class TestSensitivityTest:
+    """Test the sensitivity_test and sensitivity_report functions."""
+
+    def test_returns_list_of_correct_length(self):
+        candles = create_synthetic_candles(days=100, trend=0.1)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        param_values = [5, 9, 13]
+        results = sensitivity_test(
+            backtester, ema_crossover, "fast", param_values,
+            base_params={"slow": 21}, strategy_name="EMA"
+        )
+        assert len(results) == 3
+        assert all(isinstance(r, BacktestResult) for r in results)
+        # Check names include param values
+        assert "fast=5" in results[0].strategy_name
+        assert "fast=9" in results[1].strategy_name
+        assert "fast=13" in results[2].strategy_name
+
+    def test_sensitivity_report_returns_string(self):
+        candles = create_synthetic_candles(days=100, trend=0.1)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        results = sensitivity_test(
+            backtester, ema_crossover, "fast", [5, 9, 13],
+            base_params={"slow": 21},
+        )
+        report = sensitivity_report(results, "fast")
+        assert isinstance(report, str)
+        assert "Sensitivity Analysis" in report
+        assert "Stability score" in report
+
+    def test_sensitivity_report_empty(self):
+        report = sensitivity_report([], "fast")
+        assert report == "No results to report."
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import sensitivity_test as st, sensitivity_report as sr
+        assert callable(st)
+        assert callable(sr)

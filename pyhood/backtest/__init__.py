@@ -1,10 +1,17 @@
 """Backtesting engine for pyhood strategies."""
 
-from pyhood.backtest.compare import benchmark_spy, compare_backtests, rank_backtests
+from pyhood.backtest.compare import (
+    benchmark_spy,
+    compare_backtests,
+    rank_backtests,
+    sensitivity_report,
+    sensitivity_test,
+)
 from pyhood.backtest.engine import Backtester
 from pyhood.backtest.models import BacktestResult, Trade
 from pyhood.backtest.strategies import (
     bollinger_breakout,
+    bull_flag_breakout,
     donchian_breakout,
     ema_crossover,
     golden_cross,
@@ -13,6 +20,7 @@ from pyhood.backtest.strategies import (
     macd_crossover,
     rsi2_connors,
     rsi_mean_reversion,
+    volume_confirmed_breakout,
 )
 
 __all__ = [
@@ -22,7 +30,10 @@ __all__ = [
     "benchmark_spy",
     "compare_backtests",
     "rank_backtests",
+    "sensitivity_report",
+    "sensitivity_test",
     "bollinger_breakout",
+    "bull_flag_breakout",
     "donchian_breakout",
     "ema_crossover",
     "golden_cross",
@@ -31,4 +42,5 @@ __all__ = [
     "macd_crossover",
     "rsi2_connors",
     "rsi_mean_reversion",
+    "volume_confirmed_breakout",
 ]
