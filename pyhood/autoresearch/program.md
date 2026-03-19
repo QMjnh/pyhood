@@ -188,6 +188,74 @@ Examples of things you might hit:
 
 This log is critical — it tells us exactly what to build next.
 
+## Overnight Execution
+
+The `OvernightRunner` automates the full strategy discovery program with crash resilience.
+
+### Quick Start
+
+```bash
+python scripts/run_overnight.py
+```
+
+### Resume
+
+Just run it again — it auto-detects previous state from `experiments.json`:
+
+```bash
+# Crashed at experiment 342? Just restart:
+python scripts/run_overnight.py
+# → "Resuming from experiment #342"
+```
+
+### CLI Options
+
+```bash
+python scripts/run_overnight.py \
+  --ticker SPY \
+  --period 10y \
+  --results-dir autoresearch_results \
+  --timeout 60 \
+  --slippage 0.01
+```
+
+### Watchdog (Cron)
+
+For truly unattended overnight runs, use the watchdog:
+
+```bash
+# Add to crontab — checks every 30 minutes, restarts if dead
+crontab -e
+*/30 * * * * /path/to/scripts/watchdog.sh
+```
+
+### Results Directory
+
+After a run, find everything in `autoresearch_results/`:
+
+| File | Contents |
+|---|---|
+| `experiments.json` | Full experiment log (machine-readable) |
+| `errors.log` | Failed experiments with tracebacks |
+| `summary.md` | Human-readable progress summary |
+| `best_strategies.json` | Top strategies found so far |
+| `run_log.txt` | Timestamped log of every action |
+| `final_report.txt` | Full AutoResearcher report |
+
+### Interpreting the Summary
+
+- **Best train Sharpe / Best test Sharpe**: The best metric values found so far
+- **Kept strategies**: Strategies that passed the train → test pipeline
+- After the run, check `summary.md` for a quick overview
+- For full details, read `final_report.txt`
+
+### What It Tests
+
+All 11 built-in strategies with full parameter grids (~632 combinations):
+EMA Crossover, MACD, RSI Mean Reversion, RSI(2) Connors, Bollinger Breakout,
+Donchian Breakout, MA+ATR Mean Reversion, Golden Cross, Keltner Squeeze,
+Volume Confirmed Breakout, Bull Flag Breakout.
+
 ## Anti-Overfitting Checklist
 
 Before declaring a strategy "found":
