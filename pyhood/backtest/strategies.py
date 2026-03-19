@@ -175,6 +175,76 @@ def ema_crossover(fast: int = 9, slow: int = 21) -> Callable:
     return strategy_fn
 
 
+def _calculate_donchian(candles: list, period: int) -> tuple[list[float], list[float]]:
+    """Calculate Donchian Channel (highest high / lowest low over period).
+
+    Args:
+        candles: List of Candle objects with high_price, low_price
+        period: Lookback period
+
+    Returns:
+        Tuple of (upper, lower) lists — None for insufficient data
+    """
+    upper = []
+    lower = []
+    for i in range(len(candles)):
+        if i < period - 1:
+            upper.append(None)
+            lower.append(None)
+        else:
+            highs = [candles[j].high_price for j in range(i - period + 1, i + 1)]
+            lows = [candles[j].low_price for j in range(i - period + 1, i + 1)]
+            upper.append(max(highs))
+            lower.append(min(lows))
+    return upper, lower
+
+
+def donchian_breakout(entry_period: int = 20, exit_period: int = 10) -> Callable:
+    """Donchian Channel Breakout Strategy (Turtle Trading).
+
+    Simplified version of Richard Dennis's Turtle Trading rules. Buys on
+    breakout above the entry-period high channel and sells on breakdown
+    below the exit-period low channel.
+
+    Args:
+        entry_period: Lookback for entry channel (highest high)
+        exit_period: Lookback for exit channel (lowest low)
+
+    Returns:
+        Strategy function compatible with Backtester.run()
+    """
+    min_bars = max(entry_period, exit_period) + 1
+
+    def strategy_fn(candles: list[Candle], position: dict | None) -> str | None:
+        if len(candles) < min_bars:
+            return None
+
+        entry_upper, _ = _calculate_donchian(candles, entry_period)
+        _, exit_lower = _calculate_donchian(candles, exit_period)
+
+        if entry_upper[-1] is None or exit_lower[-1] is None:
+            return None
+
+        # Compare current close to *previous* bar's channel value to detect breakout
+        if entry_upper[-2] is None or exit_lower[-2] is None:
+            return None
+
+        current_close = candles[-1].close_price
+
+        # Buy: close breaks above entry-period high channel
+        if current_close > entry_upper[-2] and position is None:
+            return 'buy'
+
+        # Sell: close breaks below exit-period low channel
+        if (current_close < exit_lower[-2]
+                and position and position['side'] == 'long'):
+            return 'sell'
+
+        return None
+
+    return strategy_fn
+
+
 def rsi_mean_reversion(period: int = 14, oversold: float = 30, overbought: float = 70) -> Callable:
     """RSI Mean Reversion Strategy.
 
@@ -207,6 +277,233 @@ def rsi_mean_reversion(period: int = 14, oversold: float = 30, overbought: float
 
         # Sell when overbought and holding long
         if current_rsi > overbought and position and position['side'] == 'long':
+            return 'sell'
+
+        return None
+
+    return strategy_fn
+
+
+def rsi2_connors(
+    rsi_period: int = 2,
+    sma_period: int = 200,
+    oversold: float = 10,
+    overbought: float = 90,
+) -> Callable:
+    """RSI(2) Connors Strategy.
+
+    Larry Connors' short-term mean reversion with a long-term trend filter.
+    Uses an ultra-short RSI(2) to catch extreme oversold/overbought readings
+    while the 200-day SMA ensures we only trade in the direction of the trend.
+
+    Args:
+        rsi_period: RSI period (default 2)
+        sma_period: Trend filter SMA period (default 200)
+        oversold: RSI level considered oversold — buy signal (default 10)
+        overbought: RSI level considered overbought — sell signal (default 90)
+
+    Returns:
+        Strategy function compatible with Backtester.run()
+    """
+    min_bars = max(rsi_period + 1, sma_period)
+
+    def strategy_fn(candles: list[Candle], position: dict | None) -> str | None:
+        if len(candles) < min_bars:
+            return None
+
+        prices = [c.close_price for c in candles]
+        rsi_values = _calculate_rsi(prices, rsi_period)
+        sma_values = _calculate_sma(prices, sma_period)
+
+        if rsi_values[-1] is None or sma_values[-1] is None:
+            return None
+
+        current_price = prices[-1]
+        current_rsi = rsi_values[-1]
+        current_sma = sma_values[-1]
+
+        # Buy: price above 200 SMA (uptrend) AND RSI(2) < oversold
+        if current_price > current_sma and current_rsi < oversold and position is None:
+            return 'buy'
+
+        # Sell: RSI(2) > overbought
+        if current_rsi > overbought and position and position['side'] == 'long':
+            return 'sell'
+
+        return None
+
+    return strategy_fn
+
+
+def macd_crossover(fast: int = 12, slow: int = 26, signal: int = 9) -> Callable:
+    """MACD Crossover Strategy.
+
+    Classic trend-following strategy using the Moving Average Convergence
+    Divergence indicator. Buys when the MACD line crosses above the signal
+    line and sells on the opposite crossover.
+
+    Args:
+        fast: Fast EMA period (default 12)
+        slow: Slow EMA period (default 26)
+        signal: Signal line EMA period (default 9)
+
+    Returns:
+        Strategy function compatible with Backtester.run()
+    """
+    min_bars = slow + signal + 1
+
+    def strategy_fn(candles: list[Candle], position: dict | None) -> str | None:
+        if len(candles) < min_bars:
+            return None
+
+        prices = [c.close_price for c in candles]
+        fast_ema = _calculate_ema(prices, fast)
+        slow_ema = _calculate_ema(prices, slow)
+
+        # MACD line = fast EMA - slow EMA
+        macd_line = []
+        for i in range(len(prices)):
+            if fast_ema[i] is None or slow_ema[i] is None:
+                macd_line.append(None)
+            else:
+                macd_line.append(fast_ema[i] - slow_ema[i])
+
+        # Signal line = EMA of MACD (replace None with 0 for EMA calc start)
+        macd_for_ema = [v if v is not None else 0.0 for v in macd_line]
+        signal_line = _calculate_ema(macd_for_ema, signal)
+
+        if (macd_line[-1] is None or macd_line[-2] is None
+                or signal_line[-1] is None or signal_line[-2] is None):
+            return None
+
+        macd_now, macd_prev = macd_line[-1], macd_line[-2]
+        sig_now, sig_prev = signal_line[-1], signal_line[-2]
+
+        # Buy: MACD crosses above signal
+        if macd_prev <= sig_prev and macd_now > sig_now and position is None:
+            return 'buy'
+
+        # Sell: MACD crosses below signal
+        if (macd_prev >= sig_prev and macd_now < sig_now
+                and position and position['side'] == 'long'):
+            return 'sell'
+
+        return None
+
+    return strategy_fn
+
+
+def golden_cross(fast_period: int = 50, slow_period: int = 200) -> Callable:
+    """Golden Cross / Death Cross Strategy (50/200 SMA).
+
+    Classic long-term trend-following strategy. Buys on the golden cross
+    (50 SMA crosses above 200 SMA) and sells on the death cross (50 SMA
+    crosses below 200 SMA).
+
+    Args:
+        fast_period: Fast SMA period (default 50)
+        slow_period: Slow SMA period (default 200)
+
+    Returns:
+        Strategy function compatible with Backtester.run()
+    """
+    min_bars = slow_period + 1
+
+    def strategy_fn(candles: list[Candle], position: dict | None) -> str | None:
+        if len(candles) < min_bars:
+            return None
+
+        prices = [c.close_price for c in candles]
+        fast_sma = _calculate_sma(prices, fast_period)
+        slow_sma = _calculate_sma(prices, slow_period)
+
+        if (fast_sma[-1] is None or fast_sma[-2] is None
+                or slow_sma[-1] is None or slow_sma[-2] is None):
+            return None
+
+        fast_now, fast_prev = fast_sma[-1], fast_sma[-2]
+        slow_now, slow_prev = slow_sma[-1], slow_sma[-2]
+
+        # Buy: golden cross (fast crosses above slow)
+        if fast_prev <= slow_prev and fast_now > slow_now and position is None:
+            return 'buy'
+
+        # Sell: death cross (fast crosses below slow)
+        if (fast_prev >= slow_prev and fast_now < slow_now
+                and position and position['side'] == 'long'):
+            return 'sell'
+
+        return None
+
+    return strategy_fn
+
+
+def keltner_squeeze(
+    keltner_period: int = 20,
+    keltner_atr_mult: float = 1.5,
+    bb_period: int = 20,
+    bb_std: float = 2.0,
+) -> Callable:
+    """Keltner Channel Squeeze Strategy.
+
+    Detects volatility squeezes where Bollinger Bands contract inside Keltner
+    Channels, then trades the breakout direction when the squeeze releases.
+    Inspired by John Carter's TTM Squeeze indicator.
+
+    Args:
+        keltner_period: EMA/ATR period for Keltner Channel (default 20)
+        keltner_atr_mult: ATR multiplier for Keltner bands (default 1.5)
+        bb_period: Bollinger Bands period (default 20)
+        bb_std: Bollinger Bands standard deviation multiplier (default 2.0)
+
+    Returns:
+        Strategy function compatible with Backtester.run()
+    """
+    min_bars = max(keltner_period, bb_period) + 2  # +2 for squeeze state tracking
+
+    was_squeezing = False
+
+    def strategy_fn(candles: list[Candle], position: dict | None) -> str | None:
+        nonlocal was_squeezing
+
+        if len(candles) < min_bars:
+            return None
+
+        prices = [c.close_price for c in candles]
+
+        # Keltner Channel: middle = EMA, bands = middle ± mult * ATR
+        keltner_mid = _calculate_ema(prices, keltner_period)
+        atr_values = _calculate_atr(candles, keltner_period)
+
+        if keltner_mid[-1] is None or atr_values[-1] is None:
+            return None
+
+        kc_upper = keltner_mid[-1] + keltner_atr_mult * atr_values[-1]
+        kc_lower = keltner_mid[-1] - keltner_atr_mult * atr_values[-1]
+
+        # Bollinger Bands
+        bb_upper, bb_mid, bb_lower = _calculate_bollinger_bands(prices, bb_period, bb_std)
+
+        if bb_upper[-1] is None or bb_lower[-1] is None:
+            return None
+
+        # Squeeze detection: BB inside KC
+        is_squeezing = bb_lower[-1] > kc_lower and bb_upper[-1] < kc_upper
+
+        current_price = prices[-1]
+
+        # Squeeze release: was squeezing, now not
+        if was_squeezing and not is_squeezing:
+            was_squeezing = is_squeezing
+            # Buy on upward breakout
+            if current_price > keltner_mid[-1] and position is None:
+                return 'buy'
+        else:
+            was_squeezing = is_squeezing
+
+        # Sell: price falls below Keltner middle
+        if (current_price < keltner_mid[-1]
+                and position and position['side'] == 'long'):
             return 'sell'
 
         return None

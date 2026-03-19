@@ -7,7 +7,17 @@ from unittest.mock import MagicMock, patch
 
 from pyhood.models import Candle
 from pyhood.backtest import Backtester, BacktestResult, Trade, benchmark_spy, compare_backtests, rank_backtests
-from pyhood.backtest.strategies import ema_crossover, rsi_mean_reversion, bollinger_breakout, ma_atr_mean_reversion
+from pyhood.backtest.strategies import (
+    bollinger_breakout,
+    donchian_breakout,
+    ema_crossover,
+    golden_cross,
+    keltner_squeeze,
+    ma_atr_mean_reversion,
+    macd_crossover,
+    rsi2_connors,
+    rsi_mean_reversion,
+)
 
 
 def create_synthetic_candles(symbol: str = "AAPL", days: int = 100, start_price: float = 100.0, trend: float = 0.1) -> list[Candle]:
@@ -694,3 +704,218 @@ class TestBenchmarkSpy:
         assert result.spy_sharpe is None
         assert result.spy_alpha is None
         assert result.verdict == ''
+
+
+class TestDonchianBreakout:
+    """Test the Donchian Channel Breakout strategy."""
+
+    def _make_candles(self, prices: list[float], symbol: str = "TEST") -> list[Candle]:
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_returns_callable(self):
+        strategy = donchian_breakout()
+        assert callable(strategy)
+
+    def test_no_signal_insufficient_data(self):
+        strategy = donchian_breakout(entry_period=20, exit_period=10)
+        candles = self._make_candles([100.0 + i for i in range(15)])
+        assert strategy(candles, None) is None
+
+    def test_runs_without_error(self):
+        candles = create_synthetic_candles(days=252, trend=0.1)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        strategy = donchian_breakout()
+        result = backtester.run(strategy, "Donchian Breakout")
+
+        assert isinstance(result, BacktestResult)
+        assert result.strategy_name == "Donchian Breakout"
+        assert len(result.equity_curve) == 252
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import donchian_breakout as imported
+        assert callable(imported)
+
+
+class TestRsi2Connors:
+    """Test the RSI(2) Connors strategy."""
+
+    def _make_candles(self, prices: list[float], symbol: str = "TEST") -> list[Candle]:
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_returns_callable(self):
+        strategy = rsi2_connors()
+        assert callable(strategy)
+
+    def test_no_signal_insufficient_data(self):
+        strategy = rsi2_connors(sma_period=200)
+        candles = self._make_candles([100.0 + i * 0.1 for i in range(50)])
+        assert strategy(candles, None) is None
+
+    def test_runs_without_error(self):
+        candles = create_synthetic_candles(days=300, trend=0.15)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        strategy = rsi2_connors()
+        result = backtester.run(strategy, "RSI(2) Connors")
+
+        assert isinstance(result, BacktestResult)
+        assert result.strategy_name == "RSI(2) Connors"
+        assert len(result.equity_curve) == 300
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import rsi2_connors as imported
+        assert callable(imported)
+
+
+class TestMacdCrossover:
+    """Test the MACD Crossover strategy."""
+
+    def _make_candles(self, prices: list[float], symbol: str = "TEST") -> list[Candle]:
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_returns_callable(self):
+        strategy = macd_crossover()
+        assert callable(strategy)
+
+    def test_no_signal_insufficient_data(self):
+        strategy = macd_crossover(fast=12, slow=26, signal=9)
+        candles = self._make_candles([100.0 + i for i in range(30)])
+        assert strategy(candles, None) is None
+
+    def test_runs_without_error(self):
+        candles = create_synthetic_candles(days=252, trend=0.1)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        strategy = macd_crossover()
+        result = backtester.run(strategy, "MACD Crossover")
+
+        assert isinstance(result, BacktestResult)
+        assert result.strategy_name == "MACD Crossover"
+        assert len(result.equity_curve) == 252
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import macd_crossover as imported
+        assert callable(imported)
+
+
+class TestGoldenCross:
+    """Test the Golden Cross strategy."""
+
+    def _make_candles(self, prices: list[float], symbol: str = "TEST") -> list[Candle]:
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_returns_callable(self):
+        strategy = golden_cross()
+        assert callable(strategy)
+
+    def test_no_signal_insufficient_data(self):
+        strategy = golden_cross(fast_period=50, slow_period=200)
+        candles = self._make_candles([100.0 + i * 0.1 for i in range(150)])
+        assert strategy(candles, None) is None
+
+    def test_runs_without_error(self):
+        candles = create_synthetic_candles(days=400, trend=0.2)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        strategy = golden_cross()
+        result = backtester.run(strategy, "Golden Cross")
+
+        assert isinstance(result, BacktestResult)
+        assert result.strategy_name == "Golden Cross"
+        assert len(result.equity_curve) == 400
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import golden_cross as imported
+        assert callable(imported)
+
+
+class TestKeltnerSqueeze:
+    """Test the Keltner Channel Squeeze strategy."""
+
+    def _make_candles(self, prices: list[float], symbol: str = "TEST") -> list[Candle]:
+        base_date = datetime(2023, 1, 1)
+        candles = []
+        for i, price in enumerate(prices):
+            date_str = (base_date + timedelta(days=i)).isoformat() + "Z"
+            candles.append(Candle(
+                symbol=symbol,
+                begins_at=date_str,
+                open_price=price * 0.995,
+                close_price=price,
+                high_price=price * 1.02,
+                low_price=price * 0.98,
+                volume=1000000,
+            ))
+        return candles
+
+    def test_returns_callable(self):
+        strategy = keltner_squeeze()
+        assert callable(strategy)
+
+    def test_no_signal_insufficient_data(self):
+        strategy = keltner_squeeze(keltner_period=20, bb_period=20)
+        candles = self._make_candles([100.0 + i for i in range(15)])
+        assert strategy(candles, None) is None
+
+    def test_runs_without_error(self):
+        candles = create_synthetic_candles(days=252, trend=0.1)
+        backtester = Backtester(candles, initial_capital=10000.0)
+        strategy = keltner_squeeze()
+        result = backtester.run(strategy, "Keltner Squeeze")
+
+        assert isinstance(result, BacktestResult)
+        assert result.strategy_name == "Keltner Squeeze"
+        assert len(result.equity_curve) == 252
+
+    def test_import_from_backtest_init(self):
+        from pyhood.backtest import keltner_squeeze as imported
+        assert callable(imported)
