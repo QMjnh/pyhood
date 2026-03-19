@@ -82,6 +82,46 @@ Every backtest produces a `BacktestResult` with these metrics:
 | `buy_hold_return` | What buy & hold would have returned | — | — |
 | `alpha` | Strategy return minus buy & hold | Positive | Negative |
 
+## Slippage Modeling
+
+The backtesting engine supports configurable slippage to simulate real execution costs. Buys execute at a slightly higher price, sells at a slightly lower price.
+
+```python
+# Recommended: 0.01% slippage for Robinhood stock/ETF trades
+bt = Backtester.from_yfinance("AAPL", period="10y", slippage_pct=0.01)
+result = bt.run(ema_crossover(fast=9, slow=21), "EMA 9/21")
+print(f"Slippage applied: {result.slippage_pct}%")
+```
+
+For full details on slippage values for different asset classes, see **[Slippage Modeling](slippage.md)**.
+
+## Market Regime Awareness
+
+Every trade is tagged with the market regime at entry (bull, bear, recovery, or correction) based on the 200-day SMA. The `BacktestResult` includes a `regime_breakdown` showing performance per regime.
+
+```python
+from pyhood.backtest.compare import regime_report
+
+result = bt.run(ema_crossover(fast=9, slow=21), "EMA 9/21")
+print(regime_report(result))  # Formatted per-regime performance table
+```
+
+Strategies where 80%+ of P&L comes from a single regime are flagged as regime-dependent. See **[Market Regime Classification](regime-awareness.md)** for the full guide.
+
+## SPY Benchmarking
+
+Compare any strategy against S&P 500 buy & hold with the `benchmark_spy()` function:
+
+```python
+from pyhood.backtest.compare import benchmark_spy
+
+enriched = benchmark_spy([result])
+for r in enriched:
+    print(f"{r.verdict} — SPY alpha: {r.spy_alpha:+.1f}%")
+```
+
+Verdicts: ✅ Beats both | ⚠️ Better risk-adjusted | ❌ Underperforms. See **[SPY Benchmark & Verdict System](benchmarking.md)** for details.
+
 ## Built-in Strategies
 
 ### EMA Crossover

@@ -78,7 +78,11 @@ researcher = AutoResearcher(candles=my_candle_list, min_trades=5)
 | `test_pct`      |  `0.25` | Fraction for testing                       |
 | `validate_pct`  |  `0.25` | Fraction for validation                    |
 | `metric`        | `'sharpe_ratio'` | Metric to optimise             |
-| `min_trades`    |    `10` | Minimum trades for a result to count       |
+| `min_trades_train` | `20` | Minimum trades on train split              |
+| `min_trades_test`  | `10` | Minimum trades on test/validate splits     |
+| `cross_validate_tickers` | Auto | Tickers for [cross-validation](cross-validation.md) |
+| `cross_validate_min_pass` | `2` | Min tickers that must pass cross-validation |
+| `cross_validate_min_sharpe` | `0.5` | Min Sharpe on each cross-validation ticker |
 | `candles`       |  `None` | Pre-loaded candles (overrides ticker)      |
 | `initial_capital` | `10000` | Starting capital for backtests          |
 | `top_n`         |     `3` | Top train results forwarded to test        |
@@ -127,9 +131,11 @@ This is the "Karpathy loop" — automated research driven by an AI agent that fo
 AutoResearch includes several mechanisms to catch overfitting:
 
 1. **Train/Test/Validate split** — the fundamental safeguard
-2. **Minimum trade filter** — strategies with < N trades are rejected (avoids degenerate "one lucky trade" strategies)
+2. **Per-split minimum trades** — train requires ≥20 trades, test and validate require ≥10 each. Low trade counts mean the result is statistically meaningless. See [Configuration](#autoresearcher__init__) for `min_trades_train` / `min_trades_test`.
 3. **Overfitting gap detection** — if train Sharpe >> test Sharpe (gap > 30%), a warning is flagged
 4. **Parameter stability** — use `parameter_sweep` to check if small parameter changes kill performance (a sign of curve fitting)
+5. **Regime filtering** — strategies must be profitable in ≥2 out of 4 market regimes (bull/bear/recovery/correction). If 80%+ of P&L comes from a single regime, the strategy is flagged as regime-dependent. See [Regime Awareness](regime-awareness.md) for details.
+6. **Cross-validation** — after passing train/test/validate, strategies are tested on related tickers (e.g., QQQ and DIA for SPY). Must pass on ≥2 tickers with Sharpe > 0.5. See [Cross-Validation](cross-validation.md) for the full system.
 
 ### Anti-Overfitting Checklist
 
@@ -139,9 +145,14 @@ Before declaring a strategy "found":
 - [ ] Test Sharpe > 0.8
 - [ ] Train–Test gap < 30%
 - [ ] Validate Sharpe confirms (no big drop)
-- [ ] Minimum 10 trades in each split
+- [ ] Minimum trades per split: 20 (train), 10 (test), 10 (validate)
 - [ ] Nearby parameters produce similar results
 - [ ] Strategy makes economic sense
+- [ ] Profitable in ≥2 market regimes ([regime breakdown](regime-awareness.md))
+- [ ] Not regime-dependent (no single regime contributes 80%+ of P&L)
+- [ ] `regime_report(result)` reviewed — no warning flags
+- [ ] [Cross-validation](cross-validation.md) passed on related tickers
+- [ ] Strategy generalises across at least 2 related instruments
 
 ## Example Workflow
 
