@@ -46,6 +46,7 @@ nav:
     - Backtesting: backtesting.md
   - Error Handling: error-handling.md
   - Rate Limits: rate-limits.md
+  - API Endpoints: api-endpoints.md
   - API Reference:
     - PyhoodClient: api/client.md
     - CryptoClient: api/crypto.md
