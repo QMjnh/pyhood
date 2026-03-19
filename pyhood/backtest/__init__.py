@@ -1,6 +1,6 @@
 """Backtesting engine for pyhood strategies."""
 
-from pyhood.backtest.compare import compare_backtests, rank_backtests
+from pyhood.backtest.compare import benchmark_spy, compare_backtests, rank_backtests
 from pyhood.backtest.engine import Backtester
 from pyhood.backtest.models import BacktestResult, Trade
 from pyhood.backtest.strategies import (
@@ -14,6 +14,7 @@ __all__ = [
     "Backtester",
     "BacktestResult",
     "Trade",
+    "benchmark_spy",
     "compare_backtests",
     "rank_backtests",
     "bollinger_breakout",

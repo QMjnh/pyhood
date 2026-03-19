@@ -1,10 +1,12 @@
 """Tests for backtesting engine."""
 
 import pytest
+from dataclasses import replace
 from datetime import datetime, timedelta
+from unittest.mock import MagicMock, patch
 
 from pyhood.models import Candle
-from pyhood.backtest import Backtester, BacktestResult, Trade, compare_backtests, rank_backtests
+from pyhood.backtest import Backtester, BacktestResult, Trade, benchmark_spy, compare_backtests, rank_backtests
 from pyhood.backtest.strategies import ema_crossover, rsi_mean_reversion, bollinger_breakout, ma_atr_mean_reversion
 
 
@@ -478,3 +480,217 @@ class TestMaAtrMeanReversion:
         assert callable(imported_strategy)
         strategy = imported_strategy()
         assert callable(strategy)
+
+
+def _make_result(**overrides) -> BacktestResult:
+    """Helper to create a BacktestResult with sensible defaults."""
+    defaults = dict(
+        strategy_name="Test Strategy",
+        symbol="AAPL",
+        period="2023-01-01 to 2023-12-31",
+        total_return=15.0,
+        annual_return=15.0,
+        sharpe_ratio=1.2,
+        max_drawdown=-5.0,
+        win_rate=60.0,
+        profit_factor=1.8,
+        total_trades=10,
+        avg_trade_return=1.5,
+        avg_win=3.0,
+        avg_loss=-1.5,
+        buy_hold_return=12.0,
+        alpha=3.0,
+        trades=[],
+        equity_curve=[],
+    )
+    defaults.update(overrides)
+    return BacktestResult(**defaults)
+
+
+def _mock_spy_history(start, end):
+    """Create a mock DataFrame resembling yfinance output."""
+    import types
+
+    # Simulate SPY going from 400 to 440 (10% return) with 252 daily closes
+    num_days = 252
+    closes = [400 + (40 * i / (num_days - 1)) for i in range(num_days)]
+
+    class MockDF:
+        empty = False
+
+        def __init__(self, closes):
+            self._closes = closes
+
+        def __len__(self):
+            return len(self._closes)
+
+        def __getitem__(self, key):
+            if key == "Close":
+                return types.SimpleNamespace(values=self._closes)
+            raise KeyError(key)
+
+    return MockDF(closes)
+
+
+class TestBenchmarkSpy:
+    """Test SPY benchmark comparison."""
+
+    def test_benchmark_spy_returns_enriched_results(self):
+        """Test that benchmark_spy populates SPY fields."""
+        results = [_make_result()]
+
+        mock_ticker = MagicMock()
+        mock_ticker.history.return_value = _mock_spy_history("2023-01-01", "2023-12-31")
+
+        with patch("pyhood.backtest.compare.yf", create=True) as mock_yf:
+            # Patch the import inside benchmark_spy
+            import pyhood.backtest.compare as compare_mod
+            original_fn = compare_mod.benchmark_spy
+
+            # We need to mock yfinance at import time inside the function
+            with patch.dict("sys.modules", {"yfinance": mock_yf}):
+                mock_yf.Ticker.return_value = mock_ticker
+                enriched = benchmark_spy(results)
+
+        assert len(enriched) == 1
+        r = enriched[0]
+        assert r.spy_return is not None
+        assert r.spy_sharpe is not None
+        assert r.spy_alpha is not None
+        assert r.verdict != ''
+        # spy_alpha should equal total_return - spy_return
+        assert abs(r.spy_alpha - (r.total_return - r.spy_return)) < 0.01
+
+    def test_verdict_beats_both(self):
+        """Test verdict when strategy beats SPY on both return and Sharpe."""
+        # Strategy: return=20%, sharpe=1.5; SPY: return=10%, sharpe=0.8
+        result = _make_result(total_return=20.0, sharpe_ratio=1.5)
+
+        with patch("pyhood.backtest.compare._fetch_spy_metrics", return_value=(10.0, 0.8)):
+            with patch.dict("sys.modules", {"yfinance": MagicMock()}):
+                enriched = benchmark_spy([result])
+
+        assert enriched[0].verdict == '\u2705 Beats both'
+        assert abs(enriched[0].spy_alpha - 10.0) < 0.01
+
+    def test_verdict_better_risk_adjusted(self):
+        """Test verdict when strategy has better Sharpe but lower return than SPY."""
+        # Strategy: return=5%, sharpe=2.0; SPY: return=10%, sharpe=0.8
+        result = _make_result(total_return=5.0, sharpe_ratio=2.0)
+
+        with patch("pyhood.backtest.compare._fetch_spy_metrics", return_value=(10.0, 0.8)):
+            with patch.dict("sys.modules", {"yfinance": MagicMock()}):
+                enriched = benchmark_spy([result])
+
+        assert enriched[0].verdict == '\u26a0\ufe0f Better risk-adjusted'
+        assert abs(enriched[0].spy_alpha - (-5.0)) < 0.01
+
+    def test_verdict_underperforms(self):
+        """Test verdict when strategy underperforms SPY on both metrics."""
+        # Strategy: return=5%, sharpe=0.3; SPY: return=10%, sharpe=0.8
+        result = _make_result(total_return=5.0, sharpe_ratio=0.3)
+
+        with patch("pyhood.backtest.compare._fetch_spy_metrics", return_value=(10.0, 0.8)):
+            with patch.dict("sys.modules", {"yfinance": MagicMock()}):
+                enriched = benchmark_spy([result])
+
+        assert enriched[0].verdict == '\u274c Underperforms'
+
+    def test_benchmark_spy_empty_results(self):
+        """Test benchmark_spy with empty list."""
+        assert benchmark_spy([]) == []
+
+    def test_benchmark_spy_no_yfinance(self):
+        """Test graceful handling when yfinance is not installed."""
+        results = [_make_result()]
+
+        # Simulate yfinance not installed
+        import builtins
+        real_import = builtins.__import__
+
+        def mock_import(name, *args, **kwargs):
+            if name == "yfinance":
+                raise ImportError("No module named 'yfinance'")
+            return real_import(name, *args, **kwargs)
+
+        with patch("builtins.__import__", side_effect=mock_import):
+            result = benchmark_spy(results)
+
+        # Should return original results unchanged
+        assert result is results
+        assert result[0].spy_return is None
+
+    def test_benchmark_spy_caches_per_period(self):
+        """Test that SPY data is fetched once per unique period."""
+        results = [
+            _make_result(strategy_name="A", period="2023-01-01 to 2023-12-31"),
+            _make_result(strategy_name="B", period="2023-01-01 to 2023-12-31"),
+        ]
+
+        mock_ticker = MagicMock()
+        mock_ticker.history.return_value = _mock_spy_history("2023-01-01", "2023-12-31")
+
+        with patch.dict("sys.modules", {"yfinance": MagicMock()}) as mods:
+            import sys
+            mock_yf = sys.modules["yfinance"]
+            mock_yf.Ticker.return_value = mock_ticker
+            enriched = benchmark_spy(results)
+
+        # Should have called Ticker.history only once for the same period
+        assert mock_ticker.history.call_count == 1
+        # Both results should be enriched
+        assert enriched[0].spy_return is not None
+        assert enriched[1].spy_return is not None
+
+    def test_compare_backtests_shows_spy_columns(self):
+        """Test that compare_backtests includes SPY columns when benchmarked."""
+        result = _make_result(
+            spy_return=10.0,
+            spy_sharpe=0.8,
+            spy_alpha=5.0,
+            verdict='\u2705 Beats both',
+        )
+        table = compare_backtests([result])
+
+        assert "SPY Return (%)" in table
+        assert "SPY Alpha (%)" in table
+        assert "Verdict" in table
+        assert "10.00" in table
+        assert "5.00" in table
+        assert "\u2705 Beats both" in table
+
+    def test_compare_backtests_hides_spy_columns_when_not_benchmarked(self):
+        """Test that SPY columns are hidden when spy_return is None."""
+        result = _make_result()  # No SPY fields set
+        table = compare_backtests([result])
+
+        assert "SPY Return (%)" not in table
+        assert "Verdict" not in table
+
+    def test_rank_backtests_by_spy_alpha(self):
+        """Test ranking by spy_alpha metric."""
+        results = [
+            _make_result(strategy_name="Low Alpha", spy_alpha=2.0),
+            _make_result(strategy_name="High Alpha", spy_alpha=10.0),
+        ]
+        ranked = rank_backtests(results, by="spy_alpha")
+        assert ranked[0].strategy_name == "High Alpha"
+        assert ranked[1].strategy_name == "Low Alpha"
+
+    def test_rank_backtests_spy_alpha_none_sorts_last(self):
+        """Test that results without spy_alpha sort last."""
+        results = [
+            _make_result(strategy_name="No SPY"),  # spy_alpha=None
+            _make_result(strategy_name="Has SPY", spy_alpha=5.0),
+        ]
+        ranked = rank_backtests(results, by="spy_alpha")
+        assert ranked[0].strategy_name == "Has SPY"
+        assert ranked[1].strategy_name == "No SPY"
+
+    def test_backtest_result_default_spy_fields(self):
+        """Test that BacktestResult defaults preserve backward compatibility."""
+        result = _make_result()
+        assert result.spy_return is None
+        assert result.spy_sharpe is None
+        assert result.spy_alpha is None
+        assert result.verdict == ''

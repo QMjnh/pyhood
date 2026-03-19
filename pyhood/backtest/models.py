@@ -38,3 +38,8 @@ class BacktestResult:
     alpha: float  # strategy return - buy & hold
     trades: list[Trade]
     equity_curve: list[float]  # daily portfolio values
+    # SPY benchmark fields (populated by benchmark_spy())
+    spy_return: float | None = None        # SPY buy & hold return for same period
+    spy_sharpe: float | None = None        # SPY Sharpe ratio for same period
+    spy_alpha: float | None = None         # strategy total_return - spy_return
+    verdict: str = ''                       # '✅ Beats both' / '⚠️ Better risk-adjusted' / '❌ Underperforms'

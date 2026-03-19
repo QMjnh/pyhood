@@ -13,7 +13,7 @@ Usage:
 import json
 import os
 
-from pyhood.backtest import Backtester, compare_backtests
+from pyhood.backtest import Backtester, benchmark_spy, compare_backtests
 from pyhood.backtest.strategies import (
     bollinger_breakout,
     ema_crossover,
@@ -63,6 +63,8 @@ def main():
                 "total_trades": result.total_trades,
                 "alpha": round(result.alpha, 2),
             })
+
+        ticker_results = benchmark_spy(ticker_results)
 
         print(f"\n{symbol} ({period}) Results:")
         print("-" * 80)
