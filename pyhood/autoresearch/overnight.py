@@ -19,6 +19,8 @@ import threading
 import traceback
 from datetime import datetime
 
+from pyhood.autoresearch.memory import ResearchMemory
+from pyhood.autoresearch.audit import AuditTrail
 from pyhood.autoresearch.runner import AutoResearcher, _log_to_dict
 from pyhood.backtest.strategies import (
     bollinger_breakout,
@@ -179,6 +181,8 @@ class OvernightRunner:
         candles=None,
         cross_validate_tickers: list[str] | None = None,
         strategy_sweeps: list[dict] | None = None,
+        memory_db: str = 'autoresearch_memory.db',
+        audit: bool = True,
     ):
         self.ticker = ticker
         self.total_period = total_period
@@ -196,6 +200,11 @@ class OvernightRunner:
         self._error_count = 0
         self._timeout_count = 0
         self._total_expected = 0
+        self._audit_enabled = audit
+        self._audit: AuditTrail | None = None
+        self._memory_db = memory_db
+        self._memory = None
+        self._run_id = None
 
     # ------------------------------------------------------------------
     # Paths
@@ -341,7 +350,21 @@ class OvernightRunner:
 
         # Check if already completed
         if self._is_completed(label, params):
+            if self._audit:
+                self._audit.experiment_skipped(label, params, 'already completed (resume)')
             return True
+
+        # Check if memory says to skip
+        if self._memory is not None:
+            try:
+                skip, reason = self._memory.should_skip(self.ticker, label, params)
+                if skip:
+                    self._log(f'Skipping {label}: {reason}')
+                    if self._audit:
+                        self._audit.experiment_skipped(label, params, reason)
+                    return True
+            except Exception:
+                pass
 
         self._experiment_count += 1
         progress = f'Experiment {self._experiment_count}/{self._total_expected}'
@@ -362,6 +385,13 @@ class OvernightRunner:
 
             self._mark_completed(label, params)
 
+            # Store in memory
+            if self._memory is not None and self._run_id is not None:
+                try:
+                    self._memory.store_experiment(exp, self._run_id, self.ticker)
+                except Exception:
+                    pass
+
             # Save after experiment
             if self._experiment_count % self.save_every == 0:
                 self._save_state()
@@ -372,6 +402,8 @@ class OvernightRunner:
             self._timeout_count += 1
             self._log(f'{progress} | {label} | ⏰ TIMEOUT ({self.experiment_timeout}s)')
             self._log_error(label, params, str(exc))
+            if self._audit:
+                self._audit.experiment_timeout(label, params, self.experiment_timeout)
             return False
 
         except Exception as exc:
@@ -379,6 +411,8 @@ class OvernightRunner:
             tb = traceback.format_exc()
             self._log(f'{progress} | {label} | 💥 ERROR: {exc}')
             self._log_error(label, params, tb)
+            if self._audit:
+                self._audit.experiment_failed(label, params, str(exc), tb)
             return False
 
     # ------------------------------------------------------------------
@@ -466,6 +500,16 @@ class OvernightRunner:
         # 1. Create results directory
         os.makedirs(self.results_dir, exist_ok=True)
 
+        # Initialize research memory
+        try:
+            memory_path = os.path.join(self.results_dir, self._memory_db)
+            self._memory = ResearchMemory(memory_path)
+            self._run_id = self._memory.start_run(self.ticker)
+        except Exception as exc:
+            self._log(f'Warning: could not initialize research memory: {exc}')
+            self._memory = None
+            self._run_id = None
+
         self._log(f'Starting overnight autoresearch for {self.ticker}')
         self._log(f'Results directory: {self.results_dir}')
         self._log(f'Experiment timeout: {self.experiment_timeout}s')
@@ -486,7 +530,22 @@ class OvernightRunner:
         if self._cross_validate_tickers is not None:
             init_kwargs['cross_validate_tickers'] = self._cross_validate_tickers
 
+        # Initialize audit trail
+        if self._audit_enabled:
+            audit_dir = os.path.join(self.results_dir, 'audit')
+            self._audit = AuditTrail(audit_dir=audit_dir)
+            init_kwargs['audit'] = self._audit
+
         self._researcher = AutoResearcher(**init_kwargs)
+
+        # Start audit run
+        if self._audit:
+            run_id = self._run_id or 0
+            self._audit.start_run(run_id, self.ticker, {
+                'total_period': self.total_period,
+                'experiment_timeout': self.experiment_timeout,
+                'total_sweeps': len(self.strategy_sweeps),
+            })
 
         # 3. Calculate total expected experiments
         self._total_expected = sum(
@@ -509,8 +568,21 @@ class OvernightRunner:
 
             self._log(f'Starting {strategy_name} sweep ({n_combos} combos)...')
 
+            if self._audit:
+                self._audit.sweep_started(strategy_name, grid, n_combos)
+
+            sweep_kept = 0
             for params in combos:
                 self._run_single_experiment(strategy_name, factory, params)
+
+            # Count kept from this sweep
+            if self._audit:
+                kept_exps = [e for e in self._researcher.log.experiments if e.kept]
+                best_sharpe = max(
+                    (getattr(e.test_result, 'sharpe_ratio', 0) for e in kept_exps if e.test_result),
+                    default=None,
+                )
+                self._audit.sweep_completed(strategy_name, n_combos, len(kept_exps), best_sharpe)
 
             self._log(f'Completed {strategy_name} sweep')
 
@@ -537,7 +609,35 @@ class OvernightRunner:
         except Exception as exc:
             self._log(f'Report generation failed: {exc}')
 
-        # 9. Summary
+        # 9. Generate memory insights and priorities
+        if self._memory is not None and self._run_id is not None:
+            try:
+                new_insights = self._memory.generate_insights(self._run_id)
+                self._log(f'Generated {len(new_insights)} new insights')
+                new_priorities = self._memory.generate_priorities(self._run_id)
+                self._log(f'Generated {len(new_priorities)} new priorities')
+                self._memory.end_run(self._run_id, status='completed')
+                memory_stats = self._memory.stats()
+                self._log(f'Memory stats: {memory_stats}')
+            except Exception as exc:
+                self._log(f'Warning: memory finalization failed: {exc}')
+                try:
+                    self._memory.end_run(self._run_id, status='completed')
+                except Exception:
+                    pass
+
+        # End audit trail
+        if self._audit:
+            self._audit.end_run({
+                'total_experiments': self._researcher.log.total_experiments,
+                'errors': self._error_count,
+                'timeouts': self._timeout_count,
+                'best_train_sharpe': self._researcher.log.best_train_sharpe,
+                'best_test_sharpe': self._researcher.log.best_test_sharpe,
+                'kept_strategies': len([e for e in self._researcher.log.experiments if e.kept]),
+            })
+
+        # 10. Summary
         result = {
             'total_experiments': self._researcher.log.total_experiments,
             'errors': self._error_count,
@@ -546,6 +646,9 @@ class OvernightRunner:
             'best_test_sharpe': self._researcher.log.best_test_sharpe,
             'kept_strategies': len([e for e in self._researcher.log.experiments if e.kept]),
         }
+
+        if self._memory is not None:
+            result['memory_stats'] = self._memory.stats()
 
         self._log(f'Overnight run complete! {result}')
         return result

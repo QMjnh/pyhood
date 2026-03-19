@@ -18,6 +18,7 @@ from pyhood.backtest.engine import Backtester
 from pyhood.backtest.models import BacktestResult, Trade
 from pyhood.models import Candle
 
+from .audit import AuditTrail
 from .models import ExperimentLog, ExperimentResult
 
 logger = logging.getLogger(__name__)
@@ -85,6 +86,8 @@ class AutoResearcher:
         cross_validate_tickers: list[str] | None = None,
         cross_validate_min_pass: int = 2,
         cross_validate_min_sharpe: float = 0.5,
+        memory=None,
+        audit: AuditTrail | None = None,
     ):
         if abs(train_pct + test_pct + validate_pct - 1.0) > 1e-6:
             raise ValueError("train_pct + test_pct + validate_pct must equal 1.0")
@@ -129,11 +132,15 @@ class AutoResearcher:
         if self._cross_validate_tickers:
             self._init_cross_validators(total_period)
 
+        # Optional research memory
+        self.memory = memory
+
         # Experiment log
         self.log = ExperimentLog(
             ticker=self.ticker,
         )
         self._next_id = 1
+        self.audit = audit
 
     def _init_cross_validators(self, total_period: str = '10y') -> None:
         """Initialize Backtester instances for cross-validation tickers."""
@@ -241,6 +248,10 @@ class AutoResearcher:
         exp_id = self._next_id
         self._next_id += 1
 
+        # Audit: experiment starting
+        if self.audit:
+            self.audit.experiment_started(strategy_name, params, self.ticker)
+
         # --- Train ---
         train_result = self.evaluate(strategy_fn, strategy_name, 'train')
         train_metric = getattr(train_result, self.metric)
@@ -298,6 +309,25 @@ class AutoResearcher:
 
         self.log.experiments.append(experiment)
         self.log.total_experiments += 1
+
+        # Audit: experiment completed
+        if self.audit:
+            test_sharpe = getattr(experiment.test_result, self.metric, None) if experiment.test_result else None
+            self.audit.experiment_completed(
+                strategy_name, params,
+                train_sharpe=train_metric,
+                test_sharpe=test_sharpe,
+                kept=kept,
+                reason=reason,
+            )
+
+        # Store in memory if available
+        if self.memory is not None:
+            try:
+                self.memory.store_experiment(experiment, run_id=0, ticker=self.ticker)
+            except Exception:
+                pass
+
         return experiment
 
     # ------------------------------------------------------------------
@@ -323,6 +353,11 @@ class AutoResearcher:
         """
         base_params = dict(base_params or {})
         experiments: list[ExperimentResult] = []
+
+        # Audit: sweep start
+        param_grid = {param_name: param_values}
+        if self.audit:
+            self.audit.sweep_started(strategy_name, param_grid, len(param_values))
 
         # Phase 1 — train sweep
         train_scores: list[tuple[float, int, ExperimentResult]] = []
@@ -387,6 +422,15 @@ class AutoResearcher:
             self.log.experiments.append(exp)
             self.log.total_experiments += 1
 
+        # Audit: sweep completed
+        if self.audit:
+            kept_count = sum(1 for e in experiments if e.kept)
+            best = max(
+                (getattr(e.test_result, self.metric) for e in experiments if e.test_result),
+                default=None,
+            )
+            self.audit.sweep_completed(strategy_name, len(param_values), kept_count, best)
+
         # Sort: tested experiments (by test metric desc), then untested
         def sort_key(e: ExperimentResult):
             if e.test_result is not None:
@@ -416,7 +460,14 @@ class AutoResearcher:
         """
         keys = list(param_grid.keys())
         value_lists = [param_grid[k] for k in keys]
+        total_combos = 1
+        for v in value_lists:
+            total_combos *= len(v)
         experiments: list[ExperimentResult] = []
+
+        # Audit: sweep start
+        if self.audit:
+            self.audit.sweep_started(strategy_name, param_grid, total_combos)
 
         # Phase 1 — train sweep all combos
         train_scores: list[tuple[float, ExperimentResult]] = []
@@ -479,6 +530,15 @@ class AutoResearcher:
         for exp in experiments:
             self.log.experiments.append(exp)
             self.log.total_experiments += 1
+
+        # Audit: sweep completed
+        if self.audit:
+            kept_count = sum(1 for e in experiments if e.kept)
+            best = max(
+                (getattr(e.test_result, self.metric) for e in experiments if e.test_result),
+                default=None,
+            )
+            self.audit.sweep_completed(strategy_name, total_combos, kept_count, best)
 
         def sort_key(e: ExperimentResult):
             if e.test_result is not None:
@@ -606,6 +666,14 @@ class AutoResearcher:
                         f' | cross-validation FAILED '
                         f'({cv_result["pass_count"]}/{cv_result["required"]} passed)'
                     )
+
+            # Audit: validation result
+            if self.audit:
+                self.audit.validation_result(
+                    exp.strategy_name, exp.params,
+                    validate_sharpe=val_metric,
+                    cross_validation=exp.cross_validation,
+                )
 
             results.append(exp)
 
