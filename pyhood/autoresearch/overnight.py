@@ -13,7 +13,6 @@ from __future__ import annotations
 import itertools
 import json
 import logging
-import math
 import os
 import signal
 import threading
@@ -322,11 +321,11 @@ class OvernightRunner:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _experiment_key(strategy_name: str, params: dict) -> str:
+    def _experiment_key(strategy_name: str, params: dict, ticker: str = '') -> str:
         """Create a unique key for a strategy+params combination."""
         # Sort params for consistent keys
         sorted_params = sorted(params.items())
-        return f'{strategy_name}|{sorted_params}'
+        return f'{ticker}|{strategy_name}|{sorted_params}'
 
     def _load_resume_state(self) -> int:
         """Load previous experiments and build the completed keys set.
@@ -339,7 +338,7 @@ class OvernightRunner:
         try:
             self._researcher.load(self.experiments_path)
             for exp in self._researcher.log.experiments:
-                key = self._experiment_key(exp.strategy_name, exp.params)
+                key = self._experiment_key(exp.strategy_name, exp.params, self.ticker)
                 self._completed_keys.add(key)
             count = len(self._completed_keys)
             self._experiment_count = count
@@ -348,14 +347,14 @@ class OvernightRunner:
             self._log(f'Warning: could not load resume state: {exc}')
             return 0
 
-    def _is_completed(self, strategy_name: str, params: dict) -> bool:
+    def _is_completed(self, strategy_name: str, params: dict, ticker: str = '') -> bool:
         """Check if a strategy+params combo has already been tested."""
-        key = self._experiment_key(strategy_name, params)
+        key = self._experiment_key(strategy_name, params, ticker)
         return key in self._completed_keys
 
-    def _mark_completed(self, strategy_name: str, params: dict) -> None:
+    def _mark_completed(self, strategy_name: str, params: dict, ticker: str = '') -> None:
         """Mark a strategy+params combo as completed."""
-        key = self._experiment_key(strategy_name, params)
+        key = self._experiment_key(strategy_name, params, ticker)
         self._completed_keys.add(key)
 
     # ------------------------------------------------------------------
@@ -416,7 +415,7 @@ class OvernightRunner:
         label = f'{strategy_name} ({", ".join(f"{k}={v}" for k, v in params.items())})'
 
         # Check if already completed
-        if self._is_completed(label, params):
+        if self._is_completed(label, params, effective_ticker):
             if self._audit:
                 self._audit.experiment_skipped(label, params, 'already completed (resume)')
             return True
@@ -457,7 +456,7 @@ class OvernightRunner:
                 f' test={test_str} | {status}'
             )
 
-            self._mark_completed(label, params)
+            self._mark_completed(label, params, effective_ticker)
 
             # Store in memory
             if self._memory is not None and self._run_id is not None:
@@ -651,7 +650,7 @@ class OvernightRunner:
             '# AutoResearch Overall Summary',
             '',
             f'**Generated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
-            f'**Mode:** Continuous',
+            '**Mode:** Continuous',
             f'**Tickers:** {", ".join(self.tickers)}',
             '',
             '## Per-Ticker Results',
@@ -821,7 +820,11 @@ class OvernightRunner:
                 break
 
             # Extract base strategy name
-            base_name = exp.strategy_name.split('(')[0].strip() if '(' in exp.strategy_name else exp.strategy_name
+            base_name = (
+                exp.strategy_name.split('(')[0].strip()
+                if '(' in exp.strategy_name
+                else exp.strategy_name
+            )
             sweep_config = sweep_map.get(base_name)
             if not sweep_config:
                 continue
@@ -855,7 +858,10 @@ class OvernightRunner:
             strategy_name = sweep['name']
             # If this strategy was never tested on this ticker, do a full sweep
             if strategy_name not in tested_strategies:
-                self._log(f'Strategy {strategy_name} not yet tested on {ticker} — running full sweep')
+                self._log(
+                    f'Strategy {strategy_name} not yet tested on {ticker}'
+                    ' — running full sweep'
+                )
                 factory = sweep['factory']
                 grid = sweep['grid']
                 combos = _grid_combos(grid)
@@ -1080,6 +1086,9 @@ class OvernightRunner:
         if os.path.exists(exp_path):
             try:
                 researcher.load(exp_path)
+                for exp in researcher.log.experiments:
+                    key = self._experiment_key(exp.strategy_name, exp.params, ticker)
+                    self._completed_keys.add(key)
                 self._log(f'Resumed {len(researcher.log.experiments)} experiments for {ticker}')
             except Exception as exc:
                 self._log(f'Warning: could not load resume state for {ticker}: {exc}')
@@ -1107,11 +1116,11 @@ class OvernightRunner:
             audit_dir = os.path.join(self.results_dir, 'audit')
             self._audit = AuditTrail(audit_dir=audit_dir)
 
-        self._log(f'Starting CONTINUOUS autoresearch')
+        self._log('Starting CONTINUOUS autoresearch')
         self._log(f'Tickers: {", ".join(self.tickers)}')
         self._log(f'Results directory: {self.results_dir}')
         self._log(f'Experiment timeout: {self.experiment_timeout}s')
-        self._log(f'Stop with Ctrl+C or kill -TERM for graceful shutdown')
+        self._log('Stop with Ctrl+C or kill -TERM for graceful shutdown')
 
         # Calculate total expected for first cycle
         self._total_expected = sum(
