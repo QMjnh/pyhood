@@ -1,0 +1,670 @@
+[2026-03-19 21:00:04] Starting overnight autoresearch for SPY
+[2026-03-19 21:00:04] Results directory: autoresearch_results/spy_20260320
+[2026-03-19 21:00:04] Experiment timeout: 60s
+[2026-03-19 21:00:04] Slippage: 0.01%
+[2026-03-19 21:00:09] Total parameter combinations to test: 632
+[2026-03-19 21:00:09] Starting EMA Crossover sweep (49 combos)...
+[2026-03-19 21:00:09] Experiment 1/632 | EMA Crossover (fast=5, slow=15) | train=1.0959 test=0.3414 | ✅ KEPT
+[2026-03-19 21:00:09] Experiment 2/632 | EMA Crossover (fast=5, slow=20) | train=0.9921 test=N/A | ❌
+[2026-03-19 21:00:10] Experiment 3/632 | EMA Crossover (fast=5, slow=25) | train=0.9388 test=N/A | ❌
+[2026-03-19 21:00:10] Experiment 4/632 | EMA Crossover (fast=5, slow=30) | train=0.8639 test=N/A | ❌
+[2026-03-19 21:00:10] Experiment 5/632 | EMA Crossover (fast=5, slow=40) | train=0.8564 test=N/A | ❌
+[2026-03-19 21:00:10] Experiment 6/632 | EMA Crossover (fast=5, slow=50) | train=0.9407 test=N/A | ❌
+[2026-03-19 21:00:11] Experiment 7/632 | EMA Crossover (fast=5, slow=100) | train=1.0233 test=N/A | ❌
+[2026-03-19 21:00:11] Experiment 8/632 | EMA Crossover (fast=7, slow=15) | train=1.0032 test=N/A | ❌
+[2026-03-19 21:00:11] Experiment 9/632 | EMA Crossover (fast=7, slow=20) | train=0.9130 test=N/A | ❌
+[2026-03-19 21:00:12] Experiment 10/632 | EMA Crossover (fast=7, slow=25) | train=0.7637 test=N/A | ❌
+[2026-03-19 21:00:12] Experiment 11/632 | EMA Crossover (fast=7, slow=30) | train=0.7379 test=N/A | ❌
+[2026-03-19 21:00:12] Experiment 12/632 | EMA Crossover (fast=7, slow=40) | train=0.8540 test=N/A | ❌
+[2026-03-19 21:00:13] Experiment 13/632 | EMA Crossover (fast=7, slow=50) | train=0.9730 test=N/A | ❌
+[2026-03-19 21:00:13] Experiment 14/632 | EMA Crossover (fast=7, slow=100) | train=1.1095 test=N/A | ❌
+[2026-03-19 21:00:13] Experiment 15/632 | EMA Crossover (fast=9, slow=15) | train=0.7745 test=N/A | ❌
+[2026-03-19 21:00:14] Experiment 16/632 | EMA Crossover (fast=9, slow=20) | train=0.8747 test=N/A | ❌
+[2026-03-19 21:00:14] Experiment 17/632 | EMA Crossover (fast=9, slow=25) | train=0.7151 test=N/A | ❌
+[2026-03-19 21:00:14] Experiment 18/632 | EMA Crossover (fast=9, slow=30) | train=0.8044 test=N/A | ❌
+[2026-03-19 21:00:14] Experiment 19/632 | EMA Crossover (fast=9, slow=40) | train=0.8406 test=N/A | ❌
+[2026-03-19 21:00:15] Experiment 20/632 | EMA Crossover (fast=9, slow=50) | train=0.9113 test=N/A | ❌
+[2026-03-19 21:00:15] Experiment 21/632 | EMA Crossover (fast=9, slow=100) | train=1.1012 test=N/A | ❌
+[2026-03-19 21:00:15] Experiment 22/632 | EMA Crossover (fast=11, slow=15) | train=0.7460 test=N/A | ❌
+[2026-03-19 21:00:16] Experiment 23/632 | EMA Crossover (fast=11, slow=20) | train=0.8013 test=N/A | ❌
+[2026-03-19 21:00:16] Experiment 24/632 | EMA Crossover (fast=11, slow=25) | train=0.9322 test=N/A | ❌
+[2026-03-19 21:00:16] Experiment 25/632 | EMA Crossover (fast=11, slow=30) | train=0.8632 test=N/A | ❌
+[2026-03-19 21:00:17] Experiment 26/632 | EMA Crossover (fast=11, slow=40) | train=0.8756 test=N/A | ❌
+[2026-03-19 21:00:17] Experiment 27/632 | EMA Crossover (fast=11, slow=50) | train=0.9338 test=N/A | ❌
+[2026-03-19 21:00:17] Experiment 28/632 | EMA Crossover (fast=11, slow=100) | train=1.1613 test=N/A | ❌
+[2026-03-19 21:00:17] Experiment 29/632 | EMA Crossover (fast=13, slow=15) | train=0.8807 test=N/A | ❌
+[2026-03-19 21:00:18] Experiment 30/632 | EMA Crossover (fast=13, slow=20) | train=0.8110 test=N/A | ❌
+[2026-03-19 21:00:18] Experiment 31/632 | EMA Crossover (fast=13, slow=25) | train=0.8855 test=N/A | ❌
+[2026-03-19 21:00:18] Experiment 32/632 | EMA Crossover (fast=13, slow=30) | train=0.9675 test=N/A | ❌
+[2026-03-19 21:00:19] Experiment 33/632 | EMA Crossover (fast=13, slow=40) | train=0.7885 test=N/A | ❌
+[2026-03-19 21:00:19] Experiment 34/632 | EMA Crossover (fast=13, slow=50) | train=1.0161 test=N/A | ❌
+[2026-03-19 21:00:19] Experiment 35/632 | EMA Crossover (fast=13, slow=100) | train=1.1776 test=N/A | ❌
+[2026-03-19 21:00:20] Experiment 36/632 | EMA Crossover (fast=15, slow=15) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:00:20] Experiment 37/632 | EMA Crossover (fast=15, slow=20) | train=0.9550 test=N/A | ❌
+[2026-03-19 21:00:20] Experiment 38/632 | EMA Crossover (fast=15, slow=25) | train=0.8586 test=N/A | ❌
+[2026-03-19 21:00:21] Experiment 39/632 | EMA Crossover (fast=15, slow=30) | train=0.8275 test=N/A | ❌
+[2026-03-19 21:00:21] Experiment 40/632 | EMA Crossover (fast=15, slow=40) | train=0.7994 test=N/A | ❌
+[2026-03-19 21:00:21] Experiment 41/632 | EMA Crossover (fast=15, slow=50) | train=1.1213 test=N/A | ❌
+[2026-03-19 21:00:21] Experiment 42/632 | EMA Crossover (fast=15, slow=100) | train=1.1194 test=N/A | ❌
+[2026-03-19 21:00:22] Experiment 43/632 | EMA Crossover (fast=20, slow=15) | train=0.4335 test=N/A | ❌
+[2026-03-19 21:00:22] Experiment 44/632 | EMA Crossover (fast=20, slow=20) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:00:22] Experiment 45/632 | EMA Crossover (fast=20, slow=25) | train=0.7921 test=N/A | ❌
+[2026-03-19 21:00:23] Experiment 46/632 | EMA Crossover (fast=20, slow=30) | train=0.7998 test=N/A | ❌
+[2026-03-19 21:00:23] Experiment 47/632 | EMA Crossover (fast=20, slow=40) | train=1.0877 test=N/A | ❌
+[2026-03-19 21:00:23] Experiment 48/632 | EMA Crossover (fast=20, slow=50) | train=1.0359 test=N/A | ❌
+[2026-03-19 21:00:24] Experiment 49/632 | EMA Crossover (fast=20, slow=100) | train=0.7091 test=N/A | ❌
+[2026-03-19 21:00:24] Completed EMA Crossover sweep
+[2026-03-19 21:00:24] Starting MACD sweep (125 combos)...
+[2026-03-19 21:00:24] Experiment 50/632 | MACD (fast=8, slow=20, signal=5) | train=0.9859 test=N/A | ❌
+[2026-03-19 21:00:25] Experiment 51/632 | MACD (fast=8, slow=20, signal=7) | train=1.1651 test=0.1479 | ❌
+[2026-03-19 21:00:26] Experiment 52/632 | MACD (fast=8, slow=20, signal=9) | train=1.1684 test=0.1778 | ❌
+[2026-03-19 21:00:26] Experiment 53/632 | MACD (fast=8, slow=20, signal=11) | train=0.9026 test=N/A | ❌
+[2026-03-19 21:00:27] Experiment 54/632 | MACD (fast=8, slow=20, signal=13) | train=1.0619 test=N/A | ❌
+[2026-03-19 21:00:27] Experiment 55/632 | MACD (fast=8, slow=24, signal=5) | train=1.1156 test=0.1996 | ❌
+[2026-03-19 21:00:28] Experiment 56/632 | MACD (fast=8, slow=24, signal=7) | train=1.2044 test=0.1391 | ❌
+[2026-03-19 21:00:29] Experiment 57/632 | MACD (fast=8, slow=24, signal=9) | train=1.0775 test=N/A | ❌
+[2026-03-19 21:00:29] Experiment 58/632 | MACD (fast=8, slow=24, signal=11) | train=0.9475 test=N/A | ❌
+[2026-03-19 21:00:30] Experiment 59/632 | MACD (fast=8, slow=24, signal=13) | train=1.0746 test=N/A | ❌
+[2026-03-19 21:00:31] Experiment 60/632 | MACD (fast=8, slow=26, signal=5) | train=1.1168 test=0.2335 | ❌
+[2026-03-19 21:00:31] Experiment 61/632 | MACD (fast=8, slow=26, signal=7) | train=1.2116 test=0.0408 | ❌
+[2026-03-19 21:00:32] Experiment 62/632 | MACD (fast=8, slow=26, signal=9) | train=0.9495 test=N/A | ❌
+[2026-03-19 21:00:32] Experiment 63/632 | MACD (fast=8, slow=26, signal=11) | train=1.0181 test=N/A | ❌
+[2026-03-19 21:00:33] Experiment 64/632 | MACD (fast=8, slow=26, signal=13) | train=1.1022 test=0.3690 | ✅ KEPT
+[2026-03-19 21:00:34] Experiment 65/632 | MACD (fast=8, slow=30, signal=5) | train=1.1741 test=-0.0088 | ❌
+[2026-03-19 21:00:35] Experiment 66/632 | MACD (fast=8, slow=30, signal=7) | train=1.1179 test=0.1143 | ❌
+[2026-03-19 21:00:35] Experiment 67/632 | MACD (fast=8, slow=30, signal=9) | train=0.9736 test=N/A | ❌
+[2026-03-19 21:00:36] Experiment 68/632 | MACD (fast=8, slow=30, signal=11) | train=1.1453 test=0.6015 | ✅ KEPT
+[2026-03-19 21:00:36] Experiment 69/632 | MACD (fast=8, slow=30, signal=13) | train=1.0769 test=N/A | ❌
+[2026-03-19 21:00:37] Experiment 70/632 | MACD (fast=8, slow=35, signal=5) | train=1.0924 test=N/A | ❌
+[2026-03-19 21:00:38] Experiment 71/632 | MACD (fast=8, slow=35, signal=7) | train=0.9162 test=N/A | ❌
+[2026-03-19 21:00:38] Experiment 72/632 | MACD (fast=8, slow=35, signal=9) | train=1.0217 test=N/A | ❌
+[2026-03-19 21:00:39] Experiment 73/632 | MACD (fast=8, slow=35, signal=11) | train=1.0401 test=N/A | ❌
+[2026-03-19 21:00:40] Experiment 74/632 | MACD (fast=8, slow=35, signal=13) | train=1.1626 test=0.1999 | ❌
+[2026-03-19 21:00:40] Experiment 75/632 | MACD (fast=10, slow=20, signal=5) | train=1.1031 test=N/A | ❌
+[2026-03-19 21:00:41] Experiment 76/632 | MACD (fast=10, slow=20, signal=7) | train=1.1649 test=0.1939 | ❌
+[2026-03-19 21:00:42] Experiment 77/632 | MACD (fast=10, slow=20, signal=9) | train=0.9477 test=N/A | ❌
+[2026-03-19 21:00:42] Experiment 78/632 | MACD (fast=10, slow=20, signal=11) | train=1.0521 test=N/A | ❌
+[2026-03-19 21:00:43] Experiment 79/632 | MACD (fast=10, slow=20, signal=13) | train=1.1296 test=N/A | ❌
+[2026-03-19 21:00:43] Experiment 80/632 | MACD (fast=10, slow=24, signal=5) | train=1.2338 test=0.0678 | ❌
+[2026-03-19 21:00:44] Experiment 81/632 | MACD (fast=10, slow=24, signal=7) | train=1.1042 test=N/A | ❌
+[2026-03-19 21:00:45] Experiment 82/632 | MACD (fast=10, slow=24, signal=9) | train=1.0078 test=N/A | ❌
+[2026-03-19 21:00:45] Experiment 83/632 | MACD (fast=10, slow=24, signal=11) | train=1.0831 test=N/A | ❌
+[2026-03-19 21:00:46] Experiment 84/632 | MACD (fast=10, slow=24, signal=13) | train=0.9773 test=N/A | ❌
+[2026-03-19 21:00:47] Experiment 85/632 | MACD (fast=10, slow=26, signal=5) | train=1.1243 test=N/A | ❌
+[2026-03-19 21:00:47] Experiment 86/632 | MACD (fast=10, slow=26, signal=7) | train=1.0060 test=N/A | ❌
+[2026-03-19 21:00:48] Experiment 87/632 | MACD (fast=10, slow=26, signal=9) | train=0.9950 test=N/A | ❌
+[2026-03-19 21:00:48] Experiment 88/632 | MACD (fast=10, slow=26, signal=11) | train=1.0463 test=N/A | ❌
+[2026-03-19 21:00:49] Experiment 89/632 | MACD (fast=10, slow=26, signal=13) | train=1.0923 test=N/A | ❌
+[2026-03-19 21:00:50] Experiment 90/632 | MACD (fast=10, slow=30, signal=5) | train=1.0764 test=N/A | ❌
+[2026-03-19 21:00:50] Experiment 91/632 | MACD (fast=10, slow=30, signal=7) | train=0.9733 test=N/A | ❌
+[2026-03-19 21:00:51] Experiment 92/632 | MACD (fast=10, slow=30, signal=9) | train=1.1271 test=N/A | ❌
+[2026-03-19 21:00:51] Experiment 93/632 | MACD (fast=10, slow=30, signal=11) | train=1.1047 test=N/A | ❌
+[2026-03-19 21:00:52] Experiment 94/632 | MACD (fast=10, slow=30, signal=13) | train=1.1175 test=N/A | ❌
+[2026-03-19 21:00:53] Experiment 95/632 | MACD (fast=10, slow=35, signal=5) | train=1.0592 test=N/A | ❌
+[2026-03-19 21:00:53] Experiment 96/632 | MACD (fast=10, slow=35, signal=7) | train=1.0187 test=N/A | ❌
+[2026-03-19 21:00:54] Experiment 97/632 | MACD (fast=10, slow=35, signal=9) | train=1.0495 test=N/A | ❌
+[2026-03-19 21:00:55] Experiment 98/632 | MACD (fast=10, slow=35, signal=11) | train=1.1215 test=N/A | ❌
+[2026-03-19 21:00:55] Experiment 99/632 | MACD (fast=10, slow=35, signal=13) | train=0.9481 test=N/A | ❌
+[2026-03-19 21:00:56] Experiment 100/632 | MACD (fast=12, slow=20, signal=5) | train=1.1812 test=0.2419 | ❌
+[2026-03-19 21:00:57] Experiment 101/632 | MACD (fast=12, slow=20, signal=7) | train=1.0262 test=N/A | ❌
+[2026-03-19 21:00:57] Experiment 102/632 | MACD (fast=12, slow=20, signal=9) | train=1.0267 test=N/A | ❌
+[2026-03-19 21:00:58] Experiment 103/632 | MACD (fast=12, slow=20, signal=11) | train=1.1296 test=N/A | ❌
+[2026-03-19 21:00:59] Experiment 104/632 | MACD (fast=12, slow=20, signal=13) | train=0.9027 test=N/A | ❌
+[2026-03-19 21:00:59] Experiment 105/632 | MACD (fast=12, slow=24, signal=5) | train=1.1518 test=0.1447 | ❌
+[2026-03-19 21:01:00] Experiment 106/632 | MACD (fast=12, slow=24, signal=7) | train=0.9212 test=N/A | ❌
+[2026-03-19 21:01:01] Experiment 107/632 | MACD (fast=12, slow=24, signal=9) | train=1.0517 test=N/A | ❌
+[2026-03-19 21:01:01] Experiment 108/632 | MACD (fast=12, slow=24, signal=11) | train=0.9864 test=N/A | ❌
+[2026-03-19 21:01:02] Experiment 109/632 | MACD (fast=12, slow=24, signal=13) | train=0.9389 test=N/A | ❌
+[2026-03-19 21:01:03] Experiment 110/632 | MACD (fast=12, slow=26, signal=5) | train=1.0826 test=N/A | ❌
+[2026-03-19 21:01:03] Experiment 111/632 | MACD (fast=12, slow=26, signal=7) | train=1.0038 test=N/A | ❌
+[2026-03-19 21:01:04] Experiment 112/632 | MACD (fast=12, slow=26, signal=9) | train=1.0779 test=N/A | ❌
+[2026-03-19 21:01:04] Experiment 113/632 | MACD (fast=12, slow=26, signal=11) | train=1.0923 test=N/A | ❌
+[2026-03-19 21:01:05] Experiment 114/632 | MACD (fast=12, slow=26, signal=13) | train=1.0135 test=N/A | ❌
+[2026-03-19 21:01:06] Experiment 115/632 | MACD (fast=12, slow=30, signal=5) | train=0.9699 test=N/A | ❌
+[2026-03-19 21:01:06] Experiment 116/632 | MACD (fast=12, slow=30, signal=7) | train=1.0175 test=N/A | ❌
+[2026-03-19 21:01:07] Experiment 117/632 | MACD (fast=12, slow=30, signal=9) | train=1.1192 test=N/A | ❌
+[2026-03-19 21:01:08] Experiment 118/632 | MACD (fast=12, slow=30, signal=11) | train=1.0376 test=N/A | ❌
+[2026-03-19 21:01:08] Experiment 119/632 | MACD (fast=12, slow=30, signal=13) | train=0.9062 test=N/A | ❌
+[2026-03-19 21:01:09] Experiment 120/632 | MACD (fast=12, slow=35, signal=5) | train=0.9154 test=N/A | ❌
+[2026-03-19 21:01:10] Experiment 121/632 | MACD (fast=12, slow=35, signal=7) | train=1.0005 test=N/A | ❌
+[2026-03-19 21:01:10] Experiment 122/632 | MACD (fast=12, slow=35, signal=9) | train=1.1130 test=N/A | ❌
+[2026-03-19 21:01:11] Experiment 123/632 | MACD (fast=12, slow=35, signal=11) | train=0.9295 test=N/A | ❌
+[2026-03-19 21:01:12] Experiment 124/632 | MACD (fast=12, slow=35, signal=13) | train=0.9760 test=N/A | ❌
+[2026-03-19 21:01:13] Experiment 125/632 | MACD (fast=14, slow=20, signal=5) | train=1.1817 test=0.0967 | ❌
+[2026-03-19 21:01:13] Experiment 126/632 | MACD (fast=14, slow=20, signal=7) | train=0.9584 test=N/A | ❌
+[2026-03-19 21:01:14] Experiment 127/632 | MACD (fast=14, slow=20, signal=9) | train=1.1428 test=N/A | ❌
+[2026-03-19 21:01:15] Experiment 128/632 | MACD (fast=14, slow=20, signal=11) | train=0.9013 test=N/A | ❌
+[2026-03-19 21:01:15] Experiment 129/632 | MACD (fast=14, slow=20, signal=13) | train=0.9170 test=N/A | ❌
+[2026-03-19 21:01:16] Experiment 130/632 | MACD (fast=14, slow=24, signal=5) | train=1.1251 test=N/A | ❌
+[2026-03-19 21:01:17] Experiment 131/632 | MACD (fast=14, slow=24, signal=7) | train=1.0269 test=N/A | ❌
+[2026-03-19 21:01:17] Experiment 132/632 | MACD (fast=14, slow=24, signal=9) | train=1.0946 test=N/A | ❌
+[2026-03-19 21:01:18] Experiment 133/632 | MACD (fast=14, slow=24, signal=11) | train=0.9604 test=N/A | ❌
+[2026-03-19 21:01:19] Experiment 134/632 | MACD (fast=14, slow=24, signal=13) | train=0.9078 test=N/A | ❌
+[2026-03-19 21:01:19] Experiment 135/632 | MACD (fast=14, slow=26, signal=5) | train=0.9210 test=N/A | ❌
+[2026-03-19 21:01:20] Experiment 136/632 | MACD (fast=14, slow=26, signal=7) | train=1.1219 test=N/A | ❌
+[2026-03-19 21:01:21] Experiment 137/632 | MACD (fast=14, slow=26, signal=9) | train=1.0804 test=N/A | ❌
+[2026-03-19 21:01:21] Experiment 138/632 | MACD (fast=14, slow=26, signal=11) | train=1.0135 test=N/A | ❌
+[2026-03-19 21:01:22] Experiment 139/632 | MACD (fast=14, slow=26, signal=13) | train=0.9058 test=N/A | ❌
+[2026-03-19 21:01:23] Experiment 140/632 | MACD (fast=14, slow=30, signal=5) | train=1.0124 test=N/A | ❌
+[2026-03-19 21:01:23] Experiment 141/632 | MACD (fast=14, slow=30, signal=7) | train=1.0727 test=N/A | ❌
+[2026-03-19 21:01:24] Experiment 142/632 | MACD (fast=14, slow=30, signal=9) | train=1.0831 test=N/A | ❌
+[2026-03-19 21:01:25] Experiment 143/632 | MACD (fast=14, slow=30, signal=11) | train=0.9198 test=N/A | ❌
+[2026-03-19 21:01:25] Experiment 144/632 | MACD (fast=14, slow=30, signal=13) | train=0.9328 test=N/A | ❌
+[2026-03-19 21:01:26] Experiment 145/632 | MACD (fast=14, slow=35, signal=5) | train=1.0341 test=N/A | ❌
+[2026-03-19 21:01:27] Experiment 146/632 | MACD (fast=14, slow=35, signal=7) | train=1.0408 test=N/A | ❌
+[2026-03-19 21:01:27] Experiment 147/632 | MACD (fast=14, slow=35, signal=9) | train=1.1030 test=N/A | ❌
+[2026-03-19 21:01:28] Experiment 148/632 | MACD (fast=14, slow=35, signal=11) | train=0.9835 test=N/A | ❌
+[2026-03-19 21:01:29] Experiment 149/632 | MACD (fast=14, slow=35, signal=13) | train=0.9421 test=N/A | ❌
+[2026-03-19 21:01:29] Experiment 150/632 | MACD (fast=16, slow=20, signal=5) | train=1.1333 test=N/A | ❌
+[2026-03-19 21:01:30] Experiment 151/632 | MACD (fast=16, slow=20, signal=7) | train=1.0518 test=N/A | ❌
+[2026-03-19 21:01:31] Experiment 152/632 | MACD (fast=16, slow=20, signal=9) | train=1.0142 test=N/A | ❌
+[2026-03-19 21:01:32] Experiment 153/632 | MACD (fast=16, slow=20, signal=11) | train=0.9120 test=N/A | ❌
+[2026-03-19 21:01:32] Experiment 154/632 | MACD (fast=16, slow=20, signal=13) | train=0.9707 test=N/A | ❌
+[2026-03-19 21:01:33] Experiment 155/632 | MACD (fast=16, slow=24, signal=5) | train=0.9466 test=N/A | ❌
+[2026-03-19 21:01:34] Experiment 156/632 | MACD (fast=16, slow=24, signal=7) | train=1.0757 test=N/A | ❌
+[2026-03-19 21:01:34] Experiment 157/632 | MACD (fast=16, slow=24, signal=9) | train=1.0569 test=N/A | ❌
+[2026-03-19 21:01:35] Experiment 158/632 | MACD (fast=16, slow=24, signal=11) | train=0.9768 test=N/A | ❌
+[2026-03-19 21:01:36] Experiment 159/632 | MACD (fast=16, slow=24, signal=13) | train=0.9743 test=N/A | ❌
+[2026-03-19 21:01:36] Experiment 160/632 | MACD (fast=16, slow=26, signal=5) | train=0.9608 test=N/A | ❌
+[2026-03-19 21:01:37] Experiment 161/632 | MACD (fast=16, slow=26, signal=7) | train=1.0214 test=N/A | ❌
+[2026-03-19 21:01:38] Experiment 162/632 | MACD (fast=16, slow=26, signal=9) | train=1.0322 test=N/A | ❌
+[2026-03-19 21:01:38] Experiment 163/632 | MACD (fast=16, slow=26, signal=11) | train=0.8714 test=N/A | ❌
+[2026-03-19 21:01:39] Experiment 164/632 | MACD (fast=16, slow=26, signal=13) | train=0.9458 test=N/A | ❌
+[2026-03-19 21:01:40] Experiment 165/632 | MACD (fast=16, slow=30, signal=5) | train=0.9648 test=N/A | ❌
+[2026-03-19 21:01:41] Experiment 166/632 | MACD (fast=16, slow=30, signal=7) | train=1.1622 test=0.1619 | ❌
+[2026-03-19 21:01:41] Experiment 167/632 | MACD (fast=16, slow=30, signal=9) | train=0.9798 test=N/A | ❌
+[2026-03-19 21:01:42] Experiment 168/632 | MACD (fast=16, slow=30, signal=11) | train=0.9712 test=N/A | ❌
+[2026-03-19 21:01:43] Experiment 169/632 | MACD (fast=16, slow=30, signal=13) | train=0.9429 test=N/A | ❌
+[2026-03-19 21:01:44] Experiment 170/632 | MACD (fast=16, slow=35, signal=5) | train=1.0284 test=N/A | ❌
+[2026-03-19 21:01:44] Experiment 171/632 | MACD (fast=16, slow=35, signal=7) | train=1.2049 test=0.1229 | ❌
+[2026-03-19 21:01:45] Experiment 172/632 | MACD (fast=16, slow=35, signal=9) | train=0.9483 test=N/A | ❌
+[2026-03-19 21:01:46] Experiment 173/632 | MACD (fast=16, slow=35, signal=11) | train=0.9231 test=N/A | ❌
+[2026-03-19 21:01:47] Experiment 174/632 | MACD (fast=16, slow=35, signal=13) | train=0.9264 test=N/A | ❌
+[2026-03-19 21:01:47] Completed MACD sweep
+[2026-03-19 21:01:47] Starting RSI Mean Reversion sweep (100 combos)...
+[2026-03-19 21:01:48] Experiment 175/632 | RSI Mean Reversion (period=7, oversold=15, overbought=65) | train=-0.0186 test=N/A | ❌
+[2026-03-19 21:01:50] Experiment 176/632 | RSI Mean Reversion (period=7, oversold=15, overbought=70) | train=0.0217 test=N/A | ❌
+[2026-03-19 21:01:52] Experiment 177/632 | RSI Mean Reversion (period=7, oversold=15, overbought=75) | train=0.1191 test=N/A | ❌
+[2026-03-19 21:01:53] Experiment 178/632 | RSI Mean Reversion (period=7, oversold=15, overbought=80) | train=0.0869 test=N/A | ❌
+[2026-03-19 21:01:55] Experiment 179/632 | RSI Mean Reversion (period=7, oversold=15, overbought=85) | train=0.1548 test=N/A | ❌
+[2026-03-19 21:01:57] Experiment 180/632 | RSI Mean Reversion (period=7, oversold=20, overbought=65) | train=0.0867 test=N/A | ❌
+[2026-03-19 21:01:58] Experiment 181/632 | RSI Mean Reversion (period=7, oversold=20, overbought=70) | train=0.1370 test=N/A | ❌
+[2026-03-19 21:02:00] Experiment 182/632 | RSI Mean Reversion (period=7, oversold=20, overbought=75) | train=0.2474 test=N/A | ❌
+[2026-03-19 21:02:01] Experiment 183/632 | RSI Mean Reversion (period=7, oversold=20, overbought=80) | train=0.2466 test=N/A | ❌
+[2026-03-19 21:02:03] Experiment 184/632 | RSI Mean Reversion (period=7, oversold=20, overbought=85) | train=0.3214 test=N/A | ❌
+[2026-03-19 21:02:05] Experiment 185/632 | RSI Mean Reversion (period=7, oversold=25, overbought=65) | train=0.1475 test=N/A | ❌
+[2026-03-19 21:02:06] Experiment 186/632 | RSI Mean Reversion (period=7, oversold=25, overbought=70) | train=0.1725 test=N/A | ❌
+[2026-03-19 21:02:08] Experiment 187/632 | RSI Mean Reversion (period=7, oversold=25, overbought=75) | train=0.2749 test=N/A | ❌
+[2026-03-19 21:02:10] Experiment 188/632 | RSI Mean Reversion (period=7, oversold=25, overbought=80) | train=0.3172 test=N/A | ❌
+[2026-03-19 21:02:11] Experiment 189/632 | RSI Mean Reversion (period=7, oversold=25, overbought=85) | train=0.3571 test=N/A | ❌
+[2026-03-19 21:02:13] Experiment 190/632 | RSI Mean Reversion (period=7, oversold=30, overbought=65) | train=0.2311 test=N/A | ❌
+[2026-03-19 21:02:15] Experiment 191/632 | RSI Mean Reversion (period=7, oversold=30, overbought=70) | train=0.2543 test=N/A | ❌
+[2026-03-19 21:02:16] Experiment 192/632 | RSI Mean Reversion (period=7, oversold=30, overbought=75) | train=0.3325 test=N/A | ❌
+[2026-03-19 21:02:18] Experiment 193/632 | RSI Mean Reversion (period=7, oversold=30, overbought=80) | train=0.3132 test=N/A | ❌
+[2026-03-19 21:02:20] Experiment 194/632 | RSI Mean Reversion (period=7, oversold=30, overbought=85) | train=0.3847 test=N/A | ❌
+[2026-03-19 21:02:21] Experiment 195/632 | RSI Mean Reversion (period=7, oversold=35, overbought=65) | train=0.2963 test=N/A | ❌
+[2026-03-19 21:02:23] Experiment 196/632 | RSI Mean Reversion (period=7, oversold=35, overbought=70) | train=0.3181 test=N/A | ❌
+[2026-03-19 21:02:25] Experiment 197/632 | RSI Mean Reversion (period=7, oversold=35, overbought=75) | train=0.3973 test=N/A | ❌
+[2026-03-19 21:02:26] Experiment 198/632 | RSI Mean Reversion (period=7, oversold=35, overbought=80) | train=0.3928 test=N/A | ❌
+[2026-03-19 21:02:28] Experiment 199/632 | RSI Mean Reversion (period=7, oversold=35, overbought=85) | train=0.4285 test=N/A | ❌
+[2026-03-19 21:02:30] Experiment 200/632 | RSI Mean Reversion (period=10, oversold=15, overbought=65) | train=0.0966 test=N/A | ❌
+[2026-03-19 21:02:32] Experiment 201/632 | RSI Mean Reversion (period=10, oversold=15, overbought=70) | train=0.1549 test=N/A | ❌
+[2026-03-19 21:02:34] Experiment 202/632 | RSI Mean Reversion (period=10, oversold=15, overbought=75) | train=0.2310 test=N/A | ❌
+[2026-03-19 21:02:36] Experiment 203/632 | RSI Mean Reversion (period=10, oversold=15, overbought=80) | train=0.2033 test=N/A | ❌
+[2026-03-19 21:02:38] Experiment 204/632 | RSI Mean Reversion (period=10, oversold=15, overbought=85) | train=0.3055 test=N/A | ❌
+[2026-03-19 21:02:40] Experiment 205/632 | RSI Mean Reversion (period=10, oversold=20, overbought=65) | train=0.2843 test=N/A | ❌
+[2026-03-19 21:02:42] Experiment 206/632 | RSI Mean Reversion (period=10, oversold=20, overbought=70) | train=0.3360 test=N/A | ❌
+[2026-03-19 21:02:44] Experiment 207/632 | RSI Mean Reversion (period=10, oversold=20, overbought=75) | train=0.4069 test=N/A | ❌
+[2026-03-19 21:02:46] Experiment 208/632 | RSI Mean Reversion (period=10, oversold=20, overbought=80) | train=0.4405 test=N/A | ❌
+[2026-03-19 21:02:47] Experiment 209/632 | RSI Mean Reversion (period=10, oversold=20, overbought=85) | train=0.6284 test=N/A | ❌
+[2026-03-19 21:02:49] Experiment 210/632 | RSI Mean Reversion (period=10, oversold=25, overbought=65) | train=0.3206 test=N/A | ❌
+[2026-03-19 21:02:51] Experiment 211/632 | RSI Mean Reversion (period=10, oversold=25, overbought=70) | train=0.3661 test=N/A | ❌
+[2026-03-19 21:02:53] Experiment 212/632 | RSI Mean Reversion (period=10, oversold=25, overbought=75) | train=0.4491 test=N/A | ❌
+[2026-03-19 21:02:55] Experiment 213/632 | RSI Mean Reversion (period=10, oversold=25, overbought=80) | train=0.4822 test=N/A | ❌
+[2026-03-19 21:02:57] Experiment 214/632 | RSI Mean Reversion (period=10, oversold=25, overbought=85) | train=0.6972 test=N/A | ❌
+[2026-03-19 21:02:59] Experiment 215/632 | RSI Mean Reversion (period=10, oversold=30, overbought=65) | train=0.4768 test=N/A | ❌
+[2026-03-19 21:03:01] Experiment 216/632 | RSI Mean Reversion (period=10, oversold=30, overbought=70) | train=0.4869 test=N/A | ❌
+[2026-03-19 21:03:03] Experiment 217/632 | RSI Mean Reversion (period=10, oversold=30, overbought=75) | train=0.5972 test=N/A | ❌
+[2026-03-19 21:03:05] Experiment 218/632 | RSI Mean Reversion (period=10, oversold=30, overbought=80) | train=0.6070 test=N/A | ❌
+[2026-03-19 21:03:07] Experiment 219/632 | RSI Mean Reversion (period=10, oversold=30, overbought=85) | train=0.8134 test=N/A | ❌
+[2026-03-19 21:03:09] Experiment 220/632 | RSI Mean Reversion (period=10, oversold=35, overbought=65) | train=0.4223 test=N/A | ❌
+[2026-03-19 21:03:11] Experiment 221/632 | RSI Mean Reversion (period=10, oversold=35, overbought=70) | train=0.5115 test=N/A | ❌
+[2026-03-19 21:03:13] Experiment 222/632 | RSI Mean Reversion (period=10, oversold=35, overbought=75) | train=0.6226 test=N/A | ❌
+[2026-03-19 21:03:15] Experiment 223/632 | RSI Mean Reversion (period=10, oversold=35, overbought=80) | train=0.5427 test=N/A | ❌
+[2026-03-19 21:03:17] Experiment 224/632 | RSI Mean Reversion (period=10, oversold=35, overbought=85) | train=0.7025 test=N/A | ❌
+[2026-03-19 21:03:19] Experiment 225/632 | RSI Mean Reversion (period=14, oversold=15, overbought=65) | train=-0.1301 test=N/A | ❌
+[2026-03-19 21:03:22] Experiment 226/632 | RSI Mean Reversion (period=14, oversold=15, overbought=70) | train=-0.1130 test=N/A | ❌
+[2026-03-19 21:03:24] Experiment 227/632 | RSI Mean Reversion (period=14, oversold=15, overbought=75) | train=0.0618 test=N/A | ❌
+[2026-03-19 21:03:26] Experiment 228/632 | RSI Mean Reversion (period=14, oversold=15, overbought=80) | train=0.0618 test=N/A | ❌
+[2026-03-19 21:03:28] Experiment 229/632 | RSI Mean Reversion (period=14, oversold=15, overbought=85) | train=0.2202 test=N/A | ❌
+[2026-03-19 21:03:31] Experiment 230/632 | RSI Mean Reversion (period=14, oversold=20, overbought=65) | train=0.0081 test=N/A | ❌
+[2026-03-19 21:03:33] Experiment 231/632 | RSI Mean Reversion (period=14, oversold=20, overbought=70) | train=0.0354 test=N/A | ❌
+[2026-03-19 21:03:35] Experiment 232/632 | RSI Mean Reversion (period=14, oversold=20, overbought=75) | train=0.2015 test=N/A | ❌
+[2026-03-19 21:03:38] Experiment 233/632 | RSI Mean Reversion (period=14, oversold=20, overbought=80) | train=0.2015 test=N/A | ❌
+[2026-03-19 21:03:40] Experiment 234/632 | RSI Mean Reversion (period=14, oversold=20, overbought=85) | train=0.4650 test=N/A | ❌
+[2026-03-19 21:03:42] Experiment 235/632 | RSI Mean Reversion (period=14, oversold=25, overbought=65) | train=0.1712 test=N/A | ❌
+[2026-03-19 21:03:45] Experiment 236/632 | RSI Mean Reversion (period=14, oversold=25, overbought=70) | train=0.2455 test=N/A | ❌
+[2026-03-19 21:03:47] Experiment 237/632 | RSI Mean Reversion (period=14, oversold=25, overbought=75) | train=0.3961 test=N/A | ❌
+[2026-03-19 21:03:49] Experiment 238/632 | RSI Mean Reversion (period=14, oversold=25, overbought=80) | train=0.3010 test=N/A | ❌
+[2026-03-19 21:03:52] Experiment 239/632 | RSI Mean Reversion (period=14, oversold=25, overbought=85) | train=0.5498 test=N/A | ❌
+[2026-03-19 21:03:54] Experiment 240/632 | RSI Mean Reversion (period=14, oversold=30, overbought=65) | train=0.6194 test=N/A | ❌
+[2026-03-19 21:03:56] Experiment 241/632 | RSI Mean Reversion (period=14, oversold=30, overbought=70) | train=0.6248 test=N/A | ❌
+[2026-03-19 21:03:59] Experiment 242/632 | RSI Mean Reversion (period=14, oversold=30, overbought=75) | train=0.7658 test=N/A | ❌
+[2026-03-19 21:04:01] Experiment 243/632 | RSI Mean Reversion (period=14, oversold=30, overbought=80) | train=0.7056 test=N/A | ❌
+[2026-03-19 21:04:03] Experiment 244/632 | RSI Mean Reversion (period=14, oversold=30, overbought=85) | train=0.9463 test=N/A | ❌
+[2026-03-19 21:04:05] Experiment 245/632 | RSI Mean Reversion (period=14, oversold=35, overbought=65) | train=0.6328 test=N/A | ❌
+[2026-03-19 21:04:08] Experiment 246/632 | RSI Mean Reversion (period=14, oversold=35, overbought=70) | train=0.6375 test=N/A | ❌
+[2026-03-19 21:04:10] Experiment 247/632 | RSI Mean Reversion (period=14, oversold=35, overbought=75) | train=0.7829 test=N/A | ❌
+[2026-03-19 21:04:12] Experiment 248/632 | RSI Mean Reversion (period=14, oversold=35, overbought=80) | train=0.7829 test=N/A | ❌
+[2026-03-19 21:04:15] Experiment 249/632 | RSI Mean Reversion (period=14, oversold=35, overbought=85) | train=1.0652 test=N/A | ❌
+[2026-03-19 21:04:18] Experiment 250/632 | RSI Mean Reversion (period=20, oversold=15, overbought=65) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:20] Experiment 251/632 | RSI Mean Reversion (period=20, oversold=15, overbought=70) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:23] Experiment 252/632 | RSI Mean Reversion (period=20, oversold=15, overbought=75) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:26] Experiment 253/632 | RSI Mean Reversion (period=20, oversold=15, overbought=80) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:29] Experiment 254/632 | RSI Mean Reversion (period=20, oversold=15, overbought=85) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:32] Experiment 255/632 | RSI Mean Reversion (period=20, oversold=20, overbought=65) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:35] Experiment 256/632 | RSI Mean Reversion (period=20, oversold=20, overbought=70) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:38] Experiment 257/632 | RSI Mean Reversion (period=20, oversold=20, overbought=75) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:41] Experiment 258/632 | RSI Mean Reversion (period=20, oversold=20, overbought=80) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:43] Experiment 259/632 | RSI Mean Reversion (period=20, oversold=20, overbought=85) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:04:46] Experiment 260/632 | RSI Mean Reversion (period=20, oversold=25, overbought=65) | train=0.2712 test=N/A | ❌
+[2026-03-19 21:04:49] Experiment 261/632 | RSI Mean Reversion (period=20, oversold=25, overbought=70) | train=0.2914 test=N/A | ❌
+[2026-03-19 21:04:52] Experiment 262/632 | RSI Mean Reversion (period=20, oversold=25, overbought=75) | train=0.4388 test=N/A | ❌
+[2026-03-19 21:04:55] Experiment 263/632 | RSI Mean Reversion (period=20, oversold=25, overbought=80) | train=0.5852 test=N/A | ❌
+[2026-03-19 21:04:58] Experiment 264/632 | RSI Mean Reversion (period=20, oversold=25, overbought=85) | train=0.8010 test=N/A | ❌
+[2026-03-19 21:05:01] Experiment 265/632 | RSI Mean Reversion (period=20, oversold=30, overbought=65) | train=0.1712 test=N/A | ❌
+[2026-03-19 21:05:03] Experiment 266/632 | RSI Mean Reversion (period=20, oversold=30, overbought=70) | train=0.1793 test=N/A | ❌
+[2026-03-19 21:05:06] Experiment 267/632 | RSI Mean Reversion (period=20, oversold=30, overbought=75) | train=0.3095 test=N/A | ❌
+[2026-03-19 21:05:09] Experiment 268/632 | RSI Mean Reversion (period=20, oversold=30, overbought=80) | train=0.4518 test=N/A | ❌
+[2026-03-19 21:05:12] Experiment 269/632 | RSI Mean Reversion (period=20, oversold=30, overbought=85) | train=0.6574 test=N/A | ❌
+[2026-03-19 21:05:15] Experiment 270/632 | RSI Mean Reversion (period=20, oversold=35, overbought=65) | train=0.3856 test=N/A | ❌
+[2026-03-19 21:05:18] Experiment 271/632 | RSI Mean Reversion (period=20, oversold=35, overbought=70) | train=0.4362 test=N/A | ❌
+[2026-03-19 21:05:21] Experiment 272/632 | RSI Mean Reversion (period=20, oversold=35, overbought=75) | train=0.5792 test=N/A | ❌
+[2026-03-19 21:05:24] Experiment 273/632 | RSI Mean Reversion (period=20, oversold=35, overbought=80) | train=0.7167 test=N/A | ❌
+[2026-03-19 21:05:26] Experiment 274/632 | RSI Mean Reversion (period=20, oversold=35, overbought=85) | train=0.8943 test=N/A | ❌
+[2026-03-19 21:05:27] Completed RSI Mean Reversion sweep
+[2026-03-19 21:05:27] Starting RSI(2) Connors sweep (144 combos)...
+[2026-03-19 21:05:29] Experiment 275/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=5, overbought=80) | train=0.1521 test=N/A | ❌
+[2026-03-19 21:05:31] Experiment 276/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=5, overbought=85) | train=0.1096 test=N/A | ❌
+[2026-03-19 21:05:33] Experiment 277/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=5, overbought=90) | train=0.1001 test=N/A | ❌
+[2026-03-19 21:05:35] Experiment 278/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=5, overbought=95) | train=-0.1796 test=N/A | ❌
+[2026-03-19 21:05:37] Experiment 279/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=10, overbought=80) | train=0.1226 test=N/A | ❌
+[2026-03-19 21:05:39] Experiment 280/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=10, overbought=85) | train=0.0756 test=N/A | ❌
+[2026-03-19 21:05:42] Experiment 281/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=10, overbought=90) | train=0.0664 test=N/A | ❌
+[2026-03-19 21:05:44] Experiment 282/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=10, overbought=95) | train=-0.1995 test=N/A | ❌
+[2026-03-19 21:05:46] Experiment 283/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=15, overbought=80) | train=0.0835 test=N/A | ❌
+[2026-03-19 21:05:48] Experiment 284/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=15, overbought=85) | train=0.0338 test=N/A | ❌
+[2026-03-19 21:05:50] Experiment 285/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=15, overbought=90) | train=0.0250 test=N/A | ❌
+[2026-03-19 21:05:53] Experiment 286/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=15, overbought=95) | train=-0.2155 test=N/A | ❌
+[2026-03-19 21:05:55] Experiment 287/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=20, overbought=80) | train=0.1746 test=N/A | ❌
+[2026-03-19 21:05:57] Experiment 288/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=20, overbought=85) | train=0.1282 test=N/A | ❌
+[2026-03-19 21:05:59] Experiment 289/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=20, overbought=90) | train=0.1191 test=N/A | ❌
+[2026-03-19 21:06:01] Experiment 290/632 | RSI(2) Connors (rsi_period=2, sma_period=100, oversold=20, overbought=95) | train=-0.1841 test=N/A | ❌
+[2026-03-19 21:06:04] Experiment 291/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=5, overbought=80) | train=0.1508 test=N/A | ❌
+[2026-03-19 21:06:06] Experiment 292/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=5, overbought=85) | train=0.1101 test=N/A | ❌
+[2026-03-19 21:06:09] Experiment 293/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=5, overbought=90) | train=0.1011 test=N/A | ❌
+[2026-03-19 21:06:11] Experiment 294/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=5, overbought=95) | train=-0.1735 test=N/A | ❌
+[2026-03-19 21:06:13] Experiment 295/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=10, overbought=80) | train=0.1168 test=N/A | ❌
+[2026-03-19 21:06:16] Experiment 296/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=10, overbought=85) | train=0.0718 test=N/A | ❌
+[2026-03-19 21:06:18] Experiment 297/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=10, overbought=90) | train=0.0630 test=N/A | ❌
+[2026-03-19 21:06:20] Experiment 298/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=10, overbought=95) | train=-0.1969 test=N/A | ❌
+[2026-03-19 21:06:23] Experiment 299/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=15, overbought=80) | train=0.0940 test=N/A | ❌
+[2026-03-19 21:06:25] Experiment 300/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=15, overbought=85) | train=0.0460 test=N/A | ❌
+[2026-03-19 21:06:28] Experiment 301/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=15, overbought=90) | train=0.0445 test=N/A | ❌
+[2026-03-19 21:06:30] Experiment 302/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=15, overbought=95) | train=-0.1988 test=N/A | ❌
+[2026-03-19 21:06:32] Experiment 303/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=20, overbought=80) | train=0.1870 test=N/A | ❌
+[2026-03-19 21:06:35] Experiment 304/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=20, overbought=85) | train=0.1382 test=N/A | ❌
+[2026-03-19 21:06:37] Experiment 305/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=20, overbought=90) | train=0.1363 test=N/A | ❌
+[2026-03-19 21:06:40] Experiment 306/632 | RSI(2) Connors (rsi_period=2, sma_period=150, oversold=20, overbought=95) | train=-0.1676 test=N/A | ❌
+[2026-03-19 21:06:42] Experiment 307/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=5, overbought=80) | train=0.1410 test=N/A | ❌
+[2026-03-19 21:06:45] Experiment 308/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=5, overbought=85) | train=0.1001 test=N/A | ❌
+[2026-03-19 21:06:47] Experiment 309/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=5, overbought=90) | train=0.0983 test=N/A | ❌
+[2026-03-19 21:06:50] Experiment 310/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=5, overbought=95) | train=-0.1763 test=N/A | ❌
+[2026-03-19 21:06:52] Experiment 311/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=10, overbought=80) | train=0.1068 test=N/A | ❌
+[2026-03-19 21:06:55] Experiment 312/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=10, overbought=85) | train=0.0616 test=N/A | ❌
+[2026-03-19 21:06:58] Experiment 313/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=10, overbought=90) | train=0.0600 test=N/A | ❌
+[2026-03-19 21:07:00] Experiment 314/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=10, overbought=95) | train=-0.1997 test=N/A | ❌
+[2026-03-19 21:07:03] Experiment 315/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=15, overbought=80) | train=0.0560 test=N/A | ❌
+[2026-03-19 21:07:05] Experiment 316/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=15, overbought=85) | train=0.0082 test=N/A | ❌
+[2026-03-19 21:07:08] Experiment 317/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=15, overbought=90) | train=0.0069 test=N/A | ❌
+[2026-03-19 21:07:11] Experiment 318/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=15, overbought=95) | train=-0.2243 test=N/A | ❌
+[2026-03-19 21:07:14] Experiment 319/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=20, overbought=80) | train=0.1748 test=N/A | ❌
+[2026-03-19 21:07:16] Experiment 320/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=20, overbought=85) | train=0.1259 test=N/A | ❌
+[2026-03-19 21:07:19] Experiment 321/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=20, overbought=90) | train=0.1240 test=N/A | ❌
+[2026-03-19 21:07:22] Experiment 322/632 | RSI(2) Connors (rsi_period=2, sma_period=200, oversold=20, overbought=95) | train=-0.1766 test=N/A | ❌
+[2026-03-19 21:07:24] Experiment 323/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=5, overbought=80) | train=-0.0760 test=N/A | ❌
+[2026-03-19 21:07:26] Experiment 324/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=5, overbought=85) | train=0.0015 test=N/A | ❌
+[2026-03-19 21:07:29] Experiment 325/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=5, overbought=90) | train=0.0317 test=N/A | ❌
+[2026-03-19 21:07:31] Experiment 326/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=5, overbought=95) | train=0.0807 test=N/A | ❌
+[2026-03-19 21:07:33] Experiment 327/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=10, overbought=80) | train=-0.0726 test=N/A | ❌
+[2026-03-19 21:07:36] Experiment 328/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=10, overbought=85) | train=-0.0045 test=N/A | ❌
+[2026-03-19 21:07:38] Experiment 329/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=10, overbought=90) | train=0.0255 test=N/A | ❌
+[2026-03-19 21:07:41] Experiment 330/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=10, overbought=95) | train=0.0831 test=N/A | ❌
+[2026-03-19 21:07:43] Experiment 331/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=15, overbought=80) | train=0.0245 test=N/A | ❌
+[2026-03-19 21:07:46] Experiment 332/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=15, overbought=85) | train=0.0647 test=N/A | ❌
+[2026-03-19 21:07:48] Experiment 333/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=15, overbought=90) | train=0.0935 test=N/A | ❌
+[2026-03-19 21:07:50] Experiment 334/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=15, overbought=95) | train=0.1195 test=N/A | ❌
+[2026-03-19 21:07:53] Experiment 335/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=20, overbought=80) | train=0.1363 test=N/A | ❌
+[2026-03-19 21:07:55] Experiment 336/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=20, overbought=85) | train=0.1649 test=N/A | ❌
+[2026-03-19 21:07:58] Experiment 337/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=20, overbought=90) | train=0.1808 test=N/A | ❌
+[2026-03-19 21:08:00] Experiment 338/632 | RSI(2) Connors (rsi_period=3, sma_period=100, oversold=20, overbought=95) | train=0.2216 test=N/A | ❌
+[2026-03-19 21:08:03] Experiment 339/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=5, overbought=80) | train=-0.0253 test=N/A | ❌
+[2026-03-19 21:08:05] Experiment 340/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=5, overbought=85) | train=-0.0082 test=N/A | ❌
+[2026-03-19 21:08:08] Experiment 341/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=5, overbought=90) | train=0.0346 test=N/A | ❌
+[2026-03-19 21:08:10] Experiment 342/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=5, overbought=95) | train=0.0835 test=N/A | ❌
+[2026-03-19 21:08:13] Experiment 343/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=10, overbought=80) | train=-0.0286 test=N/A | ❌
+[2026-03-19 21:08:16] Experiment 344/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=10, overbought=85) | train=-0.0221 test=N/A | ❌
+[2026-03-19 21:08:18] Experiment 345/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=10, overbought=90) | train=0.0205 test=N/A | ❌
+[2026-03-19 21:08:21] Experiment 346/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=10, overbought=95) | train=0.0782 test=N/A | ❌
+[2026-03-19 21:08:23] Experiment 347/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=15, overbought=80) | train=-0.0261 test=N/A | ❌
+[2026-03-19 21:08:26] Experiment 348/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=15, overbought=85) | train=0.0279 test=N/A | ❌
+[2026-03-19 21:08:29] Experiment 349/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=15, overbought=90) | train=0.0700 test=N/A | ❌
+[2026-03-19 21:08:31] Experiment 350/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=15, overbought=95) | train=0.0961 test=N/A | ❌
+[2026-03-19 21:08:34] Experiment 351/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=20, overbought=80) | train=0.0751 test=N/A | ❌
+[2026-03-19 21:08:36] Experiment 352/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=20, overbought=85) | train=0.1182 test=N/A | ❌
+[2026-03-19 21:08:39] Experiment 353/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=20, overbought=90) | train=0.1598 test=N/A | ❌
+[2026-03-19 21:08:42] Experiment 354/632 | RSI(2) Connors (rsi_period=3, sma_period=150, oversold=20, overbought=95) | train=0.2008 test=N/A | ❌
+[2026-03-19 21:08:44] Experiment 355/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=5, overbought=80) | train=-0.0512 test=N/A | ❌
+[2026-03-19 21:08:47] Experiment 356/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=5, overbought=85) | train=-0.0332 test=N/A | ❌
+[2026-03-19 21:08:50] Experiment 357/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=5, overbought=90) | train=0.0098 test=N/A | ❌
+[2026-03-19 21:08:53] Experiment 358/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=5, overbought=95) | train=0.0517 test=N/A | ❌
+[2026-03-19 21:08:55] Experiment 359/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=10, overbought=80) | train=-0.0678 test=N/A | ❌
+[2026-03-19 21:08:58] Experiment 360/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=10, overbought=85) | train=-0.0600 test=N/A | ❌
+[2026-03-19 21:09:01] Experiment 361/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=10, overbought=90) | train=-0.0172 test=N/A | ❌
+[2026-03-19 21:09:04] Experiment 362/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=10, overbought=95) | train=0.0337 test=N/A | ❌
+[2026-03-19 21:09:06] Experiment 363/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=15, overbought=80) | train=-0.0443 test=N/A | ❌
+[2026-03-19 21:09:09] Experiment 364/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=15, overbought=85) | train=0.0104 test=N/A | ❌
+[2026-03-19 21:09:12] Experiment 365/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=15, overbought=90) | train=0.0526 test=N/A | ❌
+[2026-03-19 21:09:15] Experiment 366/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=15, overbought=95) | train=0.0717 test=N/A | ❌
+[2026-03-19 21:09:18] Experiment 367/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=20, overbought=80) | train=0.0574 test=N/A | ❌
+[2026-03-19 21:09:20] Experiment 368/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=20, overbought=85) | train=0.1010 test=N/A | ❌
+[2026-03-19 21:09:23] Experiment 369/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=20, overbought=90) | train=0.1428 test=N/A | ❌
+[2026-03-19 21:09:26] Experiment 370/632 | RSI(2) Connors (rsi_period=3, sma_period=200, oversold=20, overbought=95) | train=0.1769 test=N/A | ❌
+[2026-03-19 21:09:28] Experiment 371/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=5, overbought=80) | train=0.2077 test=N/A | ❌
+[2026-03-19 21:09:31] Experiment 372/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=5, overbought=85) | train=0.2729 test=N/A | ❌
+[2026-03-19 21:09:34] Experiment 373/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=5, overbought=90) | train=0.5541 test=N/A | ❌
+[2026-03-19 21:09:36] Experiment 374/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=5, overbought=95) | train=0.4770 test=N/A | ❌
+[2026-03-19 21:09:39] Experiment 375/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=10, overbought=80) | train=-0.1242 test=N/A | ❌
+[2026-03-19 21:09:41] Experiment 376/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=10, overbought=85) | train=-0.0996 test=N/A | ❌
+[2026-03-19 21:09:44] Experiment 377/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=10, overbought=90) | train=0.1738 test=N/A | ❌
+[2026-03-19 21:09:47] Experiment 378/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=10, overbought=95) | train=0.1548 test=N/A | ❌
+[2026-03-19 21:09:49] Experiment 379/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=15, overbought=80) | train=0.2126 test=N/A | ❌
+[2026-03-19 21:09:52] Experiment 380/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=15, overbought=85) | train=0.2862 test=N/A | ❌
+[2026-03-19 21:09:54] Experiment 381/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=15, overbought=90) | train=0.4139 test=N/A | ❌
+[2026-03-19 21:09:57] Experiment 382/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=15, overbought=95) | train=0.4332 test=N/A | ❌
+[2026-03-19 21:09:59] Experiment 383/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=20, overbought=80) | train=0.2523 test=N/A | ❌
+[2026-03-19 21:10:02] Experiment 384/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=20, overbought=85) | train=0.3109 test=N/A | ❌
+[2026-03-19 21:10:05] Experiment 385/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=20, overbought=90) | train=0.4356 test=N/A | ❌
+[2026-03-19 21:10:07] Experiment 386/632 | RSI(2) Connors (rsi_period=4, sma_period=100, oversold=20, overbought=95) | train=0.4629 test=N/A | ❌
+[2026-03-19 21:10:10] Experiment 387/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=5, overbought=80) | train=-0.0898 test=N/A | ❌
+[2026-03-19 21:10:13] Experiment 388/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=5, overbought=85) | train=-0.0321 test=N/A | ❌
+[2026-03-19 21:10:15] Experiment 389/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=5, overbought=90) | train=0.2479 test=N/A | ❌
+[2026-03-19 21:10:18] Experiment 390/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=5, overbought=95) | train=0.2010 test=N/A | ❌
+[2026-03-19 21:10:21] Experiment 391/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=10, overbought=80) | train=-0.0345 test=N/A | ❌
+[2026-03-19 21:10:24] Experiment 392/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=10, overbought=85) | train=0.0317 test=N/A | ❌
+[2026-03-19 21:10:26] Experiment 393/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=10, overbought=90) | train=0.2118 test=N/A | ❌
+[2026-03-19 21:10:29] Experiment 394/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=10, overbought=95) | train=0.1782 test=N/A | ❌
+[2026-03-19 21:10:32] Experiment 395/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=15, overbought=80) | train=0.2083 test=N/A | ❌
+[2026-03-19 21:10:35] Experiment 396/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=15, overbought=85) | train=0.2941 test=N/A | ❌
+[2026-03-19 21:10:38] Experiment 397/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=15, overbought=90) | train=0.4205 test=N/A | ❌
+[2026-03-19 21:10:40] Experiment 398/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=15, overbought=95) | train=0.4265 test=N/A | ❌
+[2026-03-19 21:10:43] Experiment 399/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=20, overbought=80) | train=0.2856 test=N/A | ❌
+[2026-03-19 21:10:46] Experiment 400/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=20, overbought=85) | train=0.3186 test=N/A | ❌
+[2026-03-19 21:10:49] Experiment 401/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=20, overbought=90) | train=0.4421 test=N/A | ❌
+[2026-03-19 21:10:51] Experiment 402/632 | RSI(2) Connors (rsi_period=4, sma_period=150, oversold=20, overbought=95) | train=0.4563 test=N/A | ❌
+[2026-03-19 21:10:54] Experiment 403/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=5, overbought=80) | train=-0.1069 test=N/A | ❌
+[2026-03-19 21:10:57] Experiment 404/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=5, overbought=85) | train=-0.0647 test=N/A | ❌
+[2026-03-19 21:11:00] Experiment 405/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=5, overbought=90) | train=0.2244 test=N/A | ❌
+[2026-03-19 21:11:03] Experiment 406/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=5, overbought=95) | train=0.1776 test=N/A | ❌
+[2026-03-19 21:11:06] Experiment 407/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=10, overbought=80) | train=-0.0518 test=N/A | ❌
+[2026-03-19 21:11:09] Experiment 408/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=10, overbought=85) | train=-0.0009 test=N/A | ❌
+[2026-03-19 21:11:12] Experiment 409/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=10, overbought=90) | train=0.1882 test=N/A | ❌
+[2026-03-19 21:11:15] Experiment 410/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=10, overbought=95) | train=0.1548 test=N/A | ❌
+[2026-03-19 21:11:18] Experiment 411/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=15, overbought=80) | train=0.1896 test=N/A | ❌
+[2026-03-19 21:11:21] Experiment 412/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=15, overbought=85) | train=0.2604 test=N/A | ❌
+[2026-03-19 21:11:24] Experiment 413/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=15, overbought=90) | train=0.3981 test=N/A | ❌
+[2026-03-19 21:11:26] Experiment 414/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=15, overbought=95) | train=0.4045 test=N/A | ❌
+[2026-03-19 21:11:29] Experiment 415/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=20, overbought=80) | train=0.2120 test=N/A | ❌
+[2026-03-19 21:11:32] Experiment 416/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=20, overbought=85) | train=0.2317 test=N/A | ❌
+[2026-03-19 21:11:35] Experiment 417/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=20, overbought=90) | train=0.3702 test=N/A | ❌
+[2026-03-19 21:11:38] Experiment 418/632 | RSI(2) Connors (rsi_period=4, sma_period=200, oversold=20, overbought=95) | train=0.3858 test=N/A | ❌
+[2026-03-19 21:11:39] Completed RSI(2) Connors sweep
+[2026-03-19 21:11:39] Starting Bollinger Breakout sweep (20 combos)...
+[2026-03-19 21:11:41] Experiment 419/632 | Bollinger Breakout (period=10, std_dev=1.5) | train=0.6542 test=N/A | ❌
+[2026-03-19 21:11:43] Experiment 420/632 | Bollinger Breakout (period=10, std_dev=2.0) | train=0.0653 test=N/A | ❌
+[2026-03-19 21:11:45] Experiment 421/632 | Bollinger Breakout (period=10, std_dev=2.5) | train=0.2795 test=N/A | ❌
+[2026-03-19 21:11:48] Experiment 422/632 | Bollinger Breakout (period=10, std_dev=3.0) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:11:51] Experiment 423/632 | Bollinger Breakout (period=15, std_dev=1.5) | train=0.6649 test=N/A | ❌
+[2026-03-19 21:11:54] Experiment 424/632 | Bollinger Breakout (period=15, std_dev=2.0) | train=0.1225 test=N/A | ❌
+[2026-03-19 21:11:57] Experiment 425/632 | Bollinger Breakout (period=15, std_dev=2.5) | train=0.4579 test=N/A | ❌
+[2026-03-19 21:12:00] Experiment 426/632 | Bollinger Breakout (period=15, std_dev=3.0) | train=0.5907 test=N/A | ❌
+[2026-03-19 21:12:03] Experiment 427/632 | Bollinger Breakout (period=20, std_dev=1.5) | train=0.9377 test=N/A | ❌
+[2026-03-19 21:12:06] Experiment 428/632 | Bollinger Breakout (period=20, std_dev=2.0) | train=0.2277 test=N/A | ❌
+[2026-03-19 21:12:10] Experiment 429/632 | Bollinger Breakout (period=20, std_dev=2.5) | train=0.3261 test=N/A | ❌
+[2026-03-19 21:12:13] Experiment 430/632 | Bollinger Breakout (period=20, std_dev=3.0) | train=0.6031 test=N/A | ❌
+[2026-03-19 21:12:17] Experiment 431/632 | Bollinger Breakout (period=25, std_dev=1.5) | train=0.9076 test=N/A | ❌
+[2026-03-19 21:12:21] Experiment 432/632 | Bollinger Breakout (period=25, std_dev=2.0) | train=0.2386 test=N/A | ❌
+[2026-03-19 21:12:25] Experiment 433/632 | Bollinger Breakout (period=25, std_dev=2.5) | train=0.0693 test=N/A | ❌
+[2026-03-19 21:12:29] Experiment 434/632 | Bollinger Breakout (period=25, std_dev=3.0) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:12:34] Experiment 435/632 | Bollinger Breakout (period=30, std_dev=1.5) | train=0.9406 test=N/A | ❌
+[2026-03-19 21:12:38] Experiment 436/632 | Bollinger Breakout (period=30, std_dev=2.0) | train=0.3709 test=N/A | ❌
+[2026-03-19 21:12:43] Experiment 437/632 | Bollinger Breakout (period=30, std_dev=2.5) | train=-0.0044 test=N/A | ❌
+[2026-03-19 21:12:47] Experiment 438/632 | Bollinger Breakout (period=30, std_dev=3.0) | train=0.6339 test=N/A | ❌
+[2026-03-19 21:12:48] Completed Bollinger Breakout sweep
+[2026-03-19 21:12:48] Starting Donchian Breakout sweep (30 combos)...
+[2026-03-19 21:12:50] Experiment 439/632 | Donchian Breakout (entry_period=10, exit_period=5) | train=0.8628 test=N/A | ❌
+[2026-03-19 21:12:54] Experiment 440/632 | Donchian Breakout (entry_period=10, exit_period=7) | train=1.0105 test=N/A | ❌
+[2026-03-19 21:12:57] Experiment 441/632 | Donchian Breakout (entry_period=10, exit_period=10) | train=0.8765 test=N/A | ❌
+[2026-03-19 21:13:01] Experiment 442/632 | Donchian Breakout (entry_period=10, exit_period=15) | train=0.7827 test=N/A | ❌
+[2026-03-19 21:13:06] Experiment 443/632 | Donchian Breakout (entry_period=10, exit_period=20) | train=0.9001 test=N/A | ❌
+[2026-03-19 21:13:10] Experiment 444/632 | Donchian Breakout (entry_period=15, exit_period=5) | train=0.8522 test=N/A | ❌
+[2026-03-19 21:13:14] Experiment 445/632 | Donchian Breakout (entry_period=15, exit_period=7) | train=1.0028 test=N/A | ❌
+[2026-03-19 21:13:18] Experiment 446/632 | Donchian Breakout (entry_period=15, exit_period=10) | train=0.9710 test=N/A | ❌
+[2026-03-19 21:13:23] Experiment 447/632 | Donchian Breakout (entry_period=15, exit_period=15) | train=0.7890 test=N/A | ❌
+[2026-03-19 21:13:28] Experiment 448/632 | Donchian Breakout (entry_period=15, exit_period=20) | train=0.9099 test=N/A | ❌
+[2026-03-19 21:13:32] Experiment 449/632 | Donchian Breakout (entry_period=20, exit_period=5) | train=0.9073 test=N/A | ❌
+[2026-03-19 21:13:36] Experiment 450/632 | Donchian Breakout (entry_period=20, exit_period=7) | train=1.0570 test=N/A | ❌
+[2026-03-19 21:13:41] Experiment 451/632 | Donchian Breakout (entry_period=20, exit_period=10) | train=0.9971 test=N/A | ❌
+[2026-03-19 21:13:46] Experiment 452/632 | Donchian Breakout (entry_period=20, exit_period=15) | train=0.8011 test=N/A | ❌
+[2026-03-19 21:13:52] Experiment 453/632 | Donchian Breakout (entry_period=20, exit_period=20) | train=0.9576 test=N/A | ❌
+[2026-03-19 21:13:57] Experiment 454/632 | Donchian Breakout (entry_period=25, exit_period=5) | train=0.7161 test=N/A | ❌
+[2026-03-19 21:14:01] Experiment 455/632 | Donchian Breakout (entry_period=25, exit_period=7) | train=0.8890 test=N/A | ❌
+[2026-03-19 21:14:07] Experiment 456/632 | Donchian Breakout (entry_period=25, exit_period=10) | train=0.8514 test=N/A | ❌
+[2026-03-19 21:14:12] Experiment 457/632 | Donchian Breakout (entry_period=25, exit_period=15) | train=0.6707 test=N/A | ❌
+[2026-03-19 21:14:19] Experiment 458/632 | Donchian Breakout (entry_period=25, exit_period=20) | train=0.7931 test=N/A | ❌
+[2026-03-19 21:14:24] Experiment 459/632 | Donchian Breakout (entry_period=30, exit_period=5) | train=0.9081 test=N/A | ❌
+[2026-03-19 21:14:29] Experiment 460/632 | Donchian Breakout (entry_period=30, exit_period=7) | train=0.9256 test=N/A | ❌
+[2026-03-19 21:14:35] Experiment 461/632 | Donchian Breakout (entry_period=30, exit_period=10) | train=0.8765 test=N/A | ❌
+[2026-03-19 21:14:41] Experiment 462/632 | Donchian Breakout (entry_period=30, exit_period=15) | train=0.7752 test=N/A | ❌
+[2026-03-19 21:14:47] Experiment 463/632 | Donchian Breakout (entry_period=30, exit_period=20) | train=0.8978 test=N/A | ❌
+[2026-03-19 21:14:53] Experiment 464/632 | Donchian Breakout (entry_period=40, exit_period=5) | train=1.0820 test=N/A | ❌
+[2026-03-19 21:15:00] Experiment 465/632 | Donchian Breakout (entry_period=40, exit_period=7) | train=0.9681 test=N/A | ❌
+[2026-03-19 21:15:06] Experiment 466/632 | Donchian Breakout (entry_period=40, exit_period=10) | train=0.9290 test=N/A | ❌
+[2026-03-19 21:15:13] Experiment 467/632 | Donchian Breakout (entry_period=40, exit_period=15) | train=0.7684 test=N/A | ❌
+[2026-03-19 21:15:21] Experiment 468/632 | Donchian Breakout (entry_period=40, exit_period=20) | train=0.9378 test=N/A | ❌
+[2026-03-19 21:15:21] Completed Donchian Breakout sweep
+[2026-03-19 21:15:21] Starting MA+ATR Mean Reversion sweep (100 combos)...
+[2026-03-19 21:15:24] Experiment 469/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.5, exit_multiplier=0.25) | train=0.7131 test=N/A | ❌
+[2026-03-19 21:15:26] Experiment 470/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.5, exit_multiplier=0.5) | train=0.7550 test=N/A | ❌
+[2026-03-19 21:15:29] Experiment 471/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.5, exit_multiplier=0.75) | train=0.6715 test=N/A | ❌
+[2026-03-19 21:15:32] Experiment 472/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.5, exit_multiplier=1.0) | train=0.9999 test=N/A | ❌
+[2026-03-19 21:15:35] Experiment 473/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.75, exit_multiplier=0.25) | train=0.3895 test=N/A | ❌
+[2026-03-19 21:15:38] Experiment 474/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.75, exit_multiplier=0.5) | train=0.4199 test=N/A | ❌
+[2026-03-19 21:15:41] Experiment 475/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.75, exit_multiplier=0.75) | train=0.3441 test=N/A | ❌
+[2026-03-19 21:15:44] Experiment 476/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=0.75, exit_multiplier=1.0) | train=0.7704 test=N/A | ❌
+[2026-03-19 21:15:47] Experiment 477/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.0, exit_multiplier=0.25) | train=0.5894 test=N/A | ❌
+[2026-03-19 21:15:50] Experiment 478/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.0, exit_multiplier=0.5) | train=0.5928 test=N/A | ❌
+[2026-03-19 21:15:53] Experiment 479/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.0, exit_multiplier=0.75) | train=0.6048 test=N/A | ❌
+[2026-03-19 21:15:55] Experiment 480/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.0, exit_multiplier=1.0) | train=1.1229 test=N/A | ❌
+[2026-03-19 21:15:58] Experiment 481/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.25, exit_multiplier=0.25) | train=0.3809 test=N/A | ❌
+[2026-03-19 21:16:01] Experiment 482/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.25, exit_multiplier=0.5) | train=0.4136 test=N/A | ❌
+[2026-03-19 21:16:04] Experiment 483/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.25, exit_multiplier=0.75) | train=0.3592 test=N/A | ❌
+[2026-03-19 21:16:07] Experiment 484/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.25, exit_multiplier=1.0) | train=0.7480 test=N/A | ❌
+[2026-03-19 21:16:10] Experiment 485/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.5, exit_multiplier=0.25) | train=0.5165 test=N/A | ❌
+[2026-03-19 21:16:13] Experiment 486/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.5, exit_multiplier=0.5) | train=0.5186 test=N/A | ❌
+[2026-03-19 21:16:16] Experiment 487/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.5, exit_multiplier=0.75) | train=0.5450 test=N/A | ❌
+[2026-03-19 21:16:19] Experiment 488/632 | MA+ATR Mean Reversion (ma_period=20, entry_multiplier=1.5, exit_multiplier=1.0) | train=0.9010 test=N/A | ❌
+[2026-03-19 21:16:22] Experiment 489/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.5, exit_multiplier=0.25) | train=0.5728 test=N/A | ❌
+[2026-03-19 21:16:25] Experiment 490/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.5, exit_multiplier=0.5) | train=0.5987 test=N/A | ❌
+[2026-03-19 21:16:28] Experiment 491/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.5, exit_multiplier=0.75) | train=0.4231 test=N/A | ❌
+[2026-03-19 21:16:31] Experiment 492/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.5, exit_multiplier=1.0) | train=0.8082 test=N/A | ❌
+[2026-03-19 21:16:34] Experiment 493/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.75, exit_multiplier=0.25) | train=0.3515 test=N/A | ❌
+[2026-03-19 21:16:37] Experiment 494/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.75, exit_multiplier=0.5) | train=0.3629 test=N/A | ❌
+[2026-03-19 21:16:41] Experiment 495/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.75, exit_multiplier=0.75) | train=0.2156 test=N/A | ❌
+[2026-03-19 21:16:44] Experiment 496/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=0.75, exit_multiplier=1.0) | train=0.5936 test=N/A | ❌
+[2026-03-19 21:16:47] Experiment 497/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.0, exit_multiplier=0.25) | train=0.3943 test=N/A | ❌
+[2026-03-19 21:16:50] Experiment 498/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.0, exit_multiplier=0.5) | train=0.4016 test=N/A | ❌
+[2026-03-19 21:16:53] Experiment 499/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.0, exit_multiplier=0.75) | train=0.3730 test=N/A | ❌
+[2026-03-19 21:16:56] Experiment 500/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.0, exit_multiplier=1.0) | train=0.7551 test=N/A | ❌
+[2026-03-19 21:16:59] Experiment 501/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.25, exit_multiplier=0.25) | train=0.1919 test=N/A | ❌
+[2026-03-19 21:17:02] Experiment 502/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.25, exit_multiplier=0.5) | train=0.2514 test=N/A | ❌
+[2026-03-19 21:17:06] Experiment 503/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.25, exit_multiplier=0.75) | train=0.2713 test=N/A | ❌
+[2026-03-19 21:17:09] Experiment 504/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.25, exit_multiplier=1.0) | train=0.6159 test=N/A | ❌
+[2026-03-19 21:17:12] Experiment 505/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.5, exit_multiplier=0.25) | train=0.3261 test=N/A | ❌
+[2026-03-19 21:17:15] Experiment 506/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.5, exit_multiplier=0.5) | train=0.3773 test=N/A | ❌
+[2026-03-19 21:17:18] Experiment 507/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.5, exit_multiplier=0.75) | train=0.4532 test=N/A | ❌
+[2026-03-19 21:17:21] Experiment 508/632 | MA+ATR Mean Reversion (ma_period=30, entry_multiplier=1.5, exit_multiplier=1.0) | train=0.7795 test=N/A | ❌
+[2026-03-19 21:17:25] Experiment 509/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.5, exit_multiplier=0.25) | train=0.4355 test=N/A | ❌
+[2026-03-19 21:17:28] Experiment 510/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.5, exit_multiplier=0.5) | train=0.4423 test=N/A | ❌
+[2026-03-19 21:17:32] Experiment 511/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.5, exit_multiplier=0.75) | train=0.4825 test=N/A | ❌
+[2026-03-19 21:17:35] Experiment 512/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.5, exit_multiplier=1.0) | train=0.7776 test=N/A | ❌
+[2026-03-19 21:17:38] Experiment 513/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.75, exit_multiplier=0.25) | train=0.2388 test=N/A | ❌
+[2026-03-19 21:17:42] Experiment 514/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.75, exit_multiplier=0.5) | train=0.2323 test=N/A | ❌
+[2026-03-19 21:17:45] Experiment 515/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.75, exit_multiplier=0.75) | train=0.2569 test=N/A | ❌
+[2026-03-19 21:17:48] Experiment 516/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=0.75, exit_multiplier=1.0) | train=0.5421 test=N/A | ❌
+[2026-03-19 21:17:52] Experiment 517/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.0, exit_multiplier=0.25) | train=0.3388 test=N/A | ❌
+[2026-03-19 21:17:55] Experiment 518/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.0, exit_multiplier=0.5) | train=0.3565 test=N/A | ❌
+[2026-03-19 21:17:58] Experiment 519/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.0, exit_multiplier=0.75) | train=0.3836 test=N/A | ❌
+[2026-03-19 21:18:02] Experiment 520/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.0, exit_multiplier=1.0) | train=0.6903 test=N/A | ❌
+[2026-03-19 21:18:05] Experiment 521/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.25, exit_multiplier=0.25) | train=0.0042 test=N/A | ❌
+[2026-03-19 21:18:08] Experiment 522/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.25, exit_multiplier=0.5) | train=0.0789 test=N/A | ❌
+[2026-03-19 21:18:12] Experiment 523/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.25, exit_multiplier=0.75) | train=0.1058 test=N/A | ❌
+[2026-03-19 21:18:15] Experiment 524/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.25, exit_multiplier=1.0) | train=0.4388 test=N/A | ❌
+[2026-03-19 21:18:18] Experiment 525/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.5, exit_multiplier=0.25) | train=0.1766 test=N/A | ❌
+[2026-03-19 21:18:22] Experiment 526/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.5, exit_multiplier=0.5) | train=0.2407 test=N/A | ❌
+[2026-03-19 21:18:25] Experiment 527/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.5, exit_multiplier=0.75) | train=0.3399 test=N/A | ❌
+[2026-03-19 21:18:29] Experiment 528/632 | MA+ATR Mean Reversion (ma_period=40, entry_multiplier=1.5, exit_multiplier=1.0) | train=0.6487 test=N/A | ❌
+[2026-03-19 21:18:32] Experiment 529/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.5, exit_multiplier=0.25) | train=0.3790 test=N/A | ❌
+[2026-03-19 21:18:36] Experiment 530/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.5, exit_multiplier=0.5) | train=0.3347 test=N/A | ❌
+[2026-03-19 21:18:39] Experiment 531/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.5, exit_multiplier=0.75) | train=0.3685 test=N/A | ❌
+[2026-03-19 21:18:43] Experiment 532/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.5, exit_multiplier=1.0) | train=0.7073 test=N/A | ❌
+[2026-03-19 21:18:46] Experiment 533/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.75, exit_multiplier=0.25) | train=0.1397 test=N/A | ❌
+[2026-03-19 21:18:50] Experiment 534/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.75, exit_multiplier=0.5) | train=0.0843 test=N/A | ❌
+[2026-03-19 21:18:53] Experiment 535/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.75, exit_multiplier=0.75) | train=0.1033 test=N/A | ❌
+[2026-03-19 21:18:57] Experiment 536/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=0.75, exit_multiplier=1.0) | train=0.4334 test=N/A | ❌
+[2026-03-19 21:19:00] Experiment 537/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.0, exit_multiplier=0.25) | train=0.3368 test=N/A | ❌
+[2026-03-19 21:19:04] Experiment 538/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.0, exit_multiplier=0.5) | train=0.3420 test=N/A | ❌
+[2026-03-19 21:19:07] Experiment 539/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.0, exit_multiplier=0.75) | train=0.3125 test=N/A | ❌
+[2026-03-19 21:19:11] Experiment 540/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.0, exit_multiplier=1.0) | train=0.6868 test=N/A | ❌
+[2026-03-19 21:19:15] Experiment 541/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.25, exit_multiplier=0.25) | train=0.0797 test=N/A | ❌
+[2026-03-19 21:19:18] Experiment 542/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.25, exit_multiplier=0.5) | train=0.1347 test=N/A | ❌
+[2026-03-19 21:19:22] Experiment 543/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.25, exit_multiplier=0.75) | train=0.1778 test=N/A | ❌
+[2026-03-19 21:19:25] Experiment 544/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.25, exit_multiplier=1.0) | train=0.5298 test=N/A | ❌
+[2026-03-19 21:19:29] Experiment 545/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.5, exit_multiplier=0.25) | train=0.2400 test=N/A | ❌
+[2026-03-19 21:19:32] Experiment 546/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.5, exit_multiplier=0.5) | train=0.2836 test=N/A | ❌
+[2026-03-19 21:19:36] Experiment 547/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.5, exit_multiplier=0.75) | train=0.3921 test=N/A | ❌
+[2026-03-19 21:19:39] Experiment 548/632 | MA+ATR Mean Reversion (ma_period=50, entry_multiplier=1.5, exit_multiplier=1.0) | train=0.7191 test=N/A | ❌
+[2026-03-19 21:19:43] Experiment 549/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.5, exit_multiplier=0.25) | train=0.4584 test=N/A | ❌
+[2026-03-19 21:19:47] Experiment 550/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.5, exit_multiplier=0.5) | train=0.3745 test=N/A | ❌
+[2026-03-19 21:19:50] Experiment 551/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.5, exit_multiplier=0.75) | train=0.3375 test=N/A | ❌
+[2026-03-19 21:19:54] Experiment 552/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.5, exit_multiplier=1.0) | train=0.7335 test=N/A | ❌
+[2026-03-19 21:19:58] Experiment 553/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.75, exit_multiplier=0.25) | train=0.2700 test=N/A | ❌
+[2026-03-19 21:20:03] Experiment 554/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.75, exit_multiplier=0.5) | train=0.2078 test=N/A | ❌
+[2026-03-19 21:20:06] Experiment 555/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.75, exit_multiplier=0.75) | train=0.1496 test=N/A | ❌
+[2026-03-19 21:20:10] Experiment 556/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=0.75, exit_multiplier=1.0) | train=0.5080 test=N/A | ❌
+[2026-03-19 21:20:14] Experiment 557/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.0, exit_multiplier=0.25) | train=0.4978 test=N/A | ❌
+[2026-03-19 21:20:17] Experiment 558/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.0, exit_multiplier=0.5) | train=0.4925 test=N/A | ❌
+[2026-03-19 21:20:21] Experiment 559/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.0, exit_multiplier=0.75) | train=0.3819 test=N/A | ❌
+[2026-03-19 21:20:25] Experiment 560/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.0, exit_multiplier=1.0) | train=0.7826 test=N/A | ❌
+[2026-03-19 21:20:29] Experiment 561/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.25, exit_multiplier=0.25) | train=0.1510 test=N/A | ❌
+[2026-03-19 21:20:33] Experiment 562/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.25, exit_multiplier=0.5) | train=0.2184 test=N/A | ❌
+[2026-03-19 21:20:36] Experiment 563/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.25, exit_multiplier=0.75) | train=0.2532 test=N/A | ❌
+[2026-03-19 21:20:40] Experiment 564/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.25, exit_multiplier=1.0) | train=0.6841 test=N/A | ❌
+[2026-03-19 21:20:44] Experiment 565/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.5, exit_multiplier=0.25) | train=0.3138 test=N/A | ❌
+[2026-03-19 21:20:48] Experiment 566/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.5, exit_multiplier=0.5) | train=0.3681 test=N/A | ❌
+[2026-03-19 21:20:51] Experiment 567/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.5, exit_multiplier=0.75) | train=0.4684 test=N/A | ❌
+[2026-03-19 21:20:55] Experiment 568/632 | MA+ATR Mean Reversion (ma_period=60, entry_multiplier=1.5, exit_multiplier=1.0) | train=0.8771 test=N/A | ❌
+[2026-03-19 21:20:56] Completed MA+ATR Mean Reversion sweep
+[2026-03-19 21:20:56] Starting Golden Cross sweep (16 combos)...
+[2026-03-19 21:20:57] Experiment 569/632 | Golden Cross (fast_period=20, slow_period=100) | train=0.7676 test=N/A | ❌
+[2026-03-19 21:20:59] Experiment 570/632 | Golden Cross (fast_period=20, slow_period=150) | train=0.4004 test=N/A | ❌
+[2026-03-19 21:21:02] Experiment 571/632 | Golden Cross (fast_period=20, slow_period=200) | train=0.1954 test=N/A | ❌
+[2026-03-19 21:21:04] Experiment 572/632 | Golden Cross (fast_period=20, slow_period=250) | train=0.3324 test=N/A | ❌
+[2026-03-19 21:21:06] Experiment 573/632 | Golden Cross (fast_period=30, slow_period=100) | train=0.6812 test=N/A | ❌
+[2026-03-19 21:21:09] Experiment 574/632 | Golden Cross (fast_period=30, slow_period=150) | train=0.2697 test=N/A | ❌
+[2026-03-19 21:21:11] Experiment 575/632 | Golden Cross (fast_period=30, slow_period=200) | train=0.2114 test=N/A | ❌
+[2026-03-19 21:21:14] Experiment 576/632 | Golden Cross (fast_period=30, slow_period=250) | train=0.1193 test=N/A | ❌
+[2026-03-19 21:21:16] Experiment 577/632 | Golden Cross (fast_period=50, slow_period=100) | train=0.4562 test=N/A | ❌
+[2026-03-19 21:21:18] Experiment 578/632 | Golden Cross (fast_period=50, slow_period=150) | train=0.3423 test=N/A | ❌
+[2026-03-19 21:21:21] Experiment 579/632 | Golden Cross (fast_period=50, slow_period=200) | train=0.3057 test=N/A | ❌
+[2026-03-19 21:21:24] Experiment 580/632 | Golden Cross (fast_period=50, slow_period=250) | train=0.3204 test=N/A | ❌
+[2026-03-19 21:21:26] Experiment 581/632 | Golden Cross (fast_period=75, slow_period=100) | train=0.4583 test=N/A | ❌
+[2026-03-19 21:21:29] Experiment 582/632 | Golden Cross (fast_period=75, slow_period=150) | train=0.1956 test=N/A | ❌
+[2026-03-19 21:21:31] Experiment 583/632 | Golden Cross (fast_period=75, slow_period=200) | train=0.3577 test=N/A | ❌
+[2026-03-19 21:21:34] Experiment 584/632 | Golden Cross (fast_period=75, slow_period=250) | train=0.3521 test=N/A | ❌
+[2026-03-19 21:21:35] Completed Golden Cross sweep
+[2026-03-19 21:21:35] Starting Keltner Squeeze sweep (16 combos)...
+[2026-03-19 21:21:39] Experiment 585/632 | Keltner Squeeze (keltner_period=10, keltner_atr_mult=1.0) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:21:44] Experiment 586/632 | Keltner Squeeze (keltner_period=10, keltner_atr_mult=1.5) | train=-0.2453 test=N/A | ❌
+[2026-03-19 21:21:48] Experiment 587/632 | Keltner Squeeze (keltner_period=10, keltner_atr_mult=2.0) | train=0.4280 test=N/A | ❌
+[2026-03-19 21:21:53] Experiment 588/632 | Keltner Squeeze (keltner_period=10, keltner_atr_mult=2.5) | train=0.5712 test=N/A | ❌
+[2026-03-19 21:21:58] Experiment 589/632 | Keltner Squeeze (keltner_period=15, keltner_atr_mult=1.0) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:22:02] Experiment 590/632 | Keltner Squeeze (keltner_period=15, keltner_atr_mult=1.5) | train=0.3369 test=N/A | ❌
+[2026-03-19 21:22:07] Experiment 591/632 | Keltner Squeeze (keltner_period=15, keltner_atr_mult=2.0) | train=0.5035 test=N/A | ❌
+[2026-03-19 21:22:12] Experiment 592/632 | Keltner Squeeze (keltner_period=15, keltner_atr_mult=2.5) | train=0.8107 test=N/A | ❌
+[2026-03-19 21:22:17] Experiment 593/632 | Keltner Squeeze (keltner_period=20, keltner_atr_mult=1.0) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:22:22] Experiment 594/632 | Keltner Squeeze (keltner_period=20, keltner_atr_mult=1.5) | train=-0.0633 test=N/A | ❌
+[2026-03-19 21:22:27] Experiment 595/632 | Keltner Squeeze (keltner_period=20, keltner_atr_mult=2.0) | train=0.5428 test=N/A | ❌
+[2026-03-19 21:22:32] Experiment 596/632 | Keltner Squeeze (keltner_period=20, keltner_atr_mult=2.5) | train=0.5066 test=N/A | ❌
+[2026-03-19 21:22:37] Experiment 597/632 | Keltner Squeeze (keltner_period=25, keltner_atr_mult=1.0) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:22:42] Experiment 598/632 | Keltner Squeeze (keltner_period=25, keltner_atr_mult=1.5) | train=-0.3014 test=N/A | ❌
+[2026-03-19 21:22:47] Experiment 599/632 | Keltner Squeeze (keltner_period=25, keltner_atr_mult=2.0) | train=0.1907 test=N/A | ❌
+[2026-03-19 21:22:52] Experiment 600/632 | Keltner Squeeze (keltner_period=25, keltner_atr_mult=2.5) | train=0.4929 test=N/A | ❌
+[2026-03-19 21:22:52] Completed Keltner Squeeze sweep
+[2026-03-19 21:22:52] Starting Volume Confirmed sweep (16 combos)...
+[2026-03-19 21:22:53] Experiment 601/632 | Volume Confirmed (sma_period=20, threshold=0.5) | train=0.8491 test=N/A | ❌
+[2026-03-19 21:22:54] Experiment 602/632 | Volume Confirmed (sma_period=20, threshold=0.6) | train=0.2045 test=N/A | ❌
+[2026-03-19 21:22:55] Experiment 603/632 | Volume Confirmed (sma_period=20, threshold=0.7) | train=0.2045 test=N/A | ❌
+[2026-03-19 21:22:56] Experiment 604/632 | Volume Confirmed (sma_period=20, threshold=0.8) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:22:57] Experiment 605/632 | Volume Confirmed (sma_period=30, threshold=0.5) | train=0.2624 test=N/A | ❌
+[2026-03-19 21:22:58] Experiment 606/632 | Volume Confirmed (sma_period=30, threshold=0.6) | train=-0.3819 test=N/A | ❌
+[2026-03-19 21:22:59] Experiment 607/632 | Volume Confirmed (sma_period=30, threshold=0.7) | train=-0.3819 test=N/A | ❌
+[2026-03-19 21:23:00] Experiment 608/632 | Volume Confirmed (sma_period=30, threshold=0.8) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:23:01] Experiment 609/632 | Volume Confirmed (sma_period=50, threshold=0.5) | train=-0.1306 test=N/A | ❌
+[2026-03-19 21:23:02] Experiment 610/632 | Volume Confirmed (sma_period=50, threshold=0.6) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:23:03] Experiment 611/632 | Volume Confirmed (sma_period=50, threshold=0.7) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:23:05] Experiment 612/632 | Volume Confirmed (sma_period=50, threshold=0.8) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:23:06] Experiment 613/632 | Volume Confirmed (sma_period=75, threshold=0.5) | train=0.5561 test=N/A | ❌
+[2026-03-19 21:23:07] Experiment 614/632 | Volume Confirmed (sma_period=75, threshold=0.6) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:23:09] Experiment 615/632 | Volume Confirmed (sma_period=75, threshold=0.7) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:23:10] Experiment 616/632 | Volume Confirmed (sma_period=75, threshold=0.8) | train=0.0000 test=N/A | ❌
+[2026-03-19 21:23:11] Completed Volume Confirmed sweep
+[2026-03-19 21:23:11] Starting Bull Flag sweep (16 combos)...
+[2026-03-19 21:23:11] Experiment 617/632 | Bull Flag (pole_min_pct=3, flag_max_bars=7) | train=0.0313 test=N/A | ❌
+[2026-03-19 21:23:11] Experiment 618/632 | Bull Flag (pole_min_pct=3, flag_max_bars=10) | train=0.3123 test=N/A | ❌
+[2026-03-19 21:23:12] Experiment 619/632 | Bull Flag (pole_min_pct=3, flag_max_bars=15) | train=0.2548 test=N/A | ❌
+[2026-03-19 21:23:13] Experiment 620/632 | Bull Flag (pole_min_pct=3, flag_max_bars=20) | train=0.2345 test=N/A | ❌
+[2026-03-19 21:23:13] Experiment 621/632 | Bull Flag (pole_min_pct=5, flag_max_bars=7) | train=-0.0987 test=N/A | ❌
+[2026-03-19 21:23:14] Experiment 622/632 | Bull Flag (pole_min_pct=5, flag_max_bars=10) | train=0.0418 test=N/A | ❌
+[2026-03-19 21:23:14] Experiment 623/632 | Bull Flag (pole_min_pct=5, flag_max_bars=15) | train=-0.0169 test=N/A | ❌
+[2026-03-19 21:23:15] Experiment 624/632 | Bull Flag (pole_min_pct=5, flag_max_bars=20) | train=-0.0169 test=N/A | ❌
+[2026-03-19 21:23:15] Experiment 625/632 | Bull Flag (pole_min_pct=7, flag_max_bars=7) | train=0.0348 test=N/A | ❌
+[2026-03-19 21:23:16] Experiment 626/632 | Bull Flag (pole_min_pct=7, flag_max_bars=10) | train=0.2342 test=N/A | ❌
+[2026-03-19 21:23:16] Experiment 627/632 | Bull Flag (pole_min_pct=7, flag_max_bars=15) | train=0.2342 test=N/A | ❌
+[2026-03-19 21:23:17] Experiment 628/632 | Bull Flag (pole_min_pct=7, flag_max_bars=20) | train=0.2342 test=N/A | ❌
+[2026-03-19 21:23:18] Experiment 629/632 | Bull Flag (pole_min_pct=10, flag_max_bars=7) | train=0.2816 test=N/A | ❌
+[2026-03-19 21:23:18] Experiment 630/632 | Bull Flag (pole_min_pct=10, flag_max_bars=10) | train=0.2816 test=N/A | ❌
+[2026-03-19 21:23:19] Experiment 631/632 | Bull Flag (pole_min_pct=10, flag_max_bars=15) | train=0.2816 test=N/A | ❌
+[2026-03-19 21:23:19] Experiment 632/632 | Bull Flag (pole_min_pct=10, flag_max_bars=20) | train=0.2816 test=N/A | ❌
+[2026-03-19 21:23:20] Completed Bull Flag sweep
+[2026-03-19 21:23:20] Running validation on best strategies...
+[2026-03-19 21:23:20]   Validated: MACD (fast=8, slow=30, signal=11) | validate_sharpe=N/A
+[2026-03-19 21:23:20]   Validated: MACD (fast=8, slow=26, signal=13) | validate_sharpe=N/A
+[2026-03-19 21:23:20]   Validated: EMA Crossover (fast=5, slow=15) | validate_sharpe=N/A
+[2026-03-19 21:23:20]   Validated: MACD (fast=12, slow=20, signal=5) | validate_sharpe=N/A
+[2026-03-19 21:23:20]   Validated: MACD (fast=8, slow=26, signal=5) | validate_sharpe=N/A
+[2026-03-19 21:23:20] Generating final report...
+[2026-03-19 21:23:20] Generated 20 new insights
+[2026-03-19 21:23:20] Generated 0 new priorities
+[2026-03-19 21:23:20] Memory stats: {'total_experiments': 632, 'total_insights': 20, 'active_insights': 20, 'total_runs': 1, 'pending_priorities': 0, 'kept_experiments': 3, 'overfit_flagged': 18}
+[2026-03-19 21:23:20] Overnight run complete! {'total_experiments': 632, 'errors': 0, 'timeouts': 0, 'best_train_sharpe': 1.1452873589314703, 'best_test_sharpe': 0.6015268612912444, 'kept_strategies': 3, 'memory_stats': {'total_experiments': 632, 'total_insights': 20, 'active_insights': 20, 'total_runs': 1, 'pending_priorities': 0, 'kept_experiments': 3, 'overfit_flagged': 18}}

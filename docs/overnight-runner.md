@@ -286,6 +286,40 @@ print(f"Errors: {result['errors']}, Timeouts: {result['timeouts']}")
 print(f"Kept: {result['kept_strategies']} strategies")
 ```
 
+## Timezone Handling for Cron Scheduling
+
+When scheduling overnight runs with `openclaw cron add --at`, **the time is interpreted as UTC by default**, not your local timezone. This can cause runs to start at unexpected times.
+
+### The Problem
+
+```bash
+# ❌ WRONG — this runs at 1 AM UTC, which is 9 PM EDT (8 PM EST)
+openclaw cron add --at "2026-03-20T01:00:00" -- python scripts/run_overnight.py
+```
+
+If you're in `America/New_York` and want the run to start at 1 AM local time, you need to either convert to UTC or specify the timezone explicitly.
+
+### The Fix
+
+**Option 1: Specify timezone explicitly (recommended)**
+
+```bash
+# ✅ Runs at 1 AM Eastern time, regardless of DST
+openclaw cron add --at "2026-03-20T01:00:00" --tz "America/New_York" -- python scripts/run_overnight.py
+```
+
+**Option 2: Convert to UTC manually**
+
+```bash
+# ✅ 1 AM EDT = 5 AM UTC (during DST, Mar–Nov)
+openclaw cron add --at "2026-03-20T05:00:00" -- python scripts/run_overnight.py
+
+# ✅ 1 AM EST = 6 AM UTC (outside DST, Nov–Mar)
+openclaw cron add --at "2026-11-20T06:00:00" -- python scripts/run_overnight.py
+```
+
+> **Tip:** Always use `--tz` to avoid DST confusion. UTC offsets change twice a year for most US timezones.
+
 ## Related Docs
 
 - [AutoResearch](autoresearch.md) — The underlying research engine

@@ -899,17 +899,94 @@ def _extract_factory_call(factory, params: dict) -> str:
     return f'{name}({param_str})'
 
 
+def _build_strategy_registry() -> dict:
+    """Build a mapping from strategy display names to factory functions.
+
+    Keys include both the canonical names used in STRATEGY_SWEEPS and common
+    aliases so that lookup succeeds regardless of how the name was stored.
+    """
+    from pyhood.backtest.strategies import (
+        bollinger_breakout,
+        bull_flag_breakout,
+        donchian_breakout,
+        ema_crossover,
+        golden_cross,
+        keltner_squeeze,
+        ma_atr_mean_reversion,
+        macd_crossover,
+        rsi2_connors,
+        rsi_mean_reversion,
+        volume_confirmed_breakout,
+    )
+
+    return {
+        # Canonical names (match STRATEGY_SWEEPS in overnight.py)
+        'EMA Crossover': ema_crossover,
+        'MACD': macd_crossover,
+        'RSI Mean Reversion': rsi_mean_reversion,
+        'RSI(2) Connors': rsi2_connors,
+        'Bollinger Breakout': bollinger_breakout,
+        'Donchian Breakout': donchian_breakout,
+        'MA+ATR Mean Reversion': ma_atr_mean_reversion,
+        'Golden Cross': golden_cross,
+        'Keltner Squeeze': keltner_squeeze,
+        'Volume Confirmed': volume_confirmed_breakout,
+        'Bull Flag': bull_flag_breakout,
+        # Common aliases
+        'MACD Crossover': macd_crossover,
+        'Volume Confirmed Breakout': volume_confirmed_breakout,
+        'Bull Flag Breakout': bull_flag_breakout,
+    }
+
+
+# Lazily built on first use
+_STRATEGY_REGISTRY: dict | None = None
+
+
+def _get_strategy_registry() -> dict:
+    """Return the strategy registry, building it on first access."""
+    global _STRATEGY_REGISTRY  # noqa: PLW0603
+    if _STRATEGY_REGISTRY is None:
+        _STRATEGY_REGISTRY = _build_strategy_registry()
+    return _STRATEGY_REGISTRY
+
+
+def _extract_base_name(strategy_name: str) -> str:
+    """Extract the base strategy name from a label like 'EMA Crossover (fast=5, slow=15)'.
+
+    Returns everything before the first '(' stripped of whitespace.
+    If there is no '(', returns the full name stripped.
+    """
+    idx = strategy_name.find('(')
+    if idx > 0:
+        return strategy_name[:idx].strip()
+    return strategy_name.strip()
+
+
 def _reconstruct_strategy(exp: ExperimentResult):
     """Try to reconstruct a strategy function from an ExperimentResult.
 
-    This uses the strategy_code string which should be a factory call like
-    ``ema_crossover(fast=9, slow=21)``.
+    Uses the strategy registry to look up the factory by the base strategy
+    name, then calls it with the saved params.  Falls back to eval-based
+    reconstruction from strategy_code for backward compatibility.
     """
-    # Import all built-in strategies into a namespace
+    registry = _get_strategy_registry()
+
+    # Primary path: look up factory by base name and call with saved params
+    base_name = _extract_base_name(exp.strategy_name)
+    factory = registry.get(base_name)
+    if factory is not None and exp.params:
+        try:
+            fn = factory(**exp.params)
+            if callable(fn):
+                return fn
+        except Exception:
+            pass
+
+    # Fallback: try eval on strategy_code (legacy behavior)
     from pyhood.backtest import strategies as strat_mod
 
     code = exp.strategy_code
-    # Safety: only allow known function calls
     ns = {name: getattr(strat_mod, name) for name in dir(strat_mod)
           if callable(getattr(strat_mod, name)) and not name.startswith('_')}
 
@@ -920,7 +997,7 @@ def _reconstruct_strategy(exp: ExperimentResult):
     except Exception:
         pass
 
-    # Fallback: try to use params with a known factory name
+    # Last resort: try matching factory name in code string
     for factory_name, factory_fn in ns.items():
         if factory_name in code:
             try:
