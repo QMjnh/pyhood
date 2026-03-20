@@ -68,6 +68,8 @@ python scripts/run_overnight.py [OPTIONS]
 | `--results-dir` | `autoresearch_results` | Output directory for all results |
 | `--timeout` | `60` | Per-experiment timeout in seconds |
 | `--slippage` | `0.01` | Slippage percentage per trade |
+| `--continuous` | `false` | Enable continuous mode (cycles through tickers forever) |
+| `--tickers` | `SPY,QQQ,AAPL,TSLA,BTC-USD` | Comma-separated tickers for continuous mode |
 
 ### Examples
 
@@ -319,6 +321,87 @@ openclaw cron add --at "2026-11-20T06:00:00" -- python scripts/run_overnight.py
 ```
 
 > **Tip:** Always use `--tz` to avoid DST confusion. UTC offsets change twice a year for most US timezones.
+
+## Continuous Mode
+
+Continuous mode runs the full strategy discovery program across multiple tickers in an infinite loop, refining results with each cycle until you stop it.
+
+### How It Works
+
+1. **Cycle 1 (Full Sweep):** Runs the complete ~632-combination parameter sweep for every ticker — same as a normal single-ticker run, but repeated for each ticker in sequence.
+2. **Cycle 2+ (Refinement):** For each ticker, generates ~20–50 parameter variations around previous winners (±20% on each parameter), runs those, and skips combinations that memory says have already been tested or are likely to fail.
+3. **Repeat forever** until you stop it.
+
+Each cycle through all tickers generates new insights and priorities that feed into subsequent cycles. The research memory database is shared across all tickers and cycles, so the system gets smarter over time.
+
+### Starting Continuous Mode
+
+```bash
+# Default tickers (SPY, QQQ, AAPL, TSLA, BTC-USD)
+python scripts/run_overnight.py --continuous
+
+# Custom tickers
+python scripts/run_overnight.py --continuous --tickers SPY,QQQ,MSFT
+
+# With custom timeout and results dir
+python scripts/run_overnight.py --continuous --tickers SPY,QQQ --timeout 120 --results-dir results/multi
+```
+
+### Stopping Gracefully
+
+Press **Ctrl+C** or send `kill -TERM <pid>`. The runner will:
+
+1. Finish the current experiment (not mid-backtest)
+2. Save all results for every ticker
+3. Close the memory database
+4. Exit cleanly
+
+**Never lose data on Ctrl+C.** Results are saved after every single experiment.
+
+### Results Directory Structure (Continuous)
+
+```
+autoresearch_results/
+├── autoresearch_memory.db    # Shared across all tickers
+├── summary.md                # Overall summary across all tickers
+├── run_log.txt               # Timestamped log of everything
+├── spy/
+│   ├── experiments.json
+│   ├── best_strategies.json
+│   └── summary.md
+├── qqq/
+│   ├── experiments.json
+│   ├── best_strategies.json
+│   └── summary.md
+├── aapl/
+│   └── ...
+├── tsla/
+│   └── ...
+└── btc_usd/
+    └── ...
+```
+
+### Expected Runtime
+
+- **First cycle:** ~2 hours for 5 tickers (5 × ~23 min each)
+- **Subsequent cycles:** Faster — memory skips already-tested combinations, refinement generates fewer experiments per strategy
+- **Overnight (8 hours):** Typically completes 3–5 full cycles, discovering increasingly refined parameter sets
+
+### Python API
+
+```python
+from pyhood.autoresearch.overnight import OvernightRunner
+
+runner = OvernightRunner(
+    continuous=True,
+    tickers=['SPY', 'QQQ', 'AAPL'],
+    total_period='10y',
+    results_dir='results/continuous_research',
+)
+result = runner.run()  # Runs until Ctrl+C
+print(f"Cycles completed: {result['cycles_completed']}")
+print(f"Total experiments: {result['total_experiments']}")
+```
 
 ## Related Docs
 

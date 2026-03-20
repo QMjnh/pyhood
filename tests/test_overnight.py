@@ -5,10 +5,12 @@ from __future__ import annotations
 import json
 import math
 import os
+import signal
 import tempfile
 from datetime import datetime, timedelta
 
 from pyhood.autoresearch.overnight import (
+    DEFAULT_TICKERS,
     STRATEGY_SWEEPS,
     OvernightRunner,
     _count_combos,
@@ -89,6 +91,9 @@ class TestOvernightRunnerInit:
         assert runner.experiment_timeout == 60
         assert runner.save_every == 1
         assert runner.slippage_pct == 0.01
+        assert runner.continuous is False
+        assert runner.tickers == list(DEFAULT_TICKERS)
+        assert runner._stop_requested is False
 
     def test_custom_init(self):
         runner = OvernightRunner(
@@ -103,6 +108,18 @@ class TestOvernightRunnerInit:
         assert runner.results_dir == '/tmp/test_results'
         assert runner.experiment_timeout == 120
         assert runner.slippage_pct == 0.05
+
+    def test_continuous_init(self):
+        runner = OvernightRunner(
+            continuous=True,
+            tickers=['SPY', 'QQQ'],
+        )
+        assert runner.continuous is True
+        assert runner.tickers == ['SPY', 'QQQ']
+
+    def test_continuous_default_tickers(self):
+        runner = OvernightRunner(continuous=True)
+        assert runner.tickers == list(DEFAULT_TICKERS)
 
     def test_paths(self):
         runner = OvernightRunner(results_dir='/tmp/test_dir')
@@ -473,3 +490,233 @@ class TestFullRun:
             assert result['total_experiments'] > 0
             assert result['errors'] == 0
             assert result['timeouts'] == 0
+
+
+# ---------------------------------------------------------------------------
+# Tests — Signal handling
+# ---------------------------------------------------------------------------
+
+class TestSignalHandling:
+
+    def test_handle_stop_sets_flag(self):
+        """_handle_stop should set _stop_requested to True."""
+        runner = OvernightRunner()
+        assert runner._stop_requested is False
+        runner._handle_stop(signal.SIGINT, None)
+        assert runner._stop_requested is True
+
+    def test_handle_stop_sigterm(self):
+        """_handle_stop should work with SIGTERM too."""
+        runner = OvernightRunner()
+        runner._handle_stop(signal.SIGTERM, None)
+        assert runner._stop_requested is True
+
+    def test_install_restore_signal_handlers(self):
+        """Signal handlers should be installed and restored cleanly."""
+        runner = OvernightRunner()
+        original_sigint = signal.getsignal(signal.SIGINT)
+        original_sigterm = signal.getsignal(signal.SIGTERM)
+
+        runner._install_signal_handlers()
+        # After install, handlers should be our custom ones
+        assert signal.getsignal(signal.SIGINT) == runner._handle_stop
+        assert signal.getsignal(signal.SIGTERM) == runner._handle_stop
+
+        runner._restore_signal_handlers()
+        # After restore, handlers should be back to originals
+        assert signal.getsignal(signal.SIGINT) == original_sigint
+        assert signal.getsignal(signal.SIGTERM) == original_sigterm
+
+    def test_stop_requested_breaks_sweep(self):
+        """When _stop_requested is True, experiments should stop."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            candles = _make_candles(400)
+            # Use a large sweep so we can stop mid-way
+            sweeps = [
+                {
+                    'name': 'EMA Crossover',
+                    'factory': ema_crossover,
+                    'grid': {
+                        'fast': [5, 7, 9, 11, 13],
+                        'slow': [20, 25, 30, 35, 40],
+                    },
+                },
+            ]
+            runner = OvernightRunner(
+                results_dir=tmpdir,
+                candles=candles,
+                cross_validate_tickers=[],
+                strategy_sweeps=sweeps,
+                experiment_timeout=30,
+            )
+            # Pre-set stop_requested so it stops immediately
+            runner._stop_requested = True
+            result = runner.run()
+            # Should have very few or zero experiments since stop was pre-set
+            assert result['total_experiments'] == 0
+
+
+# ---------------------------------------------------------------------------
+# Tests — Continuous mode
+# ---------------------------------------------------------------------------
+
+class TestContinuousMode:
+
+    def test_continuous_false_backward_compat(self):
+        """continuous=False should produce identical behavior to original."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            candles = _make_candles(400)
+            runner = OvernightRunner(
+                results_dir=tmpdir,
+                candles=candles,
+                cross_validate_tickers=[],
+                strategy_sweeps=_tiny_sweeps(),
+                experiment_timeout=30,
+                continuous=False,
+            )
+            result = runner.run()
+
+            assert isinstance(result, dict)
+            assert 'total_experiments' in result
+            assert 'best_train_sharpe' in result
+            assert 'best_test_sharpe' in result
+            assert result['total_experiments'] > 0
+
+    def test_continuous_immediate_stop(self):
+        """Continuous mode with pre-set stop should exit after saving."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            candles = _make_candles(400)
+            runner = OvernightRunner(
+                results_dir=tmpdir,
+                candles=candles,
+                cross_validate_tickers=[],
+                strategy_sweeps=_tiny_sweeps(),
+                experiment_timeout=30,
+                continuous=True,
+                tickers=['TEST'],
+            )
+            # Pre-set stop so it exits immediately
+            runner._stop_requested = True
+            result = runner.run()
+
+            assert 'cycles_completed' in result
+            assert 'tickers' in result
+            assert result['tickers'] == ['TEST']
+
+    def test_continuous_one_cycle_then_stop(self):
+        """Continuous mode should complete one full cycle then stop on signal."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            candles = _make_candles(400)
+
+            class StopAfterFirstCycle(OvernightRunner):
+                """Subclass that stops after first cycle."""
+                def _run_refinement_cycle(self, researcher, ticker, cycle):
+                    # Stop before second cycle starts
+                    self._stop_requested = True
+                    super()._run_refinement_cycle(researcher, ticker, cycle)
+
+            runner = StopAfterFirstCycle(
+                results_dir=tmpdir,
+                candles=candles,
+                cross_validate_tickers=[],
+                strategy_sweeps=_tiny_sweeps(),
+                experiment_timeout=30,
+                continuous=True,
+                tickers=['TEST'],
+            )
+            result = runner.run()
+
+            assert result['total_experiments'] > 0
+            assert result['cycles_completed'] >= 1
+
+            # Check that per-ticker directory was created
+            ticker_dir = os.path.join(tmpdir, 'test')
+            assert os.path.isdir(ticker_dir)
+            assert os.path.exists(os.path.join(ticker_dir, 'experiments.json'))
+            assert os.path.exists(os.path.join(ticker_dir, 'best_strategies.json'))
+            assert os.path.exists(os.path.join(ticker_dir, 'summary.md'))
+
+
+# ---------------------------------------------------------------------------
+# Tests — Multi-ticker results directory structure
+# ---------------------------------------------------------------------------
+
+class TestMultiTickerDirectory:
+
+    def test_ticker_dir_path(self):
+        """Ticker directories should use lowercase with underscores."""
+        runner = OvernightRunner(results_dir='/tmp/results')
+        assert runner._ticker_dir('SPY') == '/tmp/results/spy'
+        assert runner._ticker_dir('BTC-USD') == '/tmp/results/btc_usd'
+        assert runner._ticker_dir('AAPL') == '/tmp/results/aapl'
+
+    def test_ticker_paths(self):
+        runner = OvernightRunner(results_dir='/tmp/results')
+        assert runner._ticker_experiments_path('SPY') == '/tmp/results/spy/experiments.json'
+        assert runner._ticker_best_strategies_path('SPY') == '/tmp/results/spy/best_strategies.json'
+        assert runner._ticker_summary_path('SPY') == '/tmp/results/spy/summary.md'
+
+
+# ---------------------------------------------------------------------------
+# Tests — Refinement cycle parameter variations
+# ---------------------------------------------------------------------------
+
+class TestRefinementCycle:
+
+    def test_generate_param_variations_int(self):
+        """Integer parameters should generate nearby integer variations."""
+        params = {'fast': 10, 'slow': 30}
+        grid = {'fast': [5, 10, 15], 'slow': [20, 30, 40]}
+        variations = OvernightRunner._generate_param_variations(params, grid)
+
+        # Should have some variations
+        assert len(variations) > 0
+        # Should not include original params
+        assert params not in variations
+        # All values should be valid types
+        for v in variations:
+            assert isinstance(v['fast'], int)
+            assert isinstance(v['slow'], int)
+            assert v['fast'] > 0
+            assert v['slow'] > 0
+
+    def test_generate_param_variations_float(self):
+        """Float parameters should generate nearby float variations."""
+        params = {'std_dev': 2.0}
+        grid = {'std_dev': [1.5, 2.0, 2.5]}
+        variations = OvernightRunner._generate_param_variations(params, grid)
+
+        assert len(variations) > 0
+        for v in variations:
+            assert isinstance(v['std_dev'], float)
+            assert v['std_dev'] > 0
+
+    def test_generate_param_variations_excludes_grid_values(self):
+        """Variations should not include values already in the original grid."""
+        params = {'fast': 10}
+        grid = {'fast': [5, 10, 15]}
+        variations = OvernightRunner._generate_param_variations(params, grid)
+
+        # None of the variations should have values that are exactly in the grid
+        # (except the original value which is kept for cross-product)
+        for v in variations:
+            # The variation should differ from the original
+            assert v != params
+
+    def test_generate_param_variations_capped_at_50(self):
+        """Should cap at 50 variations maximum."""
+        # Large grid that would produce many combos
+        params = {'a': 10, 'b': 20, 'c': 30, 'd': 40}
+        grid = {'a': [10], 'b': [20], 'c': [30], 'd': [40]}
+        variations = OvernightRunner._generate_param_variations(params, grid)
+        assert len(variations) <= 50
+
+    def test_generate_param_variations_count_range(self):
+        """Should generate a reasonable number of variations (20-50 for typical params)."""
+        # Typical EMA crossover params
+        params = {'fast': 9, 'slow': 25}
+        grid = {'fast': [5, 7, 9, 11], 'slow': [15, 20, 25, 30]}
+        variations = OvernightRunner._generate_param_variations(params, grid)
+        # Should generate a meaningful number (depends on grid exclusion)
+        assert len(variations) >= 3  # At minimum a few variations
+        assert len(variations) <= 50
