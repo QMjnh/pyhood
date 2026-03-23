@@ -497,14 +497,7 @@ def page_autoresearch():
         board[col] = board[col].round(1)
     board["Test Trades"] = board["Test Trades"].astype(int)
 
-    # Style alpha column
-    def _style_alpha(val):
-        if pd.isna(val):
-            return "color: gray"
-        return "color: #00cc96" if val >= 0 else "color: #ef553b"
-
-    styled = board.style.applymap(_style_alpha, subset=["Alpha %"])
-    st.dataframe(styled, use_container_width=True, hide_index=True)
+    st.dataframe(board, use_container_width=True, hide_index=True)
 
     # ── Strategy Detail ──
     st.subheader("Strategy Detail")
