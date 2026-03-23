@@ -73,6 +73,20 @@ print(expirations)
 # ['2026-03-21', '2026-03-28', '2026-04-04', '2026-04-17', ...]
 ```
 
+## Trading Options in IRA Accounts
+
+pyhood supports options trading in IRA accounts. Pass `account_number` to `buy_option` or `sell_option`:
+
+```python
+order = client.buy_option(
+    symbol="NKE", strike=55.0, expiration="2026-04-02",
+    option_type="call", quantity=3, price=1.60,
+    account_number="YOUR_IRA_ACCOUNT",
+)
+```
+
+IRA accounts are limited to Level 2 options: long calls, long puts, covered calls, and cash-secured puts. Spreads and multi-leg strategies are not available. See [Account docs](account.md#ira--retirement-accounts) for details.
+
 ## Example: Find High Vol/OI Calls
 
 ```python

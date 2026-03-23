@@ -1,0 +1,348 @@
+Sat Mar 21 17:39:13 EDT 2026 Starting chunked source scrape (chunk=5, total=71)
+Sat Mar 21 17:39:13 EDT 2026 Starting chunked source scrape (chunk=5, total=71)
+Sat Mar 21 17:39:13 EDT 2026 Chunk starting at 0 (pine files: 3/71)
+Sat Mar 21 17:39:13 EDT 2026 Chunk starting at 0 (pine files: 3/71)
+2026-03-21 17:39:13,772 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:39:13,772 Processing indices 0..4 (5 strategies)
+2026-03-21 17:39:14,579 [1/5] Already exists, skipping: rsi_mean_reversion.pine
+2026-03-21 17:39:14,580 [2/5] Already exists, skipping: kinetic_kalman_breakout.pine
+2026-03-21 17:39:14,580 [3/5] Already exists, skipping: dee_mtf_atr_strategy_alert_3_tps.pine
+2026-03-21 17:39:14,580 [4/5] Scraping: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:14,580 Navigating to: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:19,541 No source code found for: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:22,554 [5/5] Scraping: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:22,554 Navigating to: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:27,034 No source code found for: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:27,107 Done. scraped=0 skipped=3 protected=0 failed=2
+Sat Mar 21 17:39:29 EDT 2026 Chunk starting at 5 (pine files: 3/71)
+Sat Mar 21 17:39:29 EDT 2026 Chunk starting at 5 (pine files: 3/71)
+2026-03-21 17:39:29,693 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:39:29,693 Processing indices 5..9 (5 strategies)
+2026-03-21 17:39:30,602 [1/5] Scraping: S1.1 EMA Crossover Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:30,607 Navigating to: S1.1 EMA Crossover Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:35,830 No source code found for: S1.1 EMA Crossover Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:38,839 [2/5] Scraping: LWTG QCBP v1.0.10-Multi Instrument Trading
+2026-03-21 17:39:38,839 Navigating to: LWTG QCBP v1.0.10-Multi Instrument Trading
+2026-03-21 17:39:43,580 Extracted 69442 chars of Pine Script for: LWTG QCBP v1.0.10-Multi Instrument Trading
+2026-03-21 17:39:43,580 Saved: lwtg_qcbp_v1010_multi_instrument_trading.pine
+2026-03-21 17:39:46,581 [3/5] Scraping: BTC/USD Quant Trend Engine Long Only v2 - 2x leverage
+2026-03-21 17:39:46,581 Navigating to: BTC/USD Quant Trend Engine Long Only v2 - 2x leverage
+2026-03-21 17:39:51,093 Extracted 10625 chars of Pine Script for: BTC/USD Quant Trend Engine Long Only v2 - 2x leverage
+2026-03-21 17:39:51,093 Saved: btcusd_quant_trend_engine_long_only_v2_2x_leverage.pine
+2026-03-21 17:39:54,094 [4/5] Scraping: BTC/USD Quant Scoring System Long Only
+2026-03-21 17:39:54,094 Navigating to: BTC/USD Quant Scoring System Long Only
+2026-03-21 17:39:58,652 Extracted 6299 chars of Pine Script for: BTC/USD Quant Scoring System Long Only
+2026-03-21 17:39:58,652 Saved: btcusd_quant_scoring_system_long_only.pine
+2026-03-21 17:40:01,653 [5/5] Scraping: MASU+ Institutional Fibonacci MTF [BTT]
+2026-03-21 17:40:01,653 Navigating to: MASU+ Institutional Fibonacci MTF [BTT]
+2026-03-21 17:40:06,205 Extracted 45880 chars of Pine Script for: MASU+ Institutional Fibonacci MTF [BTT]
+2026-03-21 17:40:06,206 Saved: masu_institutional_fibonacci_mtf_btt.pine
+2026-03-21 17:40:06,284 Done. scraped=4 skipped=0 protected=0 failed=1
+Sat Mar 21 17:40:08 EDT 2026 Chunk starting at 10 (pine files: 7/71)
+Sat Mar 21 17:40:08 EDT 2026 Chunk starting at 10 (pine files: 7/71)
+2026-03-21 17:40:08,638 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:40:08,638 Processing indices 10..14 (5 strategies)
+2026-03-21 17:40:09,402 [1/5] Already exists, skipping: masu_institutional_fibonacci_mtf_btt.pine
+2026-03-21 17:40:09,402 [2/5] Scraping: ATR Trend Strategy with Moving Average | Fixed TP/SL version
+2026-03-21 17:40:09,403 Navigating to: ATR Trend Strategy with Moving Average | Fixed TP/SL version
+2026-03-21 17:40:15,882 Extracted 17017 chars of Pine Script for: ATR Trend Strategy with Moving Average | Fixed TP/SL version
+2026-03-21 17:40:15,882 Saved: atr_trend_strategy_with_moving_average_fixed_tpsl_version.pine
+2026-03-21 17:40:18,885 [3/5] Scraping: BTC Multi-TF Momentum Strategy with DCA
+2026-03-21 17:40:18,885 Navigating to: BTC Multi-TF Momentum Strategy with DCA
+2026-03-21 17:40:23,421 Extracted 7801 chars of Pine Script for: BTC Multi-TF Momentum Strategy with DCA
+2026-03-21 17:40:23,421 Saved: btc_multi_tf_momentum_strategy_with_dca.pine
+2026-03-21 17:40:26,424 [4/5] Scraping: Simple ZigZag Double
+2026-03-21 17:40:26,424 Navigating to: Simple ZigZag Double
+2026-03-21 17:40:30,976 Extracted 9443 chars of Pine Script for: Simple ZigZag Double
+2026-03-21 17:40:30,976 Saved: simple_zigzag_double.pine
+2026-03-21 17:40:33,979 [5/5] Scraping: RVWAP Mean Reversion Strategy
+2026-03-21 17:40:33,979 Navigating to: RVWAP Mean Reversion Strategy
+2026-03-21 17:40:38,560 Extracted 14868 chars of Pine Script for: RVWAP Mean Reversion Strategy
+2026-03-21 17:40:38,561 Saved: rvwap_mean_reversion_strategy.pine
+2026-03-21 17:40:38,635 Done. scraped=4 skipped=1 protected=0 failed=0
+Sat Mar 21 17:40:40 EDT 2026 Chunk starting at 15 (pine files: 11/71)
+Sat Mar 21 17:40:40 EDT 2026 Chunk starting at 15 (pine files: 11/71)
+2026-03-21 17:40:41,007 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:40:41,007 Processing indices 15..19 (5 strategies)
+2026-03-21 17:40:41,709 [1/5] Scraping: ETH Momentum Breakout Strategy [geektrade.online]
+2026-03-21 17:40:41,709 Navigating to: ETH Momentum Breakout Strategy [geektrade.online]
+2026-03-21 17:40:46,684 Extracted 43529 chars of Pine Script for: ETH Momentum Breakout Strategy [geektrade.online]
+2026-03-21 17:40:46,685 Saved: eth_momentum_breakout_strategy_geektradeonline.pine
+2026-03-21 17:40:49,686 [2/5] Scraping: RSI-Gauss-Velocity-Strategy-WiP
+2026-03-21 17:40:49,686 Navigating to: RSI-Gauss-Velocity-Strategy-WiP
+2026-03-21 17:40:54,266 Extracted 6859 chars of Pine Script for: RSI-Gauss-Velocity-Strategy-WiP
+2026-03-21 17:40:54,267 Saved: rsi_gauss_velocity_strategy_wip.pine
+2026-03-21 17:40:57,269 [3/5] Scraping: RSI-Gauss-WiP
+2026-03-21 17:40:57,270 Navigating to: RSI-Gauss-WiP
+2026-03-21 17:41:01,733 Extracted 9124 chars of Pine Script for: RSI-Gauss-WiP
+2026-03-21 17:41:01,733 Saved: rsi_gauss_wip.pine
+2026-03-21 17:41:04,734 [4/5] Scraping: Mean Reversion VP Strategy
+2026-03-21 17:41:04,734 Navigating to: Mean Reversion VP Strategy
+2026-03-21 17:41:09,187 Extracted 3820 chars of Pine Script for: Mean Reversion VP Strategy
+2026-03-21 17:41:09,187 Saved: mean_reversion_vp_strategy.pine
+2026-03-21 17:41:12,190 [5/5] Scraping: 13 EMA Breakout + Liquidity Sweep + BOS Confirmation (A / A+)
+2026-03-21 17:41:12,191 Navigating to: 13 EMA Breakout + Liquidity Sweep + BOS Confirmation (A / A+)
+2026-03-21 17:41:16,871 Extracted 32907 chars of Pine Script for: 13 EMA Breakout + Liquidity Sweep + BOS Confirmation (A / A+)
+2026-03-21 17:41:16,872 Saved: 13_ema_breakout_liquidity_sweep_bos_confirmation_a_a.pine
+2026-03-21 17:41:16,950 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:41:19 EDT 2026 Chunk starting at 20 (pine files: 16/71)
+Sat Mar 21 17:41:19 EDT 2026 Chunk starting at 20 (pine files: 16/71)
+2026-03-21 17:41:19,314 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:41:19,314 Processing indices 20..24 (5 strategies)
+2026-03-21 17:41:20,093 [1/5] Scraping: Silver Early Pulse v11.0
+2026-03-21 17:41:20,093 Navigating to: Silver Early Pulse v11.0
+2026-03-21 17:41:25,111 Extracted 5138 chars of Pine Script for: Silver Early Pulse v11.0
+2026-03-21 17:41:25,112 Saved: silver_early_pulse_v110.pine
+2026-03-21 17:41:28,113 [2/5] Scraping: Volatility Expansion Breakout
+2026-03-21 17:41:28,114 Navigating to: Volatility Expansion Breakout
+2026-03-21 17:41:32,767 Extracted 3486 chars of Pine Script for: Volatility Expansion Breakout
+2026-03-21 17:41:32,768 Saved: volatility_expansion_breakout.pine
+2026-03-21 17:41:35,769 [3/5] Scraping: NY Midnight Zone Retest Strategy
+2026-03-21 17:41:35,769 Navigating to: NY Midnight Zone Retest Strategy
+2026-03-21 17:41:40,353 Extracted 7905 chars of Pine Script for: NY Midnight Zone Retest Strategy
+2026-03-21 17:41:40,353 Saved: ny_midnight_zone_retest_strategy.pine
+2026-03-21 17:41:43,354 [4/5] Scraping: Momentum Reversion
+2026-03-21 17:41:43,354 Navigating to: Momentum Reversion
+2026-03-21 17:41:47,896 Extracted 7651 chars of Pine Script for: Momentum Reversion
+2026-03-21 17:41:47,896 Saved: momentum_reversion.pine
+2026-03-21 17:41:50,898 [5/5] Scraping: Trend Strategy Flip
+2026-03-21 17:41:50,899 Navigating to: Trend Strategy Flip
+2026-03-21 17:41:55,466 Extracted 16529 chars of Pine Script for: Trend Strategy Flip
+2026-03-21 17:41:55,467 Saved: trend_strategy_flip.pine
+2026-03-21 17:41:55,559 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:41:57 EDT 2026 Chunk starting at 25 (pine files: 21/71)
+Sat Mar 21 17:41:57 EDT 2026 Chunk starting at 25 (pine files: 21/71)
+2026-03-21 17:41:57,941 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:41:57,941 Processing indices 25..29 (5 strategies)
+2026-03-21 17:41:58,990 [1/5] Scraping: Donchian BO with SAR & Fixed Target
+2026-03-21 17:41:58,990 Navigating to: Donchian BO with SAR & Fixed Target
+2026-03-21 17:42:04,981 Extracted 4324 chars of Pine Script for: Donchian BO with SAR & Fixed Target
+2026-03-21 17:42:04,982 Saved: donchian_bo_with_sar_fixed_target.pine
+2026-03-21 17:42:07,982 [2/5] Scraping: Trend Forge
+2026-03-21 17:42:07,983 Navigating to: Trend Forge
+2026-03-21 17:42:12,489 Extracted 22371 chars of Pine Script for: Trend Forge
+2026-03-21 17:42:12,489 Saved: trend_forge.pine
+2026-03-21 17:42:15,490 [3/5] Scraping: RSI & Stoch OS + HH Entry + SL 0.6%
+2026-03-21 17:42:15,490 Navigating to: RSI & Stoch OS + HH Entry + SL 0.6%
+2026-03-21 17:42:19,989 Extracted 4555 chars of Pine Script for: RSI & Stoch OS + HH Entry + SL 0.6%
+2026-03-21 17:42:19,990 Saved: rsi_stoch_os_hh_entry_sl_06.pine
+2026-03-21 17:42:22,991 [4/5] Scraping: BTC Cycle RSI + LinReg Bands DCA Strategy v2
+2026-03-21 17:42:22,991 Navigating to: BTC Cycle RSI + LinReg Bands DCA Strategy v2
+2026-03-21 17:42:27,591 Extracted 23014 chars of Pine Script for: BTC Cycle RSI + LinReg Bands DCA Strategy v2
+2026-03-21 17:42:27,593 Saved: btc_cycle_rsi_linreg_bands_dca_strategy_v2.pine
+2026-03-21 17:42:30,595 [5/5] Scraping: ICT Opening Gap - Confirmed Close w/ Breakeven
+2026-03-21 17:42:30,595 Navigating to: ICT Opening Gap - Confirmed Close w/ Breakeven
+2026-03-21 17:42:35,092 Extracted 7662 chars of Pine Script for: ICT Opening Gap - Confirmed Close w/ Breakeven
+2026-03-21 17:42:35,093 Saved: ict_opening_gap_confirmed_close_w_breakeven.pine
+2026-03-21 17:42:35,168 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:42:37 EDT 2026 Chunk starting at 30 (pine files: 26/71)
+Sat Mar 21 17:42:37 EDT 2026 Chunk starting at 30 (pine files: 26/71)
+2026-03-21 17:42:37,538 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:42:37,538 Processing indices 30..34 (5 strategies)
+2026-03-21 17:42:38,314 [1/5] Scraping: Manoj 1
+2026-03-21 17:42:38,314 Navigating to: Manoj 1
+2026-03-21 17:42:43,299 Extracted 8053 chars of Pine Script for: Manoj 1
+2026-03-21 17:42:43,300 Saved: manoj_1.pine
+2026-03-21 17:42:46,301 [2/5] Scraping: BP Strategy Malisa
+2026-03-21 17:42:46,301 Navigating to: BP Strategy Malisa
+2026-03-21 17:42:50,906 Extracted 7857 chars of Pine Script for: BP Strategy Malisa
+2026-03-21 17:42:50,907 Saved: bp_strategy_malisa.pine
+2026-03-21 17:42:53,910 [3/5] Scraping: EMA50 for Gold strategy TF 15M
+2026-03-21 17:42:53,910 Navigating to: EMA50 for Gold strategy TF 15M
+2026-03-21 17:42:58,492 Extracted 6831 chars of Pine Script for: EMA50 for Gold strategy TF 15M
+2026-03-21 17:42:58,493 Saved: ema50_for_gold_strategy_tf_15m.pine
+2026-03-21 17:43:01,496 [4/5] Scraping: Mean Reversion Mirror
+2026-03-21 17:43:01,496 Navigating to: Mean Reversion Mirror
+2026-03-21 17:43:06,099 Extracted 21067 chars of Pine Script for: Mean Reversion Mirror
+2026-03-21 17:43:06,099 Saved: mean_reversion_mirror.pine
+2026-03-21 17:43:09,102 [5/5] Scraping: Trade Manager + MOST RSI
+2026-03-21 17:43:09,102 Navigating to: Trade Manager + MOST RSI
+2026-03-21 17:43:13,803 Extracted 17235 chars of Pine Script for: Trade Manager + MOST RSI
+2026-03-21 17:43:13,804 Saved: trade_manager_most_rsi.pine
+2026-03-21 17:43:13,904 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:43:16 EDT 2026 Chunk starting at 35 (pine files: 31/71)
+Sat Mar 21 17:43:16 EDT 2026 Chunk starting at 35 (pine files: 31/71)
+2026-03-21 17:43:16,284 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:43:16,284 Processing indices 35..39 (5 strategies)
+2026-03-21 17:43:17,051 [1/5] Scraping: Konigs | Bollinger Band Mean Reversion (Session Filter)
+2026-03-21 17:43:17,051 Navigating to: Konigs | Bollinger Band Mean Reversion (Session Filter)
+2026-03-21 17:43:22,166 Extracted 3753 chars of Pine Script for: Konigs | Bollinger Band Mean Reversion (Session Filter)
+2026-03-21 17:43:22,167 Saved: konigs_bollinger_band_mean_reversion_session_filter.pine
+2026-03-21 17:43:25,170 [2/5] Scraping: ORB Breakout Strategy
+2026-03-21 17:43:25,170 Navigating to: ORB Breakout Strategy
+2026-03-21 17:43:29,715 Extracted 13549 chars of Pine Script for: ORB Breakout Strategy
+2026-03-21 17:43:29,716 Saved: orb_breakout_strategy.pine
+2026-03-21 17:43:32,717 [3/5] Scraping: ABCD Harmonic Pattern Strategy (Bull + Bear)
+2026-03-21 17:43:32,717 Navigating to: ABCD Harmonic Pattern Strategy (Bull + Bear)
+2026-03-21 17:43:37,206 Extracted 30566 chars of Pine Script for: ABCD Harmonic Pattern Strategy (Bull + Bear)
+2026-03-21 17:43:37,208 Saved: abcd_harmonic_pattern_strategy_bull_bear.pine
+2026-03-21 17:43:40,211 [4/5] Scraping: MACD Bounce Strategy for Cryptohopper
+2026-03-21 17:43:40,211 Navigating to: MACD Bounce Strategy for Cryptohopper
+2026-03-21 17:43:44,952 Extracted 4941 chars of Pine Script for: MACD Bounce Strategy for Cryptohopper
+2026-03-21 17:43:44,952 Saved: macd_bounce_strategy_for_cryptohopper.pine
+2026-03-21 17:43:47,954 [5/5] Scraping: RSI > 70 Buy / Exit on Cross Below 70
+2026-03-21 17:43:47,954 Navigating to: RSI > 70 Buy / Exit on Cross Below 70
+2026-03-21 17:43:52,412 Extracted 2961 chars of Pine Script for: RSI > 70 Buy / Exit on Cross Below 70
+2026-03-21 17:43:52,413 Saved: rsi_70_buy_exit_on_cross_below_70.pine
+2026-03-21 17:43:52,488 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:43:54 EDT 2026 Chunk starting at 40 (pine files: 36/71)
+Sat Mar 21 17:43:54 EDT 2026 Chunk starting at 40 (pine files: 36/71)
+2026-03-21 17:43:54,846 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:43:54,846 Processing indices 40..44 (5 strategies)
+2026-03-21 17:43:55,615 [1/5] Scraping: 6E strat g3p
+2026-03-21 17:43:55,615 Navigating to: 6E strat g3p
+2026-03-21 17:44:00,506 Extracted 4586 chars of Pine Script for: 6E strat g3p
+2026-03-21 17:44:00,507 Saved: 6e_strat_g3p.pine
+2026-03-21 17:44:03,507 [2/5] Scraping: [SM-021] Gaussian Trend System [Optimized]
+2026-03-21 17:44:03,507 Navigating to: [SM-021] Gaussian Trend System [Optimized]
+2026-03-21 17:44:08,149 Extracted 19820 chars of Pine Script for: [SM-021] Gaussian Trend System [Optimized]
+2026-03-21 17:44:08,150 Saved: sm_021_gaussian_trend_system_optimized.pine
+2026-03-21 17:44:11,151 [3/5] Scraping: Mutanabby_AI | ONEUSDT_MR1
+2026-03-21 17:44:11,151 Navigating to: Mutanabby_AI | ONEUSDT_MR1
+2026-03-21 17:44:15,664 Extracted 7064 chars of Pine Script for: Mutanabby_AI | ONEUSDT_MR1
+2026-03-21 17:44:15,664 Saved: mutanabby_ai_oneusdt_mr1.pine
+2026-03-21 17:44:18,667 [4/5] Scraping: BTC DCA Risk Metric Strategy
+2026-03-21 17:44:18,667 Navigating to: BTC DCA Risk Metric Strategy
+2026-03-21 17:44:23,418 Extracted 16258 chars of Pine Script for: BTC DCA Risk Metric Strategy
+2026-03-21 17:44:23,419 Saved: btc_dca_risk_metric_strategy.pine
+2026-03-21 17:44:26,420 [5/5] Scraping: MA Strategy: Dual Entry Filter
+2026-03-21 17:44:26,420 Navigating to: MA Strategy: Dual Entry Filter
+2026-03-21 17:44:30,991 Extracted 10041 chars of Pine Script for: MA Strategy: Dual Entry Filter
+2026-03-21 17:44:30,992 Saved: ma_strategy_dual_entry_filter.pine
+2026-03-21 17:44:31,071 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:44:33 EDT 2026 Chunk starting at 45 (pine files: 41/71)
+Sat Mar 21 17:44:33 EDT 2026 Chunk starting at 45 (pine files: 41/71)
+2026-03-21 17:44:33,437 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:44:33,438 Processing indices 45..49 (5 strategies)
+2026-03-21 17:44:34,436 [1/5] Scraping: Triple EMA + RSI + ATR
+2026-03-21 17:44:34,437 Navigating to: Triple EMA + RSI + ATR
+2026-03-21 17:44:41,436 Extracted 6314 chars of Pine Script for: Triple EMA + RSI + ATR
+2026-03-21 17:44:41,436 Saved: triple_ema_rsi_atr.pine
+2026-03-21 17:44:44,439 [2/5] Scraping: Stratégie SMC V18.2 (BTC/EUR FINAL R3 - Tendance)
+2026-03-21 17:44:44,439 Navigating to: Stratégie SMC V18.2 (BTC/EUR FINAL R3 - Tendance)
+2026-03-21 17:44:49,044 Extracted 14284 chars of Pine Script for: Stratégie SMC V18.2 (BTC/EUR FINAL R3 - Tendance)
+2026-03-21 17:44:49,045 Saved: stratégie_smc_v182_btceur_final_r3_tendance.pine
+2026-03-21 17:44:52,047 [3/5] Scraping: Hash Supertrend [Hash Capital Research]
+2026-03-21 17:44:52,047 Navigating to: Hash Supertrend [Hash Capital Research]
+2026-03-21 17:44:56,649 Extracted 18372 chars of Pine Script for: Hash Supertrend [Hash Capital Research]
+2026-03-21 17:44:56,649 Saved: hash_supertrend_hash_capital_research.pine
+2026-03-21 17:44:59,652 [4/5] Scraping: ParabolicSAR+EMA[TS_Indie]
+2026-03-21 17:44:59,652 Navigating to: ParabolicSAR+EMA[TS_Indie]
+2026-03-21 17:45:04,141 Extracted 25531 chars of Pine Script for: ParabolicSAR+EMA[TS_Indie]
+2026-03-21 17:45:04,142 Saved: parabolicsaremats_indie.pine
+2026-03-21 17:45:07,144 [5/5] Scraping: Pivot Fib 4H — EA
+2026-03-21 17:45:07,144 Navigating to: Pivot Fib 4H — EA
+2026-03-21 17:45:11,719 Extracted 9923 chars of Pine Script for: Pivot Fib 4H — EA
+2026-03-21 17:45:11,719 Saved: pivot_fib_4h_ea.pine
+2026-03-21 17:45:11,797 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:45:13 EDT 2026 Chunk starting at 50 (pine files: 46/71)
+Sat Mar 21 17:45:13 EDT 2026 Chunk starting at 50 (pine files: 46/71)
+2026-03-21 17:45:14,167 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:45:14,167 Processing indices 50..54 (5 strategies)
+2026-03-21 17:45:14,972 [1/5] Scraping: 週一普跌策略 Monday shit Strategy
+2026-03-21 17:45:14,972 Navigating to: 週一普跌策略 Monday shit Strategy
+2026-03-21 17:45:20,157 Extracted 4084 chars of Pine Script for: 週一普跌策略 Monday shit Strategy
+2026-03-21 17:45:20,157 Saved: 週一普跌策略_monday_shit_strategy.pine
+2026-03-21 17:45:23,159 [2/5] Scraping: XiaoJiu_RSI_5m_Drop1_DCA
+2026-03-21 17:45:23,159 Navigating to: XiaoJiu_RSI_5m_Drop1_DCA
+2026-03-21 17:45:27,687 Extracted 3623 chars of Pine Script for: XiaoJiu_RSI_5m_Drop1_DCA
+2026-03-21 17:45:27,687 Saved: xiaojiu_rsi_5m_drop1_dca.pine
+2026-03-21 17:45:30,690 [3/5] Scraping: Moving Average Band Strategy
+2026-03-21 17:45:30,690 Navigating to: Moving Average Band Strategy
+2026-03-21 17:45:35,338 Extracted 16095 chars of Pine Script for: Moving Average Band Strategy
+2026-03-21 17:45:35,338 Saved: moving_average_band_strategy.pine
+2026-03-21 17:45:38,341 [4/5] Scraping: Stochastic + Bollinger Bands Multi-Timeframe Strategy
+2026-03-21 17:45:38,341 Navigating to: Stochastic + Bollinger Bands Multi-Timeframe Strategy
+2026-03-21 17:45:42,828 Extracted 7569 chars of Pine Script for: Stochastic + Bollinger Bands Multi-Timeframe Strategy
+2026-03-21 17:45:42,829 Saved: stochastic_bollinger_bands_multi_timeframe_strategy.pine
+2026-03-21 17:45:45,831 [5/5] Scraping: QQQ Timing
+2026-03-21 17:45:45,832 Navigating to: QQQ Timing
+2026-03-21 17:45:50,310 Extracted 9324 chars of Pine Script for: QQQ Timing
+2026-03-21 17:45:50,310 Saved: qqq_timing.pine
+2026-03-21 17:45:50,384 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:45:52 EDT 2026 Chunk starting at 55 (pine files: 51/71)
+Sat Mar 21 17:45:52 EDT 2026 Chunk starting at 55 (pine files: 51/71)
+2026-03-21 17:45:52,744 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:45:52,744 Processing indices 55..59 (5 strategies)
+2026-03-21 17:45:53,493 [1/5] Scraping: For Albert
+2026-03-21 17:45:53,493 Navigating to: For Albert
+2026-03-21 17:45:58,526 Extracted 16168 chars of Pine Script for: For Albert
+2026-03-21 17:45:58,527 Saved: for_albert.pine
+2026-03-21 17:46:01,530 [2/5] Scraping: tradingview_momentum_Hull-Suite-W-FVSO-NO-Weekend
+2026-03-21 17:46:01,530 Navigating to: tradingview_momentum_Hull-Suite-W-FVSO-NO-Weekend
+2026-03-21 17:46:06,088 Extracted 13727 chars of Pine Script for: tradingview_momentum_Hull-Suite-W-FVSO-NO-Weekend
+2026-03-21 17:46:06,089 Saved: tradingview_momentum_hull_suite_w_fvso_no_weekend.pine
+2026-03-21 17:46:09,090 [3/5] Scraping: HEK Dinamik Fiyat Kanalı Stratejisi v1
+2026-03-21 17:46:09,090 Navigating to: HEK Dinamik Fiyat Kanalı Stratejisi v1
+2026-03-21 17:46:13,619 Extracted 16003 chars of Pine Script for: HEK Dinamik Fiyat Kanalı Stratejisi v1
+2026-03-21 17:46:13,620 Saved: hek_dinamik_fiyat_kanalı_stratejisi_v1.pine
+2026-03-21 17:46:16,623 [4/5] Scraping: Gold H1 Breakout Failure (V11.0)
+2026-03-21 17:46:16,623 Navigating to: Gold H1 Breakout Failure (V11.0)
+2026-03-21 17:46:21,193 Extracted 6748 chars of Pine Script for: Gold H1 Breakout Failure (V11.0)
+2026-03-21 17:46:21,193 Saved: gold_h1_breakout_failure_v110.pine
+2026-03-21 17:46:24,196 [5/5] Scraping: Mean Reversion Trading V1
+2026-03-21 17:46:24,196 Navigating to: Mean Reversion Trading V1
+2026-03-21 17:46:28,792 Extracted 7061 chars of Pine Script for: Mean Reversion Trading V1
+2026-03-21 17:46:28,792 Saved: mean_reversion_trading_v1.pine
+2026-03-21 17:46:28,866 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:46:31 EDT 2026 Chunk starting at 60 (pine files: 56/71)
+Sat Mar 21 17:46:31 EDT 2026 Chunk starting at 60 (pine files: 56/71)
+2026-03-21 17:46:31,227 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:46:31,227 Processing indices 60..64 (5 strategies)
+2026-03-21 17:46:32,002 [1/5] Scraping: XAUUSD 5m — NY Supertrend+RSI Optimizer (1:2 RR) — $240k/order
+2026-03-21 17:46:32,003 Navigating to: XAUUSD 5m — NY Supertrend+RSI Optimizer (1:2 RR) — $240k/order
+2026-03-21 17:46:36,944 Extracted 5996 chars of Pine Script for: XAUUSD 5m — NY Supertrend+RSI Optimizer (1:2 RR) — $240k/order
+2026-03-21 17:46:36,945 Saved: xauusd_5m_ny_supertrendrsi_optimizer_12_rr_240korder.pine
+2026-03-21 17:46:39,947 [2/5] Scraping: Hermes
+2026-03-21 17:46:39,947 Navigating to: Hermes
+2026-03-21 17:46:44,517 Extracted 12527 chars of Pine Script for: Hermes
+2026-03-21 17:46:44,517 Saved: hermes.pine
+2026-03-21 17:46:47,518 [3/5] Scraping: ES cuh
+2026-03-21 17:46:47,518 Navigating to: ES cuh
+2026-03-21 17:46:52,145 Extracted 2964 chars of Pine Script for: ES cuh
+2026-03-21 17:46:52,145 Saved: es_cuh.pine
+2026-03-21 17:46:55,148 [4/5] Scraping: MAC's V6 final
+2026-03-21 17:46:55,148 Navigating to: MAC's V6 final
+2026-03-21 17:46:59,704 Extracted 20722 chars of Pine Script for: MAC's V6 final
+2026-03-21 17:46:59,704 Saved: macs_v6_final.pine
+2026-03-21 17:47:02,706 [5/5] Scraping: Ajay R5.41
+2026-03-21 17:47:02,707 Navigating to: Ajay R5.41
+2026-03-21 17:47:07,262 Extracted 39047 chars of Pine Script for: Ajay R5.41
+2026-03-21 17:47:07,262 Saved: ajay_r541.pine
+2026-03-21 17:47:07,340 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:47:09 EDT 2026 Chunk starting at 65 (pine files: 61/71)
+Sat Mar 21 17:47:09 EDT 2026 Chunk starting at 65 (pine files: 61/71)
+2026-03-21 17:47:09,645 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:47:09,645 Processing indices 65..69 (5 strategies)
+2026-03-21 17:47:10,463 [1/5] Scraping: Order Block Volumatic FVG Strategy
+2026-03-21 17:47:10,464 Navigating to: Order Block Volumatic FVG Strategy
+2026-03-21 17:47:15,768 Extracted 23731 chars of Pine Script for: Order Block Volumatic FVG Strategy
+2026-03-21 17:47:15,769 Saved: order_block_volumatic_fvg_strategy.pine
+2026-03-21 17:47:18,770 [2/5] Scraping: AVGO Advanced Day Trading Strategy
+2026-03-21 17:47:18,770 Navigating to: AVGO Advanced Day Trading Strategy
+2026-03-21 17:47:23,488 Extracted 34516 chars of Pine Script for: AVGO Advanced Day Trading Strategy
+2026-03-21 17:47:23,488 Saved: avgo_advanced_day_trading_strategy.pine
+2026-03-21 17:47:26,491 [3/5] Scraping: RSI DCA Strategy
+2026-03-21 17:47:26,492 Navigating to: RSI DCA Strategy
+2026-03-21 17:47:30,922 Extracted 5310 chars of Pine Script for: RSI DCA Strategy
+2026-03-21 17:47:30,923 Saved: rsi_dca_strategy.pine
+2026-03-21 17:47:33,923 [4/5] Scraping: QZ Trend (Crypto Edition) v1.1a: Donchian, EMA, ATR, Liquidity/F
+2026-03-21 17:47:33,924 Navigating to: QZ Trend (Crypto Edition) v1.1a: Donchian, EMA, ATR, Liquidity/F
+2026-03-21 17:47:38,518 Extracted 14507 chars of Pine Script for: QZ Trend (Crypto Edition) v1.1a: Donchian, EMA, ATR, Liquidity/F
+2026-03-21 17:47:38,518 Saved: qz_trend_crypto_edition_v11a_donchian_ema_atr_liquidityf.pine
+2026-03-21 17:47:41,519 [5/5] Scraping: RedFlag
+2026-03-21 17:47:41,519 Navigating to: RedFlag
+2026-03-21 17:47:46,088 Extracted 8947 chars of Pine Script for: RedFlag
+2026-03-21 17:47:46,088 Saved: redflag.pine
+2026-03-21 17:47:46,168 Done. scraped=5 skipped=0 protected=0 failed=0
+Sat Mar 21 17:47:48 EDT 2026 Chunk starting at 70 (pine files: 66/71)
+Sat Mar 21 17:47:48 EDT 2026 Chunk starting at 70 (pine files: 66/71)
+2026-03-21 17:47:48,532 Loaded 71 strategies from candidates_71.json
+2026-03-21 17:47:48,532 Processing indices 70..70 (1 strategies)
+2026-03-21 17:47:49,308 [1/1] Scraping: 3-Level DCA Buy Strategy
+2026-03-21 17:47:49,308 Navigating to: 3-Level DCA Buy Strategy
+2026-03-21 17:47:54,253 Extracted 15990 chars of Pine Script for: 3-Level DCA Buy Strategy
+2026-03-21 17:47:54,254 Saved: 3_level_dca_buy_strategy.pine
+2026-03-21 17:47:54,314 Done. scraped=1 skipped=0 protected=0 failed=0
+Sat Mar 21 17:47:56 EDT 2026 Chunked source scrape complete (67 pine files)
+Sat Mar 21 17:47:56 EDT 2026 Chunked source scrape complete (67 pine files)

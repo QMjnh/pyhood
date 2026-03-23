@@ -1,0 +1,111 @@
+2026-03-21 11:21:52,556 - INFO - Starting TradingView strategy enrichment
+2026-03-21 11:21:52,556 - INFO - Config - Delay: 5.0s, Limit: All, Start from: 0
+2026-03-21 11:21:52,563 - INFO - Loaded 1000 strategies from /Users/nyra/Projects/pyhood/scripts/tv_scraper/data/strategies.json
+2026-03-21 11:21:52,604 - INFO - Found 918 already enriched strategies
+2026-03-21 11:21:52,605 - INFO - Processing 82 strategies
+2026-03-21 11:21:53,471 - INFO - Processing strategy 1/82 (#918): Bitcoin Halving Strategy
+2026-03-21 11:22:05,997 - INFO - Processing strategy 2/82 (#919): Twisted Forex's Doji + Area Strategy
+2026-03-21 11:22:15,680 - INFO - Processing strategy 3/82 (#920): BTC 5-MA Multi Cross Strategy By Hardik Prajapati Ai Tradelab
+2026-03-21 11:22:25,291 - INFO - Processing strategy 4/82 (#921): PG DMean & Price Sync ver 9.4 - Consolidated
+2026-03-21 11:22:35,007 - INFO - Processing strategy 5/82 (#922): Crypto Scalping Strategy - High Win Rate
+2026-03-21 11:22:42,602 - INFO - Processing strategy 6/82 (#923): my_strategy_2.0
+2026-03-21 11:22:52,197 - INFO - Processing strategy 7/82 (#924): SuperTrended Moving Averages Strategy
+2026-03-21 11:22:59,708 - INFO - Processing strategy 8/82 (#925): Natural Gas Intraday Strategy [15m] with Partial Profit & Trail
+2026-03-21 11:23:07,216 - INFO - Processing strategy 9/82 (#926): Zero Lag + Momentum Bias Strategy
+2026-03-21 11:23:14,716 - INFO - Processing strategy 10/82 (#927): Macro Momentum – 4-Theme, Vol Target, Rebalance
+2026-03-21 11:23:17,385 - INFO - Progress saved: 10 enriched
+2026-03-21 11:23:22,386 - INFO - Processing strategy 11/82 (#928): Universal Breakout Strategy [KedArc Quant]
+2026-03-21 11:23:32,085 - INFO - Processing strategy 12/82 (#929): Intraday Momentum for Volatile Stocks 29.09
+2026-03-21 11:23:39,587 - INFO - Processing strategy 13/82 (#930): EMA Crossover Strategy (15m)
+2026-03-21 11:23:47,085 - INFO - Processing strategy 14/82 (#931): Investorjordann - Script
+2026-03-21 11:23:54,564 - INFO - Processing strategy 15/82 (#932): 简单KDJ80策略 - test
+2026-03-21 11:24:02,121 - INFO - Processing strategy 16/82 (#933): 顺序三连穿越：2/3先入 + 3/3加仓（仅低波动过滤）
+2026-03-21 11:24:09,623 - INFO - Processing strategy 17/82 (#934): Strategy Builder
+2026-03-21 11:24:19,293 - INFO - Processing strategy 18/82 (#935): RSI Cross Strategy Precise Entry
+2026-03-21 11:24:26,897 - INFO - Processing strategy 19/82 (#936): Order Block Volumatic FVG Strategy
+2026-03-21 11:24:36,542 - INFO - Processing strategy 20/82 (#937): DBO_Prod Updated Sept 27
+2026-03-21 11:24:39,270 - INFO - Progress saved: 20 enriched
+2026-03-21 11:24:44,272 - INFO - Processing strategy 21/82 (#938): Elliott Wave Auto + Fib Targets + Scalper Strategy (Fixed)
+2026-03-21 11:24:53,965 - INFO - Processing strategy 22/82 (#939): BOCS Channel Scalper Strategy - Automated Mean Reversion System
+2026-03-21 11:25:03,625 - INFO - Processing strategy 23/82 (#940): Alain parf
+2026-03-21 11:25:11,102 - INFO - Processing strategy 24/82 (#941): [Outperforms Bitcoin Since 2011] Professional MA Strategy
+2026-03-21 11:25:18,582 - INFO - Processing strategy 25/82 (#942): RSI Divergence Strategy
+2026-03-21 11:25:26,081 - INFO - Processing strategy 26/82 (#943): KD The Scalper
+2026-03-21 11:25:33,564 - INFO - Processing strategy 27/82 (#944): MACD Aspray Hybrid Strategy
+2026-03-21 11:25:41,064 - INFO - Processing strategy 28/82 (#945): Liquidity+FVG+OB Strategy (v6)
+2026-03-21 11:25:48,538 - INFO - Processing strategy 29/82 (#946): Stochastic Divergence Strategy
+2026-03-21 11:25:56,168 - INFO - Processing strategy 30/82 (#947): KDK 4hr
+2026-03-21 11:26:00,853 - INFO - Progress saved: 30 enriched
+2026-03-21 11:26:05,854 - INFO - Processing strategy 31/82 (#948): Dwaggy Scalping Trio (VWAP + EMA + RSI)
+2026-03-21 11:26:18,352 - INFO - Processing strategy 32/82 (#949): Long-only Swing/Scalp (anchored exits + TP harness) Traders Post
+2026-03-21 11:26:25,911 - INFO - Processing strategy 33/82 (#950): Long‑only Swing/Scalp
+2026-03-21 11:26:35,566 - INFO - Processing strategy 34/82 (#951): AVGO Advanced Day Trading Strategy
+2026-03-21 11:26:45,272 - INFO - Processing strategy 35/82 (#952): Scalping Strategy: FVG + Engulfing
+2026-03-21 11:26:52,914 - INFO - Processing strategy 36/82 (#953): Supertrend 3H Strategy Vinay
+2026-03-21 11:27:00,383 - INFO - Processing strategy 37/82 (#954): Parthiban Stock Market Buy V2 - Buy only
+2026-03-21 11:27:07,964 - INFO - Processing strategy 38/82 (#955): Parthiban - Stock Market Buy
+2026-03-21 11:27:15,511 - INFO - Processing strategy 39/82 (#956): VWAP + Multi-Timeframe RSI Strategy
+2026-03-21 11:27:23,069 - INFO - Processing strategy 40/82 (#957): VWAP Pullback + RSI Confirmation
+2026-03-21 11:27:25,635 - INFO - Progress saved: 40 enriched
+2026-03-21 11:27:30,637 - INFO - Processing strategy 41/82 (#958): Indecision Candle with 2 Candle Confirmation + 500 EMA - parthib
+2026-03-21 11:27:38,165 - INFO - Processing strategy 42/82 (#959): Hybrid RSI Strategy [Heifereum ]
+2026-03-21 11:27:47,782 - INFO - Processing strategy 43/82 (#960): KCandle Strategy 1.0
+2026-03-21 11:27:55,273 - INFO - Processing strategy 44/82 (#961): Weekend Hunter Ultimate v6.2
+2026-03-21 11:28:02,831 - INFO - Processing strategy 45/82 (#962): Trend Strength Index Long Strategy
+2026-03-21 11:28:10,335 - INFO - Processing strategy 46/82 (#963): The Best Strategy Template[LuciTech]
+2026-03-21 11:28:20,111 - INFO - Processing strategy 47/82 (#964): 维加斯双通道策略
+2026-03-21 11:28:27,694 - INFO - Processing strategy 48/82 (#965): Saowanee15Gold
+2026-03-21 11:28:35,226 - INFO - Processing strategy 49/82 (#966): SMA Cross 5/50 with Trend Filter & Risk Management by JuggiD
+2026-03-21 11:28:42,711 - INFO - Processing strategy 50/82 (#967): Triple Quad Frosty v4.5
+2026-03-21 11:28:45,339 - INFO - Progress saved: 50 enriched
+2026-03-21 11:28:50,340 - INFO - Processing strategy 51/82 (#968): Grand Master's Candlestick Dominance (ATR Enhanced)
+2026-03-21 11:29:00,228 - INFO - Processing strategy 52/82 (#969): Nirvana True Duel
+2026-03-21 11:29:12,819 - INFO - Processing strategy 53/82 (#970): DMI Toolbox Strategy
+2026-03-21 11:29:22,495 - INFO - Processing strategy 54/82 (#971): Extremum Range MA Crossover Strategy
+2026-03-21 11:29:32,140 - INFO - Processing strategy 55/82 (#972): Trendline Breakout Strategy [KedArc Quant]
+2026-03-21 11:29:41,760 - INFO - Processing strategy 56/82 (#973): Cs Fenix Us30
+2026-03-21 11:29:49,227 - INFO - Processing strategy 57/82 (#974): BSL/SSL Sweep + FVG Strategy Jobin (c)
+2026-03-21 11:29:56,709 - INFO - Processing strategy 58/82 (#975): RSI DCA Strategy
+2026-03-21 11:30:04,242 - INFO - Processing strategy 59/82 (#976): ORB Breakout Strategy with reversal
+2026-03-21 11:30:11,708 - INFO - Processing strategy 60/82 (#977): Structure Strategy
+2026-03-21 11:30:14,300 - INFO - Progress saved: 60 enriched
+2026-03-21 11:30:19,302 - INFO - Processing strategy 61/82 (#978): Hilega Milega v6 - Pure EMA/SMA (Nitesh Kumar) + Full Backtest
+2026-03-21 11:30:28,809 - INFO - Processing strategy 62/82 (#979): Gold - First 5m Candle NY Session
+2026-03-21 11:30:36,292 - INFO - Processing strategy 63/82 (#980): EMA 9-21 Crossover Strategy
+2026-03-21 11:30:43,820 - INFO - Processing strategy 64/82 (#981): Small-Cap — Sell Every Spike (Rendon1)
+2026-03-21 11:30:53,436 - INFO - Processing strategy 65/82 (#982): Hazel nut BB Strategy, volume base- lite version
+2026-03-21 11:31:03,240 - INFO - Processing strategy 66/82 (#983): Liquidation Strategy
+2026-03-21 11:31:10,791 - INFO - Processing strategy 67/82 (#984): Range Breakout Strategy
+2026-03-21 11:31:18,336 - INFO - Processing strategy 68/82 (#985): QZ Trend (Crypto Edition) v1.1a: Donchian, EMA, ATR, Liquidity/F
+2026-03-21 11:31:25,850 - INFO - Processing strategy 69/82 (#986): RedFlag
+2026-03-21 11:31:33,342 - INFO - Processing strategy 70/82 (#987): Continuous Accumulation Strategy [DCA] v9
+2026-03-21 11:31:37,974 - INFO - Progress saved: 70 enriched
+2026-03-21 11:31:42,976 - INFO - Processing strategy 71/82 (#988): 3-Level DCA Buy Strategy
+2026-03-21 11:31:52,601 - INFO - Processing strategy 72/82 (#989): kaka 谈趋势
+2026-03-21 11:32:00,101 - INFO - Processing strategy 73/82 (#990): Tristan's Box: Pre-Market Range Breakout + Retest
+2026-03-21 11:32:07,665 - INFO - Processing strategy 74/82 (#991): Penguin Volatility State Strategy
+2026-03-21 11:32:15,239 - INFO - Processing strategy 75/82 (#992): Dynamic Swing Anchored VWAP STRAT (Zeiierman/PineIndicators)
+2026-03-21 11:32:24,992 - INFO - Processing strategy 76/82 (#993): VWAP Trend Strategy (Intraday) [KedarArc Quant]
+2026-03-21 11:32:32,507 - INFO - Processing strategy 77/82 (#994): DNSE VN301!, ADX Momentum Strategy
+2026-03-21 11:32:42,145 - INFO - Processing strategy 78/82 (#995): RSI Momentum Trend MM with Risk Per Trade [MTF]
+2026-03-21 11:32:51,839 - INFO - Processing strategy 79/82 (#996): Recovery Strategy
+2026-03-21 11:33:01,611 - INFO - Processing strategy 80/82 (#997): LP Sweep / Reclaim & Breakout Grading: Long-only
+2026-03-21 11:33:04,172 - INFO - Progress saved: 80 enriched
+2026-03-21 11:33:09,174 - INFO - Processing strategy 81/82 (#998): Gann Fan Strategy [KedarArc Quant]
+2026-03-21 11:33:16,723 - INFO - Processing strategy 82/82 (#999): Advanced Crypto Day Trading - Bybit Optimized maperciv
+2026-03-21 11:33:19,443 - INFO - Enrichment completed! Processed 82 successfully, 0 errors in 686.9s
+
+✅ Enrichment completed!
+📊 Total enriched strategies: 1000
+✅ Successfully enriched: 82
+❌ Errors encountered: 0
+💾 Saved to: /Users/nyra/Projects/pyhood/scripts/tv_scraper/data/strategies_enriched.json
+
+🔍 Sample enriched strategy:
+  Title: Advanced Crypto Day Trading - Bybit Optimized maperciv
+  Author: maperciv
+  Ticker: None
+  Timeframe: None
+  Strategy Type: long_and_short
+  Tags: trend analysis, volatility, volume, usdt
+  Pine Version: None

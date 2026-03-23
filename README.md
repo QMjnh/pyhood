@@ -28,6 +28,7 @@ Built for automated trading — with auth that doesn't break, proper error handl
 - 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly. No more guessing what's in a dict.
 - 🛡️ **Built-in rate limiting** — Automatic request throttling and retry logic so you don't get locked out.
 - 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration.
+- 🏦 **IRA/Retirement accounts** — Trade stocks and options in Traditional and Roth IRAs. The only Python Robinhood library with retirement account support.
 - 🧪 **Tested and maintained** — 86+ tests, CI across Python 3.10-3.13, linted with ruff. If it breaks, we know immediately.
 
 ## Quick Start
@@ -53,6 +54,27 @@ for option in chain.calls:
 positions = client.get_positions()
 balance = client.get_buying_power()
 ```
+
+## IRA Trading
+
+pyhood can discover and trade in IRA/retirement accounts — something no other Python Robinhood library supports.
+
+```python
+# Discover all accounts (including IRA)
+accounts = client.get_all_accounts()
+
+# Check IRA buying power
+bp = client.get_buying_power(account_number="YOUR_IRA_ACCOUNT")
+
+# Buy options in your Roth IRA
+order = client.buy_option(
+    symbol="NKE", strike=55.0, expiration="2026-04-02",
+    option_type="call", quantity=3, price=1.60,
+    account_number="YOUR_IRA_ACCOUNT",
+)
+```
+
+See the [Account documentation](https://jamestford.github.io/pyhood/account/) for details on IRA account discovery and limitations.
 
 ## Authentication
 

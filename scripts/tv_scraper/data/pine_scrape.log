@@ -1,0 +1,483 @@
+2026-03-21 17:38:16,675 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:38:16,676 [INFO] Processing indices 0..4 (5 strategies)
+2026-03-21 17:38:17,516 [INFO] [1/5] Scraping: RSI Mean Reversion
+2026-03-21 17:38:17,516 [INFO] Navigating to: RSI Mean Reversion
+2026-03-21 17:38:17,516 [DEBUG] URL: https://www.tradingview.com/script/JFIZkwZR-RSI-Mean-Reversion/
+2026-03-21 17:38:22,735 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:38:24,792 [INFO] Extracted 6748 chars of Pine Script for: RSI Mean Reversion
+2026-03-21 17:38:24,792 [INFO] Saved: rsi_mean_reversion.pine
+2026-03-21 17:38:27,793 [INFO] [2/5] Scraping: Kinetic Kalman Breakout
+2026-03-21 17:38:27,793 [INFO] Navigating to: Kinetic Kalman Breakout
+2026-03-21 17:38:27,794 [DEBUG] URL: https://www.tradingview.com/script/nd8EpyQ5-Kinetic-Kalman-Breakout/
+2026-03-21 17:38:30,405 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:38:32,453 [INFO] Extracted 6199 chars of Pine Script for: Kinetic Kalman Breakout
+2026-03-21 17:38:32,454 [INFO] Saved: kinetic_kalman_breakout.pine
+2026-03-21 17:38:35,456 [INFO] [3/5] Scraping: Dee MTF ATR Strategy + Alert (3 TPs)
+2026-03-21 17:38:35,456 [INFO] Navigating to: Dee MTF ATR Strategy + Alert (3 TPs)
+2026-03-21 17:38:35,457 [DEBUG] URL: https://www.tradingview.com/script/BOR96jLK-Dee-MTF-ATR-Strategy-Alert-3-TPs/
+2026-03-21 17:38:37,945 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:38:39,988 [INFO] Extracted 10567 chars of Pine Script for: Dee MTF ATR Strategy + Alert (3 TPs)
+2026-03-21 17:38:39,989 [INFO] Saved: dee_mtf_atr_strategy_alert_3_tps.pine
+2026-03-21 17:38:42,990 [INFO] [4/5] Scraping: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:38:42,990 [INFO] Navigating to: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:38:42,990 [DEBUG] URL: https://www.tradingview.com/script/qbpP1RqN-S3-1-SFP-EMA-Turtle-Strategy-for-Hyperliquid-HYPR-run/
+2026-03-21 17:38:45,604 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:38:47,678 [WARNING] No source code found for: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:38:50,690 [INFO] [5/5] Scraping: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:38:50,690 [INFO] Navigating to: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:38:50,690 [DEBUG] URL: https://www.tradingview.com/script/Dnud09x8-S2-1-EMA-Turtle-ATR-Strategy-for-Hyperliquid-HYPR-run/
+2026-03-21 17:38:53,248 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:38:55,309 [WARNING] No source code found for: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:38:55,392 [INFO] Done. scraped=3 skipped=0 protected=0 failed=2
+2026-03-21 17:39:13,772 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:39:13,772 [INFO] Processing indices 0..4 (5 strategies)
+2026-03-21 17:39:14,579 [INFO] [1/5] Already exists, skipping: rsi_mean_reversion.pine
+2026-03-21 17:39:14,580 [INFO] [2/5] Already exists, skipping: kinetic_kalman_breakout.pine
+2026-03-21 17:39:14,580 [INFO] [3/5] Already exists, skipping: dee_mtf_atr_strategy_alert_3_tps.pine
+2026-03-21 17:39:14,580 [INFO] [4/5] Scraping: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:14,580 [INFO] Navigating to: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:14,580 [DEBUG] URL: https://www.tradingview.com/script/qbpP1RqN-S3-1-SFP-EMA-Turtle-Strategy-for-Hyperliquid-HYPR-run/
+2026-03-21 17:39:17,453 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:39:19,541 [WARNING] No source code found for: S3.1 SFP EMA Turtle Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:22,554 [INFO] [5/5] Scraping: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:22,554 [INFO] Navigating to: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:22,554 [DEBUG] URL: https://www.tradingview.com/script/Dnud09x8-S2-1-EMA-Turtle-ATR-Strategy-for-Hyperliquid-HYPR-run/
+2026-03-21 17:39:24,980 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:39:27,034 [WARNING] No source code found for: S2.1 EMA Turtle ATR Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:27,107 [INFO] Done. scraped=0 skipped=3 protected=0 failed=2
+2026-03-21 17:39:29,693 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:39:29,693 [INFO] Processing indices 5..9 (5 strategies)
+2026-03-21 17:39:30,602 [INFO] [1/5] Scraping: S1.1 EMA Crossover Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:30,607 [INFO] Navigating to: S1.1 EMA Crossover Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:30,624 [DEBUG] URL: https://www.tradingview.com/script/DBe1ib2N-S1-1-EMA-Crossover-Strategy-for-Hyperliquid-HYPR-run/
+2026-03-21 17:39:33,766 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:39:35,830 [WARNING] No source code found for: S1.1 EMA Crossover Strategy for Hyperliquid [HYPR-run]
+2026-03-21 17:39:38,839 [INFO] [2/5] Scraping: LWTG QCBP v1.0.10-Multi Instrument Trading
+2026-03-21 17:39:38,839 [INFO] Navigating to: LWTG QCBP v1.0.10-Multi Instrument Trading
+2026-03-21 17:39:38,839 [DEBUG] URL: https://www.tradingview.com/script/O3X3HxPe-LWTG-QCBP-v1-0-10-Multi-Instrument-Trading/
+2026-03-21 17:39:41,453 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:39:43,580 [INFO] Extracted 69442 chars of Pine Script for: LWTG QCBP v1.0.10-Multi Instrument Trading
+2026-03-21 17:39:43,580 [INFO] Saved: lwtg_qcbp_v1010_multi_instrument_trading.pine
+2026-03-21 17:39:46,581 [INFO] [3/5] Scraping: BTC/USD Quant Trend Engine Long Only v2 - 2x leverage
+2026-03-21 17:39:46,581 [INFO] Navigating to: BTC/USD Quant Trend Engine Long Only v2 - 2x leverage
+2026-03-21 17:39:46,581 [DEBUG] URL: https://www.tradingview.com/script/FChtLB3J-BTC-USD-Quant-Trend-Engine-Long-Only-v2-2x-leverage/
+2026-03-21 17:39:49,040 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:39:51,093 [INFO] Extracted 10625 chars of Pine Script for: BTC/USD Quant Trend Engine Long Only v2 - 2x leverage
+2026-03-21 17:39:51,093 [INFO] Saved: btcusd_quant_trend_engine_long_only_v2_2x_leverage.pine
+2026-03-21 17:39:54,094 [INFO] [4/5] Scraping: BTC/USD Quant Scoring System Long Only
+2026-03-21 17:39:54,094 [INFO] Navigating to: BTC/USD Quant Scoring System Long Only
+2026-03-21 17:39:54,094 [DEBUG] URL: https://www.tradingview.com/script/SUpWBQGR-BTC-USD-Quant-Scoring-System-Long-Only/
+2026-03-21 17:39:56,603 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:39:58,652 [INFO] Extracted 6299 chars of Pine Script for: BTC/USD Quant Scoring System Long Only
+2026-03-21 17:39:58,652 [INFO] Saved: btcusd_quant_scoring_system_long_only.pine
+2026-03-21 17:40:01,653 [INFO] [5/5] Scraping: MASU+ Institutional Fibonacci MTF [BTT]
+2026-03-21 17:40:01,653 [INFO] Navigating to: MASU+ Institutional Fibonacci MTF [BTT]
+2026-03-21 17:40:01,653 [DEBUG] URL: https://www.tradingview.com/script/QCkIgf3z-MASU-Institutional-Fibonacci-MTF-BTT/
+2026-03-21 17:40:04,112 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:40:06,205 [INFO] Extracted 45880 chars of Pine Script for: MASU+ Institutional Fibonacci MTF [BTT]
+2026-03-21 17:40:06,206 [INFO] Saved: masu_institutional_fibonacci_mtf_btt.pine
+2026-03-21 17:40:06,284 [INFO] Done. scraped=4 skipped=0 protected=0 failed=1
+2026-03-21 17:40:08,638 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:40:08,638 [INFO] Processing indices 10..14 (5 strategies)
+2026-03-21 17:40:09,402 [INFO] [1/5] Already exists, skipping: masu_institutional_fibonacci_mtf_btt.pine
+2026-03-21 17:40:09,402 [INFO] [2/5] Scraping: ATR Trend Strategy with Moving Average | Fixed TP/SL version
+2026-03-21 17:40:09,403 [INFO] Navigating to: ATR Trend Strategy with Moving Average | Fixed TP/SL version
+2026-03-21 17:40:09,403 [DEBUG] URL: https://www.tradingview.com/script/fM3YQz8i-ATR-Trend-Strategy-with-Moving-Average-Fixed-TP-SL-version/
+2026-03-21 17:40:13,810 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:40:15,882 [INFO] Extracted 17017 chars of Pine Script for: ATR Trend Strategy with Moving Average | Fixed TP/SL version
+2026-03-21 17:40:15,882 [INFO] Saved: atr_trend_strategy_with_moving_average_fixed_tpsl_version.pine
+2026-03-21 17:40:18,885 [INFO] [3/5] Scraping: BTC Multi-TF Momentum Strategy with DCA
+2026-03-21 17:40:18,885 [INFO] Navigating to: BTC Multi-TF Momentum Strategy with DCA
+2026-03-21 17:40:18,885 [DEBUG] URL: https://www.tradingview.com/script/a7n5ip1Z-BTC-Multi-TF-Momentum-Strategy-with-DCA/
+2026-03-21 17:40:21,372 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:40:23,421 [INFO] Extracted 7801 chars of Pine Script for: BTC Multi-TF Momentum Strategy with DCA
+2026-03-21 17:40:23,421 [INFO] Saved: btc_multi_tf_momentum_strategy_with_dca.pine
+2026-03-21 17:40:26,424 [INFO] [4/5] Scraping: Simple ZigZag Double
+2026-03-21 17:40:26,424 [INFO] Navigating to: Simple ZigZag Double
+2026-03-21 17:40:26,424 [DEBUG] URL: https://www.tradingview.com/script/3Q75d98D-Simple-ZigZag-Double/
+2026-03-21 17:40:28,923 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:40:30,976 [INFO] Extracted 9443 chars of Pine Script for: Simple ZigZag Double
+2026-03-21 17:40:30,976 [INFO] Saved: simple_zigzag_double.pine
+2026-03-21 17:40:33,979 [INFO] [5/5] Scraping: RVWAP Mean Reversion Strategy
+2026-03-21 17:40:33,979 [INFO] Navigating to: RVWAP Mean Reversion Strategy
+2026-03-21 17:40:33,979 [DEBUG] URL: https://www.tradingview.com/script/oZcWZsvU-RVWAP-Mean-Reversion-Strategy/
+2026-03-21 17:40:36,507 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:40:38,560 [INFO] Extracted 14868 chars of Pine Script for: RVWAP Mean Reversion Strategy
+2026-03-21 17:40:38,561 [INFO] Saved: rvwap_mean_reversion_strategy.pine
+2026-03-21 17:40:38,635 [INFO] Done. scraped=4 skipped=1 protected=0 failed=0
+2026-03-21 17:40:41,007 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:40:41,007 [INFO] Processing indices 15..19 (5 strategies)
+2026-03-21 17:40:41,709 [INFO] [1/5] Scraping: ETH Momentum Breakout Strategy [geektrade.online]
+2026-03-21 17:40:41,709 [INFO] Navigating to: ETH Momentum Breakout Strategy [geektrade.online]
+2026-03-21 17:40:41,709 [DEBUG] URL: https://www.tradingview.com/script/T3t4yoJx-ETH-Momentum-Breakout-Strategy-geektrade-online/
+2026-03-21 17:40:44,585 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:40:46,684 [INFO] Extracted 43529 chars of Pine Script for: ETH Momentum Breakout Strategy [geektrade.online]
+2026-03-21 17:40:46,685 [INFO] Saved: eth_momentum_breakout_strategy_geektradeonline.pine
+2026-03-21 17:40:49,686 [INFO] [2/5] Scraping: RSI-Gauss-Velocity-Strategy-WiP
+2026-03-21 17:40:49,686 [INFO] Navigating to: RSI-Gauss-Velocity-Strategy-WiP
+2026-03-21 17:40:49,686 [DEBUG] URL: https://www.tradingview.com/script/T5kd1bJ2-RSI-Gauss-Velocity-Strategy-WiP/
+2026-03-21 17:40:52,219 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:40:54,266 [INFO] Extracted 6859 chars of Pine Script for: RSI-Gauss-Velocity-Strategy-WiP
+2026-03-21 17:40:54,267 [INFO] Saved: rsi_gauss_velocity_strategy_wip.pine
+2026-03-21 17:40:57,269 [INFO] [3/5] Scraping: RSI-Gauss-WiP
+2026-03-21 17:40:57,270 [INFO] Navigating to: RSI-Gauss-WiP
+2026-03-21 17:40:57,270 [DEBUG] URL: https://www.tradingview.com/script/oc2vZUcN-RSI-Gauss-WiP/
+2026-03-21 17:40:59,684 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:01,733 [INFO] Extracted 9124 chars of Pine Script for: RSI-Gauss-WiP
+2026-03-21 17:41:01,733 [INFO] Saved: rsi_gauss_wip.pine
+2026-03-21 17:41:04,734 [INFO] [4/5] Scraping: Mean Reversion VP Strategy
+2026-03-21 17:41:04,734 [INFO] Navigating to: Mean Reversion VP Strategy
+2026-03-21 17:41:04,734 [DEBUG] URL: https://www.tradingview.com/script/FmPVAq8Y/
+2026-03-21 17:41:07,141 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:09,187 [INFO] Extracted 3820 chars of Pine Script for: Mean Reversion VP Strategy
+2026-03-21 17:41:09,187 [INFO] Saved: mean_reversion_vp_strategy.pine
+2026-03-21 17:41:12,190 [INFO] [5/5] Scraping: 13 EMA Breakout + Liquidity Sweep + BOS Confirmation (A / A+)
+2026-03-21 17:41:12,191 [INFO] Navigating to: 13 EMA Breakout + Liquidity Sweep + BOS Confirmation (A / A+)
+2026-03-21 17:41:12,191 [DEBUG] URL: https://www.tradingview.com/script/iueqDnDD-13-EMA-Breakout-Liquidity-Sweep-BOS-Confirmation-A-A/
+2026-03-21 17:41:14,796 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:16,871 [INFO] Extracted 32907 chars of Pine Script for: 13 EMA Breakout + Liquidity Sweep + BOS Confirmation (A / A+)
+2026-03-21 17:41:16,872 [INFO] Saved: 13_ema_breakout_liquidity_sweep_bos_confirmation_a_a.pine
+2026-03-21 17:41:16,950 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:41:19,314 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:41:19,314 [INFO] Processing indices 20..24 (5 strategies)
+2026-03-21 17:41:20,093 [INFO] [1/5] Scraping: Silver Early Pulse v11.0
+2026-03-21 17:41:20,093 [INFO] Navigating to: Silver Early Pulse v11.0
+2026-03-21 17:41:20,093 [DEBUG] URL: https://www.tradingview.com/script/yBEw68Tf-Silver-Early-Pulse-v11-0/
+2026-03-21 17:41:23,054 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:25,111 [INFO] Extracted 5138 chars of Pine Script for: Silver Early Pulse v11.0
+2026-03-21 17:41:25,112 [INFO] Saved: silver_early_pulse_v110.pine
+2026-03-21 17:41:28,113 [INFO] [2/5] Scraping: Volatility Expansion Breakout
+2026-03-21 17:41:28,114 [INFO] Navigating to: Volatility Expansion Breakout
+2026-03-21 17:41:28,114 [DEBUG] URL: https://www.tradingview.com/script/zhEefWDB-Volatility-Expansion-Breakout/
+2026-03-21 17:41:30,719 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:32,767 [INFO] Extracted 3486 chars of Pine Script for: Volatility Expansion Breakout
+2026-03-21 17:41:32,768 [INFO] Saved: volatility_expansion_breakout.pine
+2026-03-21 17:41:35,769 [INFO] [3/5] Scraping: NY Midnight Zone Retest Strategy
+2026-03-21 17:41:35,769 [INFO] Navigating to: NY Midnight Zone Retest Strategy
+2026-03-21 17:41:35,769 [DEBUG] URL: https://www.tradingview.com/script/qkODE3Mq-NY-Midnight-Zone-Retest-Strategy/
+2026-03-21 17:41:38,305 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:40,353 [INFO] Extracted 7905 chars of Pine Script for: NY Midnight Zone Retest Strategy
+2026-03-21 17:41:40,353 [INFO] Saved: ny_midnight_zone_retest_strategy.pine
+2026-03-21 17:41:43,354 [INFO] [4/5] Scraping: Momentum Reversion
+2026-03-21 17:41:43,354 [INFO] Navigating to: Momentum Reversion
+2026-03-21 17:41:43,355 [DEBUG] URL: https://www.tradingview.com/script/4OvEmH7m-Momentum-Reversion/
+2026-03-21 17:41:45,852 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:47,896 [INFO] Extracted 7651 chars of Pine Script for: Momentum Reversion
+2026-03-21 17:41:47,896 [INFO] Saved: momentum_reversion.pine
+2026-03-21 17:41:50,898 [INFO] [5/5] Scraping: Trend Strategy Flip
+2026-03-21 17:41:50,899 [INFO] Navigating to: Trend Strategy Flip
+2026-03-21 17:41:50,899 [DEBUG] URL: https://www.tradingview.com/script/QEuDqatd-trend-strategy-flip/
+2026-03-21 17:41:53,411 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:41:55,466 [INFO] Extracted 16529 chars of Pine Script for: Trend Strategy Flip
+2026-03-21 17:41:55,467 [INFO] Saved: trend_strategy_flip.pine
+2026-03-21 17:41:55,559 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:41:57,941 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:41:57,941 [INFO] Processing indices 25..29 (5 strategies)
+2026-03-21 17:41:58,990 [INFO] [1/5] Scraping: Donchian BO with SAR & Fixed Target
+2026-03-21 17:41:58,990 [INFO] Navigating to: Donchian BO with SAR & Fixed Target
+2026-03-21 17:41:58,990 [DEBUG] URL: https://www.tradingview.com/script/Ce3leWWr-Donchian-BO-with-SAR-Fixed-Target/
+2026-03-21 17:42:02,901 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:04,981 [INFO] Extracted 4324 chars of Pine Script for: Donchian BO with SAR & Fixed Target
+2026-03-21 17:42:04,982 [INFO] Saved: donchian_bo_with_sar_fixed_target.pine
+2026-03-21 17:42:07,982 [INFO] [2/5] Scraping: Trend Forge
+2026-03-21 17:42:07,983 [INFO] Navigating to: Trend Forge
+2026-03-21 17:42:07,983 [DEBUG] URL: https://www.tradingview.com/script/GK2YzJCC-Trend-Forge/
+2026-03-21 17:42:10,436 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:12,489 [INFO] Extracted 22371 chars of Pine Script for: Trend Forge
+2026-03-21 17:42:12,489 [INFO] Saved: trend_forge.pine
+2026-03-21 17:42:15,490 [INFO] [3/5] Scraping: RSI & Stoch OS + HH Entry + SL 0.6%
+2026-03-21 17:42:15,490 [INFO] Navigating to: RSI & Stoch OS + HH Entry + SL 0.6%
+2026-03-21 17:42:15,490 [DEBUG] URL: https://www.tradingview.com/script/dkr7Mwm3-RSI-Stoch-OS-HH-Entry-SL-0-6/
+2026-03-21 17:42:17,945 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:19,989 [INFO] Extracted 4555 chars of Pine Script for: RSI & Stoch OS + HH Entry + SL 0.6%
+2026-03-21 17:42:19,990 [INFO] Saved: rsi_stoch_os_hh_entry_sl_06.pine
+2026-03-21 17:42:22,991 [INFO] [4/5] Scraping: BTC Cycle RSI + LinReg Bands DCA Strategy v2
+2026-03-21 17:42:22,991 [INFO] Navigating to: BTC Cycle RSI + LinReg Bands DCA Strategy v2
+2026-03-21 17:42:22,991 [DEBUG] URL: https://www.tradingview.com/script/9XexTNJK-BTC-Cycle-RSI-LinReg-Bands-DCA-Strategy-v2/
+2026-03-21 17:42:25,528 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:27,591 [INFO] Extracted 23014 chars of Pine Script for: BTC Cycle RSI + LinReg Bands DCA Strategy v2
+2026-03-21 17:42:27,593 [INFO] Saved: btc_cycle_rsi_linreg_bands_dca_strategy_v2.pine
+2026-03-21 17:42:30,595 [INFO] [5/5] Scraping: ICT Opening Gap - Confirmed Close w/ Breakeven
+2026-03-21 17:42:30,595 [INFO] Navigating to: ICT Opening Gap - Confirmed Close w/ Breakeven
+2026-03-21 17:42:30,595 [DEBUG] URL: https://www.tradingview.com/script/VfL2KrgA-ICT-Opening-Gap-Confirmed-Close-w-Breakeven/
+2026-03-21 17:42:33,042 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:35,092 [INFO] Extracted 7662 chars of Pine Script for: ICT Opening Gap - Confirmed Close w/ Breakeven
+2026-03-21 17:42:35,093 [INFO] Saved: ict_opening_gap_confirmed_close_w_breakeven.pine
+2026-03-21 17:42:35,168 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:42:37,538 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:42:37,538 [INFO] Processing indices 30..34 (5 strategies)
+2026-03-21 17:42:38,314 [INFO] [1/5] Scraping: Manoj 1
+2026-03-21 17:42:38,314 [INFO] Navigating to: Manoj 1
+2026-03-21 17:42:38,315 [DEBUG] URL: https://www.tradingview.com/script/fWehf6Wa-Manoj-1/
+2026-03-21 17:42:41,243 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:43,299 [INFO] Extracted 8053 chars of Pine Script for: Manoj 1
+2026-03-21 17:42:43,300 [INFO] Saved: manoj_1.pine
+2026-03-21 17:42:46,301 [INFO] [2/5] Scraping: BP Strategy Malisa
+2026-03-21 17:42:46,301 [INFO] Navigating to: BP Strategy Malisa
+2026-03-21 17:42:46,301 [DEBUG] URL: https://www.tradingview.com/script/hSAW8NxA-BP-Strategy-Malisa/
+2026-03-21 17:42:48,855 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:50,906 [INFO] Extracted 7857 chars of Pine Script for: BP Strategy Malisa
+2026-03-21 17:42:50,907 [INFO] Saved: bp_strategy_malisa.pine
+2026-03-21 17:42:53,910 [INFO] [3/5] Scraping: EMA50 for Gold strategy TF 15M
+2026-03-21 17:42:53,910 [INFO] Navigating to: EMA50 for Gold strategy TF 15M
+2026-03-21 17:42:53,910 [DEBUG] URL: https://www.tradingview.com/script/ygvB0qZv-EMA50-for-Gold-strategy-TF-15M/
+2026-03-21 17:42:56,444 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:42:58,492 [INFO] Extracted 6831 chars of Pine Script for: EMA50 for Gold strategy TF 15M
+2026-03-21 17:42:58,493 [INFO] Saved: ema50_for_gold_strategy_tf_15m.pine
+2026-03-21 17:43:01,496 [INFO] [4/5] Scraping: Mean Reversion Mirror
+2026-03-21 17:43:01,496 [INFO] Navigating to: Mean Reversion Mirror
+2026-03-21 17:43:01,496 [DEBUG] URL: https://www.tradingview.com/script/WjDhL2FO-mean-reversion-mirror/
+2026-03-21 17:43:04,039 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:43:06,099 [INFO] Extracted 21067 chars of Pine Script for: Mean Reversion Mirror
+2026-03-21 17:43:06,099 [INFO] Saved: mean_reversion_mirror.pine
+2026-03-21 17:43:09,102 [INFO] [5/5] Scraping: Trade Manager + MOST RSI
+2026-03-21 17:43:09,102 [INFO] Navigating to: Trade Manager + MOST RSI
+2026-03-21 17:43:09,102 [DEBUG] URL: https://www.tradingview.com/script/284j9AQ5-trade-manager-most-rsi/
+2026-03-21 17:43:11,742 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:43:13,803 [INFO] Extracted 17235 chars of Pine Script for: Trade Manager + MOST RSI
+2026-03-21 17:43:13,804 [INFO] Saved: trade_manager_most_rsi.pine
+2026-03-21 17:43:13,904 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:43:16,284 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:43:16,284 [INFO] Processing indices 35..39 (5 strategies)
+2026-03-21 17:43:17,051 [INFO] [1/5] Scraping: Konigs | Bollinger Band Mean Reversion (Session Filter)
+2026-03-21 17:43:17,051 [INFO] Navigating to: Konigs | Bollinger Band Mean Reversion (Session Filter)
+2026-03-21 17:43:17,051 [DEBUG] URL: https://www.tradingview.com/script/4wUJnYSD-Konigs-Bollinger-Band-Mean-Reversion-Session-Filter/
+2026-03-21 17:43:20,111 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:43:22,166 [INFO] Extracted 3753 chars of Pine Script for: Konigs | Bollinger Band Mean Reversion (Session Filter)
+2026-03-21 17:43:22,167 [INFO] Saved: konigs_bollinger_band_mean_reversion_session_filter.pine
+2026-03-21 17:43:25,170 [INFO] [2/5] Scraping: ORB Breakout Strategy
+2026-03-21 17:43:25,170 [INFO] Navigating to: ORB Breakout Strategy
+2026-03-21 17:43:25,170 [DEBUG] URL: https://www.tradingview.com/script/VJ9ZHgNB-ORB-Breakout-Strategy/
+2026-03-21 17:43:27,664 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:43:29,715 [INFO] Extracted 13549 chars of Pine Script for: ORB Breakout Strategy
+2026-03-21 17:43:29,716 [INFO] Saved: orb_breakout_strategy.pine
+2026-03-21 17:43:32,717 [INFO] [3/5] Scraping: ABCD Harmonic Pattern Strategy (Bull + Bear)
+2026-03-21 17:43:32,717 [INFO] Navigating to: ABCD Harmonic Pattern Strategy (Bull + Bear)
+2026-03-21 17:43:32,718 [DEBUG] URL: https://www.tradingview.com/script/6hnGTVTM/
+2026-03-21 17:43:35,135 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:43:37,206 [INFO] Extracted 30566 chars of Pine Script for: ABCD Harmonic Pattern Strategy (Bull + Bear)
+2026-03-21 17:43:37,208 [INFO] Saved: abcd_harmonic_pattern_strategy_bull_bear.pine
+2026-03-21 17:43:40,211 [INFO] [4/5] Scraping: MACD Bounce Strategy for Cryptohopper
+2026-03-21 17:43:40,211 [INFO] Navigating to: MACD Bounce Strategy for Cryptohopper
+2026-03-21 17:43:40,211 [DEBUG] URL: https://www.tradingview.com/script/G6O8DZGw-MACD-Bounce-Strategy-for-Cryptohopper/
+2026-03-21 17:43:42,908 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:43:44,952 [INFO] Extracted 4941 chars of Pine Script for: MACD Bounce Strategy for Cryptohopper
+2026-03-21 17:43:44,952 [INFO] Saved: macd_bounce_strategy_for_cryptohopper.pine
+2026-03-21 17:43:47,954 [INFO] [5/5] Scraping: RSI > 70 Buy / Exit on Cross Below 70
+2026-03-21 17:43:47,954 [INFO] Navigating to: RSI > 70 Buy / Exit on Cross Below 70
+2026-03-21 17:43:47,954 [DEBUG] URL: https://www.tradingview.com/script/wZIdSrBG/
+2026-03-21 17:43:50,372 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:43:52,412 [INFO] Extracted 2961 chars of Pine Script for: RSI > 70 Buy / Exit on Cross Below 70
+2026-03-21 17:43:52,413 [INFO] Saved: rsi_70_buy_exit_on_cross_below_70.pine
+2026-03-21 17:43:52,488 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:43:54,846 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:43:54,846 [INFO] Processing indices 40..44 (5 strategies)
+2026-03-21 17:43:55,615 [INFO] [1/5] Scraping: 6E strat g3p
+2026-03-21 17:43:55,615 [INFO] Navigating to: 6E strat g3p
+2026-03-21 17:43:55,615 [DEBUG] URL: https://www.tradingview.com/script/fL3N5KEy/
+2026-03-21 17:43:58,431 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:00,506 [INFO] Extracted 4586 chars of Pine Script for: 6E strat g3p
+2026-03-21 17:44:00,507 [INFO] Saved: 6e_strat_g3p.pine
+2026-03-21 17:44:03,507 [INFO] [2/5] Scraping: [SM-021] Gaussian Trend System [Optimized]
+2026-03-21 17:44:03,507 [INFO] Navigating to: [SM-021] Gaussian Trend System [Optimized]
+2026-03-21 17:44:03,507 [DEBUG] URL: https://www.tradingview.com/script/xTnfnVLA-SM-021-Gaussian-Trend-System-Optimized/
+2026-03-21 17:44:06,089 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:08,149 [INFO] Extracted 19820 chars of Pine Script for: [SM-021] Gaussian Trend System [Optimized]
+2026-03-21 17:44:08,150 [INFO] Saved: sm_021_gaussian_trend_system_optimized.pine
+2026-03-21 17:44:11,151 [INFO] [3/5] Scraping: Mutanabby_AI | ONEUSDT_MR1
+2026-03-21 17:44:11,151 [INFO] Navigating to: Mutanabby_AI | ONEUSDT_MR1
+2026-03-21 17:44:11,151 [DEBUG] URL: https://www.tradingview.com/script/8I2576zL-Mutanabby-AI-ONEUSDT-MR1/
+2026-03-21 17:44:13,621 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:15,664 [INFO] Extracted 7064 chars of Pine Script for: Mutanabby_AI | ONEUSDT_MR1
+2026-03-21 17:44:15,664 [INFO] Saved: mutanabby_ai_oneusdt_mr1.pine
+2026-03-21 17:44:18,667 [INFO] [4/5] Scraping: BTC DCA Risk Metric Strategy
+2026-03-21 17:44:18,667 [INFO] Navigating to: BTC DCA Risk Metric Strategy
+2026-03-21 17:44:18,667 [DEBUG] URL: https://www.tradingview.com/script/rGv72PnR-BTC-DCA-Risk-Metric-Strategy/
+2026-03-21 17:44:21,363 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:23,418 [INFO] Extracted 16258 chars of Pine Script for: BTC DCA Risk Metric Strategy
+2026-03-21 17:44:23,419 [INFO] Saved: btc_dca_risk_metric_strategy.pine
+2026-03-21 17:44:26,420 [INFO] [5/5] Scraping: MA Strategy: Dual Entry Filter
+2026-03-21 17:44:26,420 [INFO] Navigating to: MA Strategy: Dual Entry Filter
+2026-03-21 17:44:26,420 [DEBUG] URL: https://www.tradingview.com/script/ixBY1TYg-MA-Strategy-Dual-Entry-Filter/
+2026-03-21 17:44:28,943 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:30,991 [INFO] Extracted 10041 chars of Pine Script for: MA Strategy: Dual Entry Filter
+2026-03-21 17:44:30,992 [INFO] Saved: ma_strategy_dual_entry_filter.pine
+2026-03-21 17:44:31,071 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:44:33,437 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:44:33,438 [INFO] Processing indices 45..49 (5 strategies)
+2026-03-21 17:44:34,436 [INFO] [1/5] Scraping: Triple EMA + RSI + ATR
+2026-03-21 17:44:34,437 [INFO] Navigating to: Triple EMA + RSI + ATR
+2026-03-21 17:44:34,437 [DEBUG] URL: https://www.tradingview.com/script/HERuuRt5/
+2026-03-21 17:44:39,356 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:41,436 [INFO] Extracted 6314 chars of Pine Script for: Triple EMA + RSI + ATR
+2026-03-21 17:44:41,436 [INFO] Saved: triple_ema_rsi_atr.pine
+2026-03-21 17:44:44,439 [INFO] [2/5] Scraping: Stratégie SMC V18.2 (BTC/EUR FINAL R3 - Tendance)
+2026-03-21 17:44:44,439 [INFO] Navigating to: Stratégie SMC V18.2 (BTC/EUR FINAL R3 - Tendance)
+2026-03-21 17:44:44,439 [DEBUG] URL: https://www.tradingview.com/script/ZyPd3ENh/
+2026-03-21 17:44:46,990 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:49,044 [INFO] Extracted 14284 chars of Pine Script for: Stratégie SMC V18.2 (BTC/EUR FINAL R3 - Tendance)
+2026-03-21 17:44:49,045 [INFO] Saved: stratégie_smc_v182_btceur_final_r3_tendance.pine
+2026-03-21 17:44:52,047 [INFO] [3/5] Scraping: Hash Supertrend [Hash Capital Research]
+2026-03-21 17:44:52,047 [INFO] Navigating to: Hash Supertrend [Hash Capital Research]
+2026-03-21 17:44:52,047 [DEBUG] URL: https://www.tradingview.com/script/6zYF9Xts-Hash-Supertrend-Hash-Capital-Research/
+2026-03-21 17:44:54,598 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:44:56,649 [INFO] Extracted 18372 chars of Pine Script for: Hash Supertrend [Hash Capital Research]
+2026-03-21 17:44:56,649 [INFO] Saved: hash_supertrend_hash_capital_research.pine
+2026-03-21 17:44:59,652 [INFO] [4/5] Scraping: ParabolicSAR+EMA[TS_Indie]
+2026-03-21 17:44:59,652 [INFO] Navigating to: ParabolicSAR+EMA[TS_Indie]
+2026-03-21 17:44:59,652 [DEBUG] URL: https://www.tradingview.com/script/pBCSZ5V6-ParabolicSAR-EMA-TS-Indie/
+2026-03-21 17:45:02,068 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:04,141 [INFO] Extracted 25531 chars of Pine Script for: ParabolicSAR+EMA[TS_Indie]
+2026-03-21 17:45:04,142 [INFO] Saved: parabolicsaremats_indie.pine
+2026-03-21 17:45:07,144 [INFO] [5/5] Scraping: Pivot Fib 4H — EA
+2026-03-21 17:45:07,144 [INFO] Navigating to: Pivot Fib 4H — EA
+2026-03-21 17:45:07,145 [DEBUG] URL: https://www.tradingview.com/script/ER2j409r-Pivot-Fib-4H-EA/
+2026-03-21 17:45:09,669 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:11,719 [INFO] Extracted 9923 chars of Pine Script for: Pivot Fib 4H — EA
+2026-03-21 17:45:11,719 [INFO] Saved: pivot_fib_4h_ea.pine
+2026-03-21 17:45:11,797 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:45:14,167 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:45:14,167 [INFO] Processing indices 50..54 (5 strategies)
+2026-03-21 17:45:14,972 [INFO] [1/5] Scraping: 週一普跌策略 Monday shit Strategy
+2026-03-21 17:45:14,972 [INFO] Navigating to: 週一普跌策略 Monday shit Strategy
+2026-03-21 17:45:14,972 [DEBUG] URL: https://www.tradingview.com/script/uOhNhsV1/
+2026-03-21 17:45:18,100 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:20,157 [INFO] Extracted 4084 chars of Pine Script for: 週一普跌策略 Monday shit Strategy
+2026-03-21 17:45:20,157 [INFO] Saved: 週一普跌策略_monday_shit_strategy.pine
+2026-03-21 17:45:23,159 [INFO] [2/5] Scraping: XiaoJiu_RSI_5m_Drop1_DCA
+2026-03-21 17:45:23,159 [INFO] Navigating to: XiaoJiu_RSI_5m_Drop1_DCA
+2026-03-21 17:45:23,159 [DEBUG] URL: https://www.tradingview.com/script/eFPQkfkz/
+2026-03-21 17:45:25,640 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:27,687 [INFO] Extracted 3623 chars of Pine Script for: XiaoJiu_RSI_5m_Drop1_DCA
+2026-03-21 17:45:27,687 [INFO] Saved: xiaojiu_rsi_5m_drop1_dca.pine
+2026-03-21 17:45:30,690 [INFO] [3/5] Scraping: Moving Average Band Strategy
+2026-03-21 17:45:30,690 [INFO] Navigating to: Moving Average Band Strategy
+2026-03-21 17:45:30,690 [DEBUG] URL: https://www.tradingview.com/script/wwi02rpz-Moving-Average-Band-Strategy/
+2026-03-21 17:45:33,289 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:35,338 [INFO] Extracted 16095 chars of Pine Script for: Moving Average Band Strategy
+2026-03-21 17:45:35,338 [INFO] Saved: moving_average_band_strategy.pine
+2026-03-21 17:45:38,341 [INFO] [4/5] Scraping: Stochastic + Bollinger Bands Multi-Timeframe Strategy
+2026-03-21 17:45:38,341 [INFO] Navigating to: Stochastic + Bollinger Bands Multi-Timeframe Strategy
+2026-03-21 17:45:38,341 [DEBUG] URL: https://www.tradingview.com/script/80lETemF-Stochastic-Bollinger-Bands-Multi-Timeframe-Strategy/
+2026-03-21 17:45:40,785 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:42,828 [INFO] Extracted 7569 chars of Pine Script for: Stochastic + Bollinger Bands Multi-Timeframe Strategy
+2026-03-21 17:45:42,829 [INFO] Saved: stochastic_bollinger_bands_multi_timeframe_strategy.pine
+2026-03-21 17:45:45,831 [INFO] [5/5] Scraping: QQQ Timing
+2026-03-21 17:45:45,832 [INFO] Navigating to: QQQ Timing
+2026-03-21 17:45:45,832 [DEBUG] URL: https://www.tradingview.com/script/9odfcpq0-QQQ-Timing/
+2026-03-21 17:45:48,264 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:50,310 [INFO] Extracted 9324 chars of Pine Script for: QQQ Timing
+2026-03-21 17:45:50,310 [INFO] Saved: qqq_timing.pine
+2026-03-21 17:45:50,384 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:45:52,744 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:45:52,744 [INFO] Processing indices 55..59 (5 strategies)
+2026-03-21 17:45:53,493 [INFO] [1/5] Scraping: For Albert
+2026-03-21 17:45:53,493 [INFO] Navigating to: For Albert
+2026-03-21 17:45:53,493 [DEBUG] URL: https://www.tradingview.com/script/9B9FvPIK-for-albert/
+2026-03-21 17:45:56,459 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:45:58,526 [INFO] Extracted 16168 chars of Pine Script for: For Albert
+2026-03-21 17:45:58,527 [INFO] Saved: for_albert.pine
+2026-03-21 17:46:01,530 [INFO] [2/5] Scraping: tradingview_momentum_Hull-Suite-W-FVSO-NO-Weekend
+2026-03-21 17:46:01,530 [INFO] Navigating to: tradingview_momentum_Hull-Suite-W-FVSO-NO-Weekend
+2026-03-21 17:46:01,530 [DEBUG] URL: https://www.tradingview.com/script/5PX56BsH/
+2026-03-21 17:46:04,033 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:06,088 [INFO] Extracted 13727 chars of Pine Script for: tradingview_momentum_Hull-Suite-W-FVSO-NO-Weekend
+2026-03-21 17:46:06,089 [INFO] Saved: tradingview_momentum_hull_suite_w_fvso_no_weekend.pine
+2026-03-21 17:46:09,090 [INFO] [3/5] Scraping: HEK Dinamik Fiyat Kanalı Stratejisi v1
+2026-03-21 17:46:09,090 [INFO] Navigating to: HEK Dinamik Fiyat Kanalı Stratejisi v1
+2026-03-21 17:46:09,090 [DEBUG] URL: https://www.tradingview.com/script/AgX3DSS5/
+2026-03-21 17:46:11,564 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:13,619 [INFO] Extracted 16003 chars of Pine Script for: HEK Dinamik Fiyat Kanalı Stratejisi v1
+2026-03-21 17:46:13,620 [INFO] Saved: hek_dinamik_fiyat_kanalı_stratejisi_v1.pine
+2026-03-21 17:46:16,623 [INFO] [4/5] Scraping: Gold H1 Breakout Failure (V11.0)
+2026-03-21 17:46:16,623 [INFO] Navigating to: Gold H1 Breakout Failure (V11.0)
+2026-03-21 17:46:16,624 [DEBUG] URL: https://www.tradingview.com/script/8Iv42BDE-Gold-H1-Breakout-Failure-V11-0/
+2026-03-21 17:46:19,149 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:21,193 [INFO] Extracted 6748 chars of Pine Script for: Gold H1 Breakout Failure (V11.0)
+2026-03-21 17:46:21,193 [INFO] Saved: gold_h1_breakout_failure_v110.pine
+2026-03-21 17:46:24,196 [INFO] [5/5] Scraping: Mean Reversion Trading V1
+2026-03-21 17:46:24,196 [INFO] Navigating to: Mean Reversion Trading V1
+2026-03-21 17:46:24,197 [DEBUG] URL: https://www.tradingview.com/script/yR19A10A-Mean-Reversion-Trading-V1/
+2026-03-21 17:46:26,747 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:28,792 [INFO] Extracted 7061 chars of Pine Script for: Mean Reversion Trading V1
+2026-03-21 17:46:28,792 [INFO] Saved: mean_reversion_trading_v1.pine
+2026-03-21 17:46:28,866 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:46:31,227 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:46:31,227 [INFO] Processing indices 60..64 (5 strategies)
+2026-03-21 17:46:32,002 [INFO] [1/5] Scraping: XAUUSD 5m — NY Supertrend+RSI Optimizer (1:2 RR) — $240k/order
+2026-03-21 17:46:32,003 [INFO] Navigating to: XAUUSD 5m — NY Supertrend+RSI Optimizer (1:2 RR) — $240k/order
+2026-03-21 17:46:32,003 [DEBUG] URL: https://www.tradingview.com/script/qtRLvhR3-XAUUSD-5m-NY-Supertrend-RSI-Optimizer-1-2-RR-240k-order/
+2026-03-21 17:46:34,888 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:36,944 [INFO] Extracted 5996 chars of Pine Script for: XAUUSD 5m — NY Supertrend+RSI Optimizer (1:2 RR) — $240k/order
+2026-03-21 17:46:36,945 [INFO] Saved: xauusd_5m_ny_supertrendrsi_optimizer_12_rr_240korder.pine
+2026-03-21 17:46:39,947 [INFO] [2/5] Scraping: Hermes
+2026-03-21 17:46:39,947 [INFO] Navigating to: Hermes
+2026-03-21 17:46:39,948 [DEBUG] URL: https://www.tradingview.com/script/nhsUBtUD-Hermes/
+2026-03-21 17:46:42,467 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:44,517 [INFO] Extracted 12527 chars of Pine Script for: Hermes
+2026-03-21 17:46:44,517 [INFO] Saved: hermes.pine
+2026-03-21 17:46:47,518 [INFO] [3/5] Scraping: ES cuh
+2026-03-21 17:46:47,518 [INFO] Navigating to: ES cuh
+2026-03-21 17:46:47,518 [DEBUG] URL: https://www.tradingview.com/script/OSi92hjJ-ES-cuh/
+2026-03-21 17:46:50,095 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:52,145 [INFO] Extracted 2964 chars of Pine Script for: ES cuh
+2026-03-21 17:46:52,145 [INFO] Saved: es_cuh.pine
+2026-03-21 17:46:55,148 [INFO] [4/5] Scraping: MAC's V6 final
+2026-03-21 17:46:55,148 [INFO] Navigating to: MAC's V6 final
+2026-03-21 17:46:55,148 [DEBUG] URL: https://www.tradingview.com/script/NxjjgiWM-MAC-s-V6-final/
+2026-03-21 17:46:57,646 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:46:59,704 [INFO] Extracted 20722 chars of Pine Script for: MAC's V6 final
+2026-03-21 17:46:59,704 [INFO] Saved: macs_v6_final.pine
+2026-03-21 17:47:02,706 [INFO] [5/5] Scraping: Ajay R5.41
+2026-03-21 17:47:02,707 [INFO] Navigating to: Ajay R5.41
+2026-03-21 17:47:02,707 [DEBUG] URL: https://www.tradingview.com/script/mBhnRO3S-Ajay-R5-41/
+2026-03-21 17:47:05,172 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:47:07,262 [INFO] Extracted 39047 chars of Pine Script for: Ajay R5.41
+2026-03-21 17:47:07,262 [INFO] Saved: ajay_r541.pine
+2026-03-21 17:47:07,340 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:47:09,645 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:47:09,645 [INFO] Processing indices 65..69 (5 strategies)
+2026-03-21 17:47:10,463 [INFO] [1/5] Scraping: Order Block Volumatic FVG Strategy
+2026-03-21 17:47:10,464 [INFO] Navigating to: Order Block Volumatic FVG Strategy
+2026-03-21 17:47:10,464 [DEBUG] URL: https://www.tradingview.com/script/PjH7wg3n/
+2026-03-21 17:47:13,694 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:47:15,768 [INFO] Extracted 23731 chars of Pine Script for: Order Block Volumatic FVG Strategy
+2026-03-21 17:47:15,769 [INFO] Saved: order_block_volumatic_fvg_strategy.pine
+2026-03-21 17:47:18,770 [INFO] [2/5] Scraping: AVGO Advanced Day Trading Strategy
+2026-03-21 17:47:18,770 [INFO] Navigating to: AVGO Advanced Day Trading Strategy
+2026-03-21 17:47:18,770 [DEBUG] URL: https://www.tradingview.com/script/2pkl0BIu-AVGO-Advanced-Day-Trading-Strategy/
+2026-03-21 17:47:21,380 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:47:23,488 [INFO] Extracted 34516 chars of Pine Script for: AVGO Advanced Day Trading Strategy
+2026-03-21 17:47:23,488 [INFO] Saved: avgo_advanced_day_trading_strategy.pine
+2026-03-21 17:47:26,491 [INFO] [3/5] Scraping: RSI DCA Strategy
+2026-03-21 17:47:26,492 [INFO] Navigating to: RSI DCA Strategy
+2026-03-21 17:47:26,492 [DEBUG] URL: https://www.tradingview.com/script/LS6Jsy63-RSI-DCA-Strategy/
+2026-03-21 17:47:28,875 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:47:30,922 [INFO] Extracted 5310 chars of Pine Script for: RSI DCA Strategy
+2026-03-21 17:47:30,923 [INFO] Saved: rsi_dca_strategy.pine
+2026-03-21 17:47:33,923 [INFO] [4/5] Scraping: QZ Trend (Crypto Edition) v1.1a: Donchian, EMA, ATR, Liquidity/F
+2026-03-21 17:47:33,924 [INFO] Navigating to: QZ Trend (Crypto Edition) v1.1a: Donchian, EMA, ATR, Liquidity/F
+2026-03-21 17:47:33,924 [DEBUG] URL: https://www.tradingview.com/script/aGjVN33a-QZ-Trend-Crypto-Edition-v1-1a-Donchian-EMA-ATR-Liquidity-F/
+2026-03-21 17:47:36,462 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:47:38,518 [INFO] Extracted 14507 chars of Pine Script for: QZ Trend (Crypto Edition) v1.1a: Donchian, EMA, ATR, Liquidity/F
+2026-03-21 17:47:38,518 [INFO] Saved: qz_trend_crypto_edition_v11a_donchian_ema_atr_liquidityf.pine
+2026-03-21 17:47:41,519 [INFO] [5/5] Scraping: RedFlag
+2026-03-21 17:47:41,519 [INFO] Navigating to: RedFlag
+2026-03-21 17:47:41,520 [DEBUG] URL: https://www.tradingview.com/script/68ydbliS-RedFlag/
+2026-03-21 17:47:44,040 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:47:46,088 [INFO] Extracted 8947 chars of Pine Script for: RedFlag
+2026-03-21 17:47:46,088 [INFO] Saved: redflag.pine
+2026-03-21 17:47:46,168 [INFO] Done. scraped=5 skipped=0 protected=0 failed=0
+2026-03-21 17:47:48,532 [INFO] Loaded 71 strategies from candidates_71.json
+2026-03-21 17:47:48,532 [INFO] Processing indices 70..70 (1 strategies)
+2026-03-21 17:47:49,308 [INFO] [1/1] Scraping: 3-Level DCA Buy Strategy
+2026-03-21 17:47:49,308 [INFO] Navigating to: 3-Level DCA Buy Strategy
+2026-03-21 17:47:49,308 [DEBUG] URL: https://www.tradingview.com/script/aYFehiGq-3-Level-DCA-Buy-Strategy/
+2026-03-21 17:47:52,185 [DEBUG] Clicked tab with selector: button:has-text("Source code")
+2026-03-21 17:47:54,253 [INFO] Extracted 15990 chars of Pine Script for: 3-Level DCA Buy Strategy
+2026-03-21 17:47:54,254 [INFO] Saved: 3_level_dca_buy_strategy.pine
+2026-03-21 17:47:54,314 [INFO] Done. scraped=1 skipped=0 protected=0 failed=0
+2026-03-21 22:43:12,642 [INFO] Loaded 1 strategies from 11
+2026-03-21 22:43:12,642 [INFO] Processing indices 0..0 (1 strategies)
+2026-03-21 22:43:17,508 [INFO] [1/1] Already exists, skipping: masu_institutional_fibonacci_mtf_btt.pine
+2026-03-21 22:43:21,852 [INFO] Done. scraped=0 skipped=1 protected=0 failed=0

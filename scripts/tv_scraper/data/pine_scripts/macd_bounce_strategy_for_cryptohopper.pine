@@ -1,0 +1,220 @@
+//@version=6
+strategy(
+     'MACD Bounce Strategy Cryptohopper',
+     overlay = false,
+     margin_long = 100,
+     margin_short = 100,
+     default_qty_type = strategy.percent_of_equity,
+     default_qty_value = 100,
+     initial_capital = 10000
+)
+
+// === Inputs ===
+fastLength   = input.int(12, 'MACD Fast Length')
+slowLength   = input.int(26, 'MACD Slow Length')
+signalLength = input.int(9,  'MACD Signal Length')
+
+threshold = input.float(-350.0, 'MACD Threshold')
+bounce    = input.float(100.0,  'Bounce Distance')
+
+// === MACD Calculation ===
+[macdLine, signalLine, histLine] = ta.macd(close, fastLength, slowLength, signalLength)
+
+// === State variables ===
+var bool  armed             = false
+var bool  buyPlaced         = false
+var bool  sellPlaced        = false
+var bool  macdAboveZero     = false
+var float lowestMacd        = na
+
+// === Logica ===
+
+// Activeer cyclus
+if macdLine < threshold and not armed
+    armed := true
+    lowestMacd := macdLine
+    buyPlaced := false
+    sellPlaced := false
+    macdAboveZero := false
+
+// Bodem volgen
+if armed and macdLine < threshold
+    lowestMacd := math.min(lowestMacd, macdLine)
+
+// BUY trigger
+buySignal = false
+if armed and not buyPlaced and macdLine >= lowestMacd + bounce
+    buySignal := true
+    buyPlaced := true
+
+// Houd bij of MACD boven nul komt
+if buyPlaced and not macdAboveZero and macdLine > 0
+    macdAboveZero := true
+
+// SELL trigger
+sellSignal = false
+if buyPlaced and macdAboveZero and not sellPlaced and macdLine < signalLine
+    sellSignal := true
+    sellPlaced := true
+    armed := false
+    buyPlaced := false
+    macdAboveZero := false
+    lowestMacd := na
+
+// === Strategy Orders + Cryptohopper Alerts ===
+if buySignal and strategy.position_size == 0
+    strategy.entry('BUY', strategy.long)
+    alert(
+        '{"action":"buy","coin":"BTC","market_order":"1"}',
+        alert.freq_once_per_bar_close
+    )
+
+if sellSignal and strategy.position_size > 0
+    strategy.close('BUY')
+    alert(
+        '{"action":"sell","coin":"BTC","market_order":"1"}',
+        alert.freq_once_per_bar_close
+    )
+
+// === Visuals ===
+plot(macdLine,   color=color.new(color.blue, 0),   title='MACD')
+plot(signalLine, color=color.new(color.orange, 0), title='Signal Line')
+hline(0, 'Zero Line', color=color.gray)
+
+plotshape(
+     buySignal,
+     title     = 'BUY',
+     location  = location.bottom,
+     color     = color.green,
+     style     = shape.triangleup,
+     size      = size.small
+)
+
+plotshape(
+     sellSignal,
+     title     = 'SELL',
+     location  = location.top,
+     color     = color.red,
+     style     = shape.triangledown,
+     size      = size.small
+)
+
+View in Pine Editor・100 lines
+Use on chart
+1
+1
+567
+Jan 5
+Sell and Buy alerts based on MACD crossover values for automated triggers in Cryptohopper
+Jan 5
+Release Notes
+Strategy Tester only uses strategy.entry/close
+
+Cryptohopper receives exactly 1 BUY / 1 SELL
+
+No duplicate orders
+
+Live behavior = backtest behavior
+
+Alerts only for real position changes
+Open-source script
+
+In true TradingView spirit, the creator of this script has made it open-source, so that traders can review and verify its functionality. Kudos to the author! While you can use it for free, remember that republishing the code is subject to our House Rules.
+
+Dwinn
+Follow
+sentiment
+Disclaimer
+The information and publications are not meant to be, and do not constitute, financial, investment, trading, or other types of advice or recommendations supplied or endorsed by TradingView. Read more in the Terms of Use.
+English
+
+Select market data provided by ICE Data Services.
+Select reference data provided by FactSet. Copyright © 2026 FactSet Research Systems Inc.
+Copyright © 2026, American Bankers Association. CUSIP Database provided by FactSet Research Systems Inc. All rights reserved.
+SEC fillings and other documents provided by Quartr.
+© 2026 TradingView, Inc.
+
+MORE THAN A PRODUCT
+Supercharts
+SCREENERS
+Stocks
+ETFs
+Bonds
+Crypto coins
+CEX pairs
+DEX pairs
+Pine
+HEATMAPS
+Stocks
+ETFs
+Crypto coins
+CALENDARS
+Economic
+Earnings
+Dividends
+MORE PRODUCTS
+Yield Curves
+Options
+Macro Maps
+News Flow
+Pine Script®
+APPS
+Mobile
+Desktop
+TOOLS & SUBSCRIPTIONS
+Features
+Pricing
+Market data
+Gift plans
+TRADING
+Overview
+Top brokers
+Brokers comparison
+SPECIAL OFFERS
+CME Group futures
+Eurex futures
+US stocks bundle
+ABOUT COMPANY
+Who we are
+Space mission
+Blog
+Careers
+Media kit
+MERCH
+TradingView store
+Tarot cards for traders
+The C63 TradeTime
+POLICIES & SECURITY
+Terms of Use
+Disclaimer
+Privacy Policy
+Cookies Policy
+Accessibility Statement
+Security tips
+Bug Bounty program
+Status page
+COMMUNITY
+Social network
+Wall of Love
+Refer a friend
+House Rules
+Moderators
+IDEAS
+Trading
+Education
+Editors' picks
+PINE SCRIPT
+Indicators & strategies
+Wizards
+Freelancers
+BUSINESS SOLUTIONS
+Widgets
+Charting libraries
+Lightweight Charts™
+Advanced Charts
+Trading Platform
+GROWTH OPPORTUNITIES
+Advertising
+Brokerage integration
+Partner program
+Education program

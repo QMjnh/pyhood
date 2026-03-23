@@ -97,9 +97,9 @@ class Backtester:
         ticker = yf.Ticker(symbol.upper())
 
         if start:
-            df = ticker.history(start=start, end=end)
+            df = ticker.history(start=start, end=end, auto_adjust=False)
         else:
-            df = ticker.history(period=period)
+            df = ticker.history(period=period, auto_adjust=False)
 
         if df.empty:
             raise ValueError(

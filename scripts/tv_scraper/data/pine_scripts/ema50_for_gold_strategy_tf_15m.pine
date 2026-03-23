@@ -1,0 +1,208 @@
+//@version=6
+strategy("HT EMA50 Bias + Entry: Price x EMA50(45m) + Exit: EMA50(15m) [Session+NewsSafe]",
+     overlay=true,
+     initial_capital=10000,
+     calc_on_every_tick=false,
+     process_orders_on_close=true)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Inputs
+// ─────────────────────────────────────────────────────────────────────────────
+emaLen      = input.int(50, "EMA Length", minval=1)
+
+// Timeframes
+htfBiasTF   = input.timeframe("60", "HTF for EMA50 Bias (e.g., 60=1H, 240=4H)")
+entryRefTF  = input.timeframe("45", "Entry reference TF (EMA50 on 45m)")
+exitTF      = input.timeframe("15", "Exit TF (EMA50 on 15m)")
+
+// Trade control
+onePosOnly  = input.bool(true, "One position at a time")
+
+// Session filter (exchange time of the symbol)
+useSession  = input.bool(true, "Use session filter")
+tradeSess   = input.session("0700-2200", "Trading session (exchange time)")
+
+// News-safe mode (manual lockout window)
+newsSafeOn  = input.bool(false, "🟡 News-safe mode (block entries)")
+newsSess    = input.session("0000-0000", "News lockout session (set your red-news window)")
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers: session + news filters
+// ─────────────────────────────────────────────────────────────────────────────
+inSession = not useSession or not na(time(timeframe.period, tradeSess))
+inNews    = newsSafeOn and not na(time(timeframe.period, newsSess))
+
+allowEntries = inSession and not inNews
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HTF Bias: Close vs EMA50 on HTF
+// ─────────────────────────────────────────────────────────────────────────────
+htfClose = request.security(syminfo.tickerid, htfBiasTF, close, barmerge.gaps_off, barmerge.lookahead_off)
+htfEma50 = request.security(syminfo.tickerid, htfBiasTF, ta.ema(close, emaLen), barmerge.gaps_off, barmerge.lookahead_off)
+
+biasBull = htfClose > htfEma50
+biasBear = htfClose < htfEma50
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Entry Reference: EMA50 calculated on 45m (used on LTF chart)
+// ─────────────────────────────────────────────────────────────────────────────
+ema50_45 = request.security(syminfo.tickerid, entryRefTF, ta.ema(close, emaLen), barmerge.gaps_off, barmerge.lookahead_off)
+plot(ema50_45, "EMA50 (45m reference)", linewidth=2)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Exit: EMA50 calculated on 15m
+// ─────────────────────────────────────────────────────────────────────────────
+ema50_15 = request.security(syminfo.tickerid, exitTF, ta.ema(close, emaLen), barmerge.gaps_off, barmerge.lookahead_off)
+plot(ema50_15, "EMA50 (15m exit)", linewidth=2)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Entries (on your chart timeframe)
+// Long: HT bias bullish AND price crosses ABOVE 45m EMA50
+// Short: HT bias bearish AND price crosses BELOW 45m EMA50
+// ─────────────────────────────────────────────────────────────────────────────
+longEntry  = allowEntries and biasBull and ta.crossover(close, ema50_45)
+shortEntry = allowEntries and biasBear and ta.crossunder(close, ema50_45)
+
+canEnter = not onePosOnly or strategy.position_size == 0
+
+if canEnter and longEntry
+    strategy.entry("Long", strategy.long)
+
+if canEnter and shortEntry
+    strategy.entry("Short", strategy.short)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Exits (based on 15m EMA50)
+// Long exits when close crosses BELOW 15m EMA50
+// Short exits when close crosses ABOVE 15m EMA50
+// ─────────────────────────────────────────────────────────────────────────────
+longExit  = ta.crossunder(close, ema50_15)
+shortExit = ta.crossover(close, ema50_15)
+
+if strategy.position_size > 0 and longExit
+    strategy.close("Long", comment="Exit: Close < EMA50(15m)")
+
+if strategy.position_size < 0 and shortExit
+    strategy.close("Short", comment="Exit: Close > EMA50(15m)")
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Alerts
+// ─────────────────────────────────────────────────────────────────────────────
+alertcondition(longEntry,  title="BUY: HT bias + Close x EMA50(45m)",
+     message="BUY: HT EMA50 bias bullish + price crossed ABOVE EMA50(45m).")
+alertcondition(shortEntry, title="SELL: HT bias + Close x EMA50(45m)",
+     message="SELL: HT EMA50 bias bearish + price crossed BELOW EMA50(45m).")
+alertcondition(longExit,   title="EXIT LONG: Close x EMA50(15m)",
+     message="EXIT LONG: price crossed BELOW EMA50(15m).")
+alertcondition(shortExit,  title="EXIT SHORT: Close x EMA50(15m)",
+     message="EXIT SHORT: price crossed ABOVE EMA50(15m).")
+
+View in Pine Editor・98 lines
+Use on chart
+1
+1
+634
+This is a strategy for Gold in TF 15M using EMA50 of HT
+Open-source script
+
+In true TradingView spirit, the creator of this script has made it open-source, so that traders can review and verify its functionality. Kudos to the author! While you can use it for free, remember that republishing the code is subject to our House Rules.
+
+TradeCatcherX
+Follow
+Moving Averages
+Disclaimer
+The information and publications are not meant to be, and do not constitute, financial, investment, trading, or other types of advice or recommendations supplied or endorsed by TradingView. Read more in the Terms of Use.
+0 comments
+Post
+English
+
+Select market data provided by ICE Data Services.
+Select reference data provided by FactSet. Copyright © 2026 FactSet Research Systems Inc.
+Copyright © 2026, American Bankers Association. CUSIP Database provided by FactSet Research Systems Inc. All rights reserved.
+SEC fillings and other documents provided by Quartr.
+© 2026 TradingView, Inc.
+
+MORE THAN A PRODUCT
+Supercharts
+SCREENERS
+Stocks
+ETFs
+Bonds
+Crypto coins
+CEX pairs
+DEX pairs
+Pine
+HEATMAPS
+Stocks
+ETFs
+Crypto coins
+CALENDARS
+Economic
+Earnings
+Dividends
+MORE PRODUCTS
+Yield Curves
+Options
+Macro Maps
+News Flow
+Pine Script®
+APPS
+Mobile
+Desktop
+TOOLS & SUBSCRIPTIONS
+Features
+Pricing
+Market data
+Gift plans
+TRADING
+Overview
+Top brokers
+Brokers comparison
+SPECIAL OFFERS
+CME Group futures
+Eurex futures
+US stocks bundle
+ABOUT COMPANY
+Who we are
+Space mission
+Blog
+Careers
+Media kit
+MERCH
+TradingView store
+Tarot cards for traders
+The C63 TradeTime
+POLICIES & SECURITY
+Terms of Use
+Disclaimer
+Privacy Policy
+Cookies Policy
+Accessibility Statement
+Security tips
+Bug Bounty program
+Status page
+COMMUNITY
+Social network
+Wall of Love
+Refer a friend
+House Rules
+Moderators
+IDEAS
+Trading
+Education
+Editors' picks
+PINE SCRIPT
+Indicators & strategies
+Wizards
+Freelancers
+BUSINESS SOLUTIONS
+Widgets
+Charting libraries
+Lightweight Charts™
+Advanced Charts
+Trading Platform
+GROWTH OPPORTUNITIES
+Advertising
+Brokerage integration
+Partner program
+Education program

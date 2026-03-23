@@ -1,0 +1,214 @@
+[2026-03-21 12:43:05] 
+========================================================================
+[2026-03-21 12:43:05] Pipeline started at 2026-03-21 12:43:05
+[2026-03-21 12:43:05] ========================================================================
+[2026-03-21 12:43:05] Pipeline: 3 step(s) to run, 2 to skip
+[2026-03-21 12:43:05] ⏭ SKIP [scrape] — before --start-from
+[2026-03-21 12:43:05] ⏭ SKIP [enrich] — before --start-from
+[2026-03-21 12:43:05] ▶ STEP [classify] — Regex-based text classification
+[2026-03-21 12:43:05]   cmd: /Users/nyra/Projects/pyhood/.venv/bin/python /Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_classify.py --input data/strategies_enriched.json --output data/strategies_classified.json
+    Loading strategies from: data/strategies_enriched.json
+    Loaded 1000 strategies
+    Classifying strategies...
+    Saving classified strategies to: data/strategies_classified.json
+    
+    ============================================================
+    CLASSIFICATION SUMMARY
+    ============================================================
+    Total strategies processed: 1000
+    Tickers filled: 112
+    Timeframes filled: 94
+    
+    Asset Class Distribution:
+      crypto        434 ( 43.4%)
+      unknown       285 ( 28.5%)
+      equities      104 ( 10.4%)
+      futures       102 ( 10.2%)
+      commodities    52 (  5.2%)
+      forex          23 (  2.3%)
+    
+    Trading Style Distribution:
+      scalp         311 ( 31.1%)
+      intraday      242 ( 24.2%)
+      swing         167 ( 16.7%)
+      unknown       158 ( 15.8%)
+      position      122 ( 12.2%)
+    
+    Regime Tags Distribution:
+      trending         699 ( 69.9%)
+      ranging          558 ( 55.8%)
+      high_volatility  377 ( 37.7%)
+      momentum         357 ( 35.7%)
+      bullish          328 ( 32.8%)
+      bearish          292 ( 29.2%)
+      breakout         254 ( 25.4%)
+      low_volatility    78 (  7.8%)
+    
+    Quality Score: 55.9 average
+    High quality (≥70): 267/1000 (26.7%)
+    
+    Classified data saved to: data/strategies_classified.json
+[2026-03-21 12:43:07] ✓ PASS [classify] in 2.3s
+[2026-03-21 12:43:07] ▶ STEP [llm-classify] — LLM-powered deep classification
+[2026-03-21 12:43:07]   cmd: /Users/nyra/Projects/pyhood/.venv/bin/python /Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py --input data/strategies_classified.json
+    2026-03-21 12:43:08,150 - INFO - Starting LLM strategy classification
+    2026-03-21 12:43:08,150 - INFO - Input: data/strategies_classified.json
+    2026-03-21 12:43:08,150 - INFO - Output: /Users/nyra/Projects/pyhood/scripts/tv_scraper/data/strategies_classified.json
+    2026-03-21 12:43:08,150 - INFO - Batch size: 15, Delay: 1.0s
+    2026-03-21 12:43:08,175 - INFO - Loaded 1000 strategies
+    2026-03-21 12:43:08,196 - INFO - Already classified: 0
+    2026-03-21 12:43:08,196 - INFO - Need classification: 1000
+    2026-03-21 12:43:08,238 - INFO - Batch 1/67: classifying strategies 1-15
+    Traceback (most recent call last):
+      File "/Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py", line 351, in <module>
+        main()
+        ~~~~^^
+      File "/Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py", line 292, in main
+        results = classify_batch(client, batch, logger)
+      File "/Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py", line 125, in classify_batch
+        response = client.messages.create(
+            model=MODEL,
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}]
+        )
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_utils/_utils.py", line 282, in wrapper
+        return func(*args, **kwargs)
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/resources/messages/messages.py", line 996, in create
+        return self._post(
+               ~~~~~~~~~~^
+            "/v1/messages",
+            ^^^^^^^^^^^^^^^
+        ...<30 lines>...
+            stream_cls=Stream[RawMessageStreamEvent],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1364, in post
+        return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                               ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1058, in request
+        request = self._build_request(options, retries_taken=retries_taken)
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 521, in _build_request
+        headers = self._build_headers(options, retries_taken=retries_taken)
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 451, in _build_headers
+        self._validate_headers(headers_dict, custom_headers)
+        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_client.py", line 196, in _validate_headers
+        raise TypeError(
+            '"Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"'
+        )
+    TypeError: "Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"
+[2026-03-21 12:43:08] ✗ FAIL [llm-classify] exit=1 in 0.9s
+[2026-03-21 12:43:08] Pipeline finished at 2026-03-21 12:43:08
+[2026-03-21 12:43:05] Pipeline: 3 step(s) to run, 2 to skip
+
+🚀 TV Strategy Pipeline
+   Log: /Users/nyra/Projects/pyhood/scripts/tv_scraper/data/pipeline.log
+  ⏭ [scrape] skipped — before --start-from
+  ⏭ [enrich] skipped — before --start-from
+
+▶ [classify] Regex-based text classification
+[2026-03-21 12:43:05]   cmd: /Users/nyra/Projects/pyhood/.venv/bin/python /Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_classify.py --input data/strategies_enriched.json --output data/strategies_classified.json
+    Loading strategies from: data/strategies_enriched.json
+    Loaded 1000 strategies
+    Classifying strategies...
+    Saving classified strategies to: data/strategies_classified.json
+    
+    ============================================================
+    CLASSIFICATION SUMMARY
+    ============================================================
+    Total strategies processed: 1000
+    Tickers filled: 112
+    Timeframes filled: 94
+    
+    Asset Class Distribution:
+      crypto        434 ( 43.4%)
+      unknown       285 ( 28.5%)
+      equities      104 ( 10.4%)
+      futures       102 ( 10.2%)
+      commodities    52 (  5.2%)
+      forex          23 (  2.3%)
+    
+    Trading Style Distribution:
+      scalp         311 ( 31.1%)
+      intraday      242 ( 24.2%)
+      swing         167 ( 16.7%)
+      unknown       158 ( 15.8%)
+      position      122 ( 12.2%)
+    
+    Regime Tags Distribution:
+      trending         699 ( 69.9%)
+      ranging          558 ( 55.8%)
+      high_volatility  377 ( 37.7%)
+      momentum         357 ( 35.7%)
+      bullish          328 ( 32.8%)
+      bearish          292 ( 29.2%)
+      breakout         254 ( 25.4%)
+      low_volatility    78 (  7.8%)
+    
+    Quality Score: 55.9 average
+    High quality (≥70): 267/1000 (26.7%)
+    
+    Classified data saved to: data/strategies_classified.json
+  ✓ [classify] completed in 2.3s
+
+▶ [llm-classify] LLM-powered deep classification
+[2026-03-21 12:43:07]   cmd: /Users/nyra/Projects/pyhood/.venv/bin/python /Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py --input data/strategies_classified.json
+    2026-03-21 12:43:08,150 - INFO - Starting LLM strategy classification
+    2026-03-21 12:43:08,150 - INFO - Input: data/strategies_classified.json
+    2026-03-21 12:43:08,150 - INFO - Output: /Users/nyra/Projects/pyhood/scripts/tv_scraper/data/strategies_classified.json
+    2026-03-21 12:43:08,150 - INFO - Batch size: 15, Delay: 1.0s
+    2026-03-21 12:43:08,175 - INFO - Loaded 1000 strategies
+    2026-03-21 12:43:08,196 - INFO - Already classified: 0
+    2026-03-21 12:43:08,196 - INFO - Need classification: 1000
+    2026-03-21 12:43:08,238 - INFO - Batch 1/67: classifying strategies 1-15
+    Traceback (most recent call last):
+      File "/Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py", line 351, in <module>
+        main()
+        ~~~~^^
+      File "/Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py", line 292, in main
+        results = classify_batch(client, batch, logger)
+      File "/Users/nyra/Projects/pyhood/scripts/tv_scraper/tv_llm_classify.py", line 125, in classify_batch
+        response = client.messages.create(
+            model=MODEL,
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}]
+        )
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_utils/_utils.py", line 282, in wrapper
+        return func(*args, **kwargs)
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/resources/messages/messages.py", line 996, in create
+        return self._post(
+               ~~~~~~~~~~^
+            "/v1/messages",
+            ^^^^^^^^^^^^^^^
+        ...<30 lines>...
+            stream_cls=Stream[RawMessageStreamEvent],
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1364, in post
+        return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                               ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1058, in request
+        request = self._build_request(options, retries_taken=retries_taken)
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 521, in _build_request
+        headers = self._build_headers(options, retries_taken=retries_taken)
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 451, in _build_headers
+        self._validate_headers(headers_dict, custom_headers)
+        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/Users/nyra/Projects/pyhood/.venv/lib/python3.14/site-packages/anthropic/_client.py", line 196, in _validate_headers
+        raise TypeError(
+            '"Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"'
+        )
+    TypeError: "Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"
+  ✗ [llm-classify] failed (exit 1) after 0.9s
+
+Pipeline halted — [llm-classify] failed with exit code 1
+
+──────────────────────────────────────────────────
+Pipeline Results  (3.3s total)
+
+  ⏭ scrape          before --start-from
+  ⏭ enrich          before --start-from
+  ✓ classify        2.3s
+  ✗ llm-classify    exit 1 (0.9s)

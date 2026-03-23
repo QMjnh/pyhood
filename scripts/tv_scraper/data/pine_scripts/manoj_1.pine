@@ -1,0 +1,272 @@
+//@version=6
+strategy('EMA High/Low + VWAP Strategy', overlay = true, initial_capital = 10000, default_qty_type = strategy.percent_of_equity, default_qty_value = 100)
+
+// ============================================
+// INPUTS
+// ============================================
+emaLength = input.int(20, 'EMA Length', minval = 1)
+vwapTouchPct = input.float(30, 'VWAP Touch % of Candle Body', minval = 0, maxval = 100) / 100
+exitAfterCandles = input.int(3, 'Exit After N Candles', minval = 1)
+trailPoints = input.int(50, 'Trailing Stop Loss Points', minval = 1)
+trailOffset = input.int(25, 'Trailing Stop Loss Offset', minval = 0)
+
+// ============================================
+// CALCULATIONS
+// ============================================
+// 20 EMA of High and Low
+emaHigh = ta.ema(high, emaLength)
+emaLow = ta.ema(low, emaLength)
+
+// VWAP
+vwapValue = ta.vwap(close)
+
+// Candle body
+candleBody = close - open
+candleBodyAbs = math.abs(candleBody)
+
+// ============================================
+// PLOTTING (moved up to ensure they display)
+// ============================================
+plot(emaHigh, '20 EMA High', color = color.new(color.green, 0), linewidth = 2)
+plot(emaLow, '20 EMA Low', color = color.new(color.red, 0), linewidth = 2)
+plot(vwapValue, 'VWAP', color = color.new(color.blue, 0), linewidth = 2)
+
+// ============================================
+// BUY SIGNAL CONDITIONS
+// ============================================
+// Signal candle: opens below EMA High and closes above EMA High
+buySignalCandle = open < emaHigh and close > emaHigh
+
+// VWAP below price or touching 30% of candle body from bottom
+vwapBelowOrTouching = vwapValue <= close or vwapValue >= open and vwapValue <= open + candleBodyAbs * vwapTouchPct
+
+buySignal = buySignalCandle and vwapBelowOrTouching
+
+// ============================================
+// SELL SIGNAL CONDITIONS
+// ============================================
+// Signal candle: opens above EMA Low and closes below EMA Low
+sellSignalCandle = open > emaLow and close < emaLow
+
+// VWAP above price or touching 30% of candle body from top
+vwapAboveOrTouching = vwapValue >= close or vwapValue <= open and vwapValue >= open - candleBodyAbs * vwapTouchPct
+
+sellSignal = sellSignalCandle and vwapAboveOrTouching
+
+// ============================================
+// TRADE MANAGEMENT VARIABLES
+// ============================================
+var float buySignalClose = na
+var float buySignalLow = na
+var int buyEntryBar = na
+var bool inBuyTrade = false
+
+var float sellSignalClose = na
+var float sellSignalHigh = na
+var int sellEntryBar = na
+var bool inSellTrade = false
+
+// ============================================
+// BUY TRADE LOGIC
+// ============================================
+// Detect buy signal
+if buySignal and strategy.position_size == 0 and not inBuyTrade
+    buySignalClose := close
+    buySignalLow := low
+    buySignalLow
+
+// Entry on next candle
+if not na(buySignalClose) and strategy.position_size == 0 and not inBuyTrade
+    strategy.entry('Long', strategy.long)
+    strategy.exit('Long Exit', 'Long', stop = buySignalLow, trail_points = trailPoints, trail_offset = trailOffset)
+    buyEntryBar := bar_index
+    inBuyTrade := true
+    inBuyTrade
+
+// Exit after 3 candles
+if strategy.position_size > 0 and not na(buyEntryBar)
+    barsInTrade = bar_index - buyEntryBar
+    if barsInTrade >= exitAfterCandles
+        strategy.close('Long', comment = 'Time Exit')
+
+// Reset when trade closes
+if inBuyTrade and strategy.position_size == 0
+    buySignalClose := na
+    buySignalLow := na
+    buyEntryBar := na
+    inBuyTrade := false
+    inBuyTrade
+
+// ============================================
+// SELL TRADE LOGIC
+// ============================================
+// Detect sell signal
+if sellSignal and strategy.position_size == 0 and not inSellTrade
+    sellSignalClose := close
+    sellSignalHigh := high
+    sellSignalHigh
+
+// Entry on next candle
+if not na(sellSignalClose) and strategy.position_size == 0 and not inSellTrade
+    strategy.entry('Short', strategy.short)
+    strategy.exit('Short Exit', 'Short', stop = sellSignalHigh, trail_points = trailPoints, trail_offset = trailOffset)
+    sellEntryBar := bar_index
+    inSellTrade := true
+    inSellTrade
+
+// Exit after 3 candles
+if strategy.position_size < 0 and not na(sellEntryBar)
+    barsInTrade = bar_index - sellEntryBar
+    if barsInTrade >= exitAfterCandles
+        strategy.close('Short', comment = 'Time Exit')
+
+// Reset when trade closes
+if inSellTrade and strategy.position_size == 0
+    sellSignalClose := na
+    sellSignalHigh := na
+    sellEntryBar := na
+    inSellTrade := false
+    inSellTrade
+
+// ============================================
+// SIGNAL PLOTTING
+// ============================================
+plotshape(buySignal, 'Buy Signal', shape.triangleup, location.belowbar, color.new(color.green, 0), size = size.normal)
+plotshape(sellSignal, 'Sell Signal', shape.triangledown, location.abovebar, color.new(color.red, 0), size = size.normal)
+
+// Background highlighting for active positions
+bgcolor(strategy.position_size > 0 ? color.new(color.green, 90) : na, title = 'Long Position')
+bgcolor(strategy.position_size < 0 ? color.new(color.red, 90) : na, title = 'Short Position')
+
+// Plot entry levels
+var line buyEntryLine = na
+var line sellEntryLine = na
+
+if not na(buySignalClose) and na(buyEntryLine)
+    buyEntryLine := line.new(bar_index, buySignalClose, bar_index + 1, buySignalClose, color = color.green, width = 1, style = line.style_dashed)
+    buyEntryLine
+
+if inBuyTrade and not na(buyEntryLine)
+    line.delete(buyEntryLine)
+    buyEntryLine := na
+    buyEntryLine
+
+if not na(sellSignalClose) and na(sellEntryLine)
+    sellEntryLine := line.new(bar_index, sellSignalClose, bar_index + 1, sellSignalClose, color = color.red, width = 1, style = line.style_dashed)
+    sellEntryLine
+
+if inSellTrade and not na(sellEntryLine)
+    line.delete(sellEntryLine)
+    sellEntryLine := na
+    sellEntryLine
+
+View in Pine Editor・161 lines
+Use on chart
+2
+6
+571
+A strategy for Manoj and growth am.
+To make easy money from charts
+Open-source script
+
+In true TradingView spirit, the creator of this script has made it open-source, so that traders can review and verify its functionality. Kudos to the author! While you can use it for free, remember that republishing the code is subject to our House Rules.
+
+vasudevshenoy
+Follow
+Bands and Channels
+Disclaimer
+The information and publications are not meant to be, and do not constitute, financial, investment, trading, or other types of advice or recommendations supplied or endorsed by TradingView. Read more in the Terms of Use.
+0 comments
+Post
+English
+
+Select market data provided by ICE Data Services.
+Select reference data provided by FactSet. Copyright © 2026 FactSet Research Systems Inc.
+Copyright © 2026, American Bankers Association. CUSIP Database provided by FactSet Research Systems Inc. All rights reserved.
+SEC fillings and other documents provided by Quartr.
+© 2026 TradingView, Inc.
+
+MORE THAN A PRODUCT
+Supercharts
+SCREENERS
+Stocks
+ETFs
+Bonds
+Crypto coins
+CEX pairs
+DEX pairs
+Pine
+HEATMAPS
+Stocks
+ETFs
+Crypto coins
+CALENDARS
+Economic
+Earnings
+Dividends
+MORE PRODUCTS
+Yield Curves
+Options
+Macro Maps
+News Flow
+Pine Script®
+APPS
+Mobile
+Desktop
+TOOLS & SUBSCRIPTIONS
+Features
+Pricing
+Market data
+Gift plans
+TRADING
+Overview
+Top brokers
+Brokers comparison
+SPECIAL OFFERS
+CME Group futures
+Eurex futures
+US stocks bundle
+ABOUT COMPANY
+Who we are
+Space mission
+Blog
+Careers
+Media kit
+MERCH
+TradingView store
+Tarot cards for traders
+The C63 TradeTime
+POLICIES & SECURITY
+Terms of Use
+Disclaimer
+Privacy Policy
+Cookies Policy
+Accessibility Statement
+Security tips
+Bug Bounty program
+Status page
+COMMUNITY
+Social network
+Wall of Love
+Refer a friend
+House Rules
+Moderators
+IDEAS
+Trading
+Education
+Editors' picks
+PINE SCRIPT
+Indicators & strategies
+Wizards
+Freelancers
+BUSINESS SOLUTIONS
+Widgets
+Charting libraries
+Lightweight Charts™
+Advanced Charts
+Trading Platform
+GROWTH OPPORTUNITIES
+Advertising
+Brokerage integration
+Partner program
+Education program

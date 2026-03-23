@@ -1,0 +1,170 @@
+2026-03-20 16:51:17,225 - INFO - Starting TradingView strategy scraper
+2026-03-20 16:51:17,225 - INFO - Config - Min boosts: 0, Page delay: 3.0s, Max pages: All
+2026-03-20 16:51:17,226 - INFO - Loaded 48 existing strategies
+2026-03-20 16:51:17,939 - INFO - Navigating to https://www.tradingview.com/scripts/?script_type=strategies
+2026-03-20 16:51:19,830 - INFO - Switching to Editors' picks tab
+2026-03-20 16:51:29,832 - WARNING - Could not find/click Editors' picks tab: Locator.wait_for: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("text=Editor's pick").first to be visible
+
+2026-03-20 16:51:56,857 - INFO - Scraping page 1
+2026-03-20 16:52:06,426 - INFO - Page 1: Found 24 strategies, 0 new
+2026-03-20 16:52:06,556 - INFO - Waiting 3.0s before next page...
+2026-03-20 16:52:09,557 - INFO - Scraping page 2
+2026-03-20 16:52:18,792 - INFO - Page 2: Found 24 strategies, 0 new
+2026-03-20 16:52:18,991 - INFO - Waiting 3.0s before next page...
+2026-03-20 16:52:21,993 - INFO - Scraping page 3
+2026-03-20 16:52:31,922 - INFO - Page 3: Found 24 strategies, 0 new
+2026-03-20 16:53:01,946 - WARNING - Failed to navigate to next page: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("a:has-text('Next')").first
+    - locator resolved to <a tabindex="-1" class="paragraph-t3qFZvNN" data-qa-id="ui-lib-card-link-paragraph" href="https://www.tradingview.com/script/BOR96jLK-Dee-MTF-ATR-Strategy-Alert-3-TPs/">…</a>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not stable
+    - retrying click action
+      - waiting 100ms
+    4 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+    4 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not stable
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is not stable
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is not stable
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is not stable
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+  2 × retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <canvas width="1646" height="806" data-qa-id="pane-top-canvas" aria-label="Chart for PEPPERSTONE:NAS100, 15 minutes"></canvas> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+  2 × retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-qa-id="header-meta-info-container" class="root-tazsg7p7 headerMetaInfo-aqIxarm1">…</div> from <div id="overlap-manager-root" data-qa-id="overlap-manager-root">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+
+2026-03-20 16:53:01,946 - INFO - No more pages available
+2026-03-20 16:53:02,023 - INFO - Scraping completed! Found 0 new strategies
+
+✅ Scraping completed!
+📊 Total strategies in database: 48
+🆕 New strategies added: 0
+💾 Saved to: /Users/nyra/Projects/pyhood/scripts/tv_scraper/data/strategies.json

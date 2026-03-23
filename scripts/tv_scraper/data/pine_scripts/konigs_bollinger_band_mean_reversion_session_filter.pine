@@ -1,0 +1,161 @@
+//@version=5
+strategy("Konigs | Bollinger Band Mean Reversion (Session Filter)",overlay = true,default_qty_type = strategy.percent_of_equity,default_qty_value = 10)
+
+// === Input Parameters ===
+bbLength = input.int(20, title="Bollinger Band Length")
+bbMult   = input.float(2.0, title="Bollinger Band Multiplier")
+
+// === Trading Session (18:00 – 15:00) ===
+tradeSession = input.session("1800-1500", title="Trading Session")
+inSession    = not na(time(timeframe.period, tradeSession))
+
+// === Bollinger Band Calculation ===
+basis = ta.sma(close, bbLength)
+dev   = bbMult * ta.stdev(close, bbLength)
+upper = basis + dev
+lower = basis - dev
+
+// === Entry Conditions (Session Restricted) ===
+longCond  = close < lower and inSession
+shortCond = close > upper and inSession
+
+if longCond
+    strategy.entry("Buy", strategy.long)
+
+if shortCond
+    strategy.entry("Sell", strategy.short)
+
+// === Exit Conditions (Always Active) ===
+exitLong  = strategy.position_size > 0 and close >= basis
+exitShort = strategy.position_size < 0 and close <= basis
+
+if exitLong
+    strategy.close("Buy")
+
+if exitShort
+    strategy.close("Sell")
+
+// === Plot Bollinger Bands ===
+plot(basis, title="Basis (Mean)", color=color.orange)
+plot(upper, title="Upper Band", color=color.red)
+plot(lower, title="Lower Band", color=color.green)
+
+View in Pine Editor・41 lines
+Use on chart
+3
+0
+876
+Core Idea:
+In sideways markets, price tends to revert to the mean (the middle band).
+
+Strategy:
+Buy when price touches or moves below the lower band.
+Sell when price reaches or exceeds the upper band.
+Exit at the middle band (20-period moving average).
+Confirm with: RSI/Stochastic or candle patterns for reversal at the bands.
+
+Only works with low-volatility instruments:
+EURCHF
+
+Filter certain time to avoid unexpected volatility
+Open-source script
+
+In true TradingView spirit, the creator of this script has made it open-source, so that traders can review and verify its functionality. Kudos to the author! While you can use it for free, remember that republishing the code is subject to our House Rules.
+
+konigsblue
+Follow
+Bollinger Bands (BB)
+Disclaimer
+The information and publications are not meant to be, and do not constitute, financial, investment, trading, or other types of advice or recommendations supplied or endorsed by TradingView. Read more in the Terms of Use.
+English
+
+Select market data provided by ICE Data Services.
+Select reference data provided by FactSet. Copyright © 2026 FactSet Research Systems Inc.
+Copyright © 2026, American Bankers Association. CUSIP Database provided by FactSet Research Systems Inc. All rights reserved.
+SEC fillings and other documents provided by Quartr.
+© 2026 TradingView, Inc.
+
+MORE THAN A PRODUCT
+Supercharts
+SCREENERS
+Stocks
+ETFs
+Bonds
+Crypto coins
+CEX pairs
+DEX pairs
+Pine
+HEATMAPS
+Stocks
+ETFs
+Crypto coins
+CALENDARS
+Economic
+Earnings
+Dividends
+MORE PRODUCTS
+Yield Curves
+Options
+Macro Maps
+News Flow
+Pine Script®
+APPS
+Mobile
+Desktop
+TOOLS & SUBSCRIPTIONS
+Features
+Pricing
+Market data
+Gift plans
+TRADING
+Overview
+Top brokers
+Brokers comparison
+SPECIAL OFFERS
+CME Group futures
+Eurex futures
+US stocks bundle
+ABOUT COMPANY
+Who we are
+Space mission
+Blog
+Careers
+Media kit
+MERCH
+TradingView store
+Tarot cards for traders
+The C63 TradeTime
+POLICIES & SECURITY
+Terms of Use
+Disclaimer
+Privacy Policy
+Cookies Policy
+Accessibility Statement
+Security tips
+Bug Bounty program
+Status page
+COMMUNITY
+Social network
+Wall of Love
+Refer a friend
+House Rules
+Moderators
+IDEAS
+Trading
+Education
+Editors' picks
+PINE SCRIPT
+Indicators & strategies
+Wizards
+Freelancers
+BUSINESS SOLUTIONS
+Widgets
+Charting libraries
+Lightweight Charts™
+Advanced Charts
+Trading Platform
+GROWTH OPPORTUNITIES
+Advertising
+Brokerage integration
+Partner program
+Education program
