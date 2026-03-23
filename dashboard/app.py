@@ -460,7 +460,7 @@ def page_autoresearch():
     # ── Strategy Detail ──
     st.subheader("Strategy Detail")
     detail_options = [
-        f"#{r['rank']} — {r['Strategy']} ({r['Ticker']})"
+        f"#{r['Rank']} — {r['Strategy']} ({r['Ticker']})"
         for _, r in board.iterrows()
     ]
     if not detail_options:
