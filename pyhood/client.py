@@ -441,7 +441,9 @@ class PyhoodClient:
         data = self._session.get("https://bonfire.robinhood.com/accounts/unified/")
         return data.get("results", [])
 
-    def get_positions(self, nonzero: bool = True, account_number: str | None = None) -> list[Position]:
+    def get_positions(
+        self, nonzero: bool = True, account_number: str | None = None,
+    ) -> list[Position]:
         """Get current stock positions.
 
         Args:
