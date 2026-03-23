@@ -357,7 +357,9 @@ def page_autoresearch():
         st.subheader("Filters")
         tickers = ["All"] + sorted(df["ticker"].unique().tolist())
         sel_ticker = st.selectbox("Ticker", tickers, key="ar_ticker")
-        show_only_kept = st.checkbox("Show only kept", value=False)
+        show_only_kept = st.checkbox("Show only kept", value=True)
+        if not show_only_kept:
+            max_rows = st.slider("Max rows", 50, 500, 100, key="ar_max_rows")
 
     filtered = df.copy()
     if sel_ticker != "All":
@@ -366,26 +368,30 @@ def page_autoresearch():
         filtered = filtered[filtered["kept"] == 1]
 
     # Summary
-    total = len(filtered)
-    kept = filtered["kept"].sum()
-    failed = total - kept
-    st.markdown(f"**{total}** experiments | ✅ **{kept}** kept | ❌ **{failed}** failed")
+    st.markdown(
+        f"**{len(filtered)}** shown | "
+        f"✅ **{int(df['kept'].sum())}** kept"
+        f" / **{len(df)}** total experiments"
+    )
 
     # Table
     display_cols = ["id", "ticker", "strategy_name", "kept", "train_sharpe", "test_sharpe",
                     "overfit_gap", "train_return", "test_return", "train_max_drawdown",
                     "test_max_drawdown", "train_win_rate", "test_win_rate", "reason"]
     avail_cols = [c for c in display_cols if c in filtered.columns]
-    display = filtered[avail_cols].copy()
 
-    # Color kept/failed
-    def highlight_kept(row):
-        if row.get("kept", 0) == 0:
-            return ["background-color: rgba(239,85,59,0.2)"] * len(row)
-        return [""] * len(row)
+    # Limit rows when showing all to prevent crashes
+    if not show_only_kept:
+        display = filtered[avail_cols].head(max_rows).copy()
+        if len(filtered) > max_rows:
+            st.caption(
+                f"Showing {max_rows} of {len(filtered)}. "
+                "Increase slider or filter to see more."
+            )
+    else:
+        display = filtered[avail_cols].copy()
 
-    styled = display.style.apply(highlight_kept, axis=1)
-    st.dataframe(styled, use_container_width=True, hide_index=True)
+    st.dataframe(display, use_container_width=True, hide_index=True)
 
     # Detail expander
     st.subheader("Strategy Detail")
