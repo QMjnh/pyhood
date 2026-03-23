@@ -5,6 +5,36 @@ All notable changes to pyhood will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-03-23
+
+### Added
+- **IRA/Retirement Account Support** — Trade stocks and options in Traditional and Roth IRAs
+  - `get_all_accounts()` discovers all accounts including IRA via bonfire endpoint
+  - `account_number` parameter on all order methods (`buy_option`, `sell_option`, `buy_stock`, `sell_stock`, `order_option`, `order_stock`)
+  - `account_number` parameter on `get_buying_power()` and `get_positions()`
+  - Direct account URL construction bypasses Robinhood's `/accounts/` blind spot for IRA
+  - Full documentation with examples and IRA limitations
+- **Autoresearch Engine** — Automated trading strategy discovery and optimization
+  - Persistent SQLite memory for experiment tracking and caching
+  - Cross-validation with train/validation/test splits
+  - Continuous overnight mode (`run_overnight.py`)
+  - Multi-ticker parallel strategy testing
+  - JSONL audit trail for reproducibility
+- **Market Regime Classifier** — 200-SMA based bull/bear/recovery/correction detection
+- **Slippage Modeling** — Realistic transaction cost simulation in backtester
+- **5 New Strategies** — Full 9-strategy catalog with benchmarks
+- **Fundamental Data** — `get_fundamentals()` and `get_fundamentals_batch()` with PE, market cap, 52w range
+- **Stock Universe Screener** — `get_all_instruments()` for full Robinhood symbol list
+- **Batch Historicals** — `get_stock_historicals_batch()` for multi-symbol OHLCV in one call
+
+### Fixed
+- **Options order direction** — Use `direction` field instead of `side` in option order payload (matches Robinhood's actual API)
+- **Ticker-scoped experiment keys** — Fixed isolation bug in autoresearch
+- **Ruff lint cleanup** — All E501, F821, N818 violations resolved
+
+### Changed
+- CI dependencies bumped: actions/checkout v6, actions/setup-python v6, actions/upload-artifact v7, github/codeql-action v4
+
 ## [0.2.0] - 2026-03-18
 
 ### Added
