@@ -432,9 +432,27 @@ class PyhoodClient:
 
     # ── Account ─────────────────────────────────────────────────────────
 
-    def get_positions(self, nonzero: bool = True) -> list[Position]:
-        """Get current stock positions."""
-        params = {"nonzero": "true"} if nonzero else {}
+    def get_all_accounts(self) -> list[dict]:
+        """Get all accounts including IRA via bonfire unified endpoint.
+
+        The standard /accounts/ endpoint never returns IRA accounts.
+        This uses the bonfire API which returns all account types.
+        """
+        data = self._session.get("https://bonfire.robinhood.com/accounts/unified/")
+        return data.get("results", [])
+
+    def get_positions(self, nonzero: bool = True, account_number: str | None = None) -> list[Position]:
+        """Get current stock positions.
+
+        Args:
+            nonzero: Only return positions with quantity > 0.
+            account_number: Filter to a specific account (e.g. IRA).
+        """
+        params: dict[str, str] = {}
+        if nonzero:
+            params["nonzero"] = "true"
+        if account_number:
+            params["account_number"] = account_number
         data = self._session.get_paginated(urls.POSITIONS, params=params)
 
         positions: list[Position] = []
@@ -473,8 +491,20 @@ class PyhoodClient:
 
         return positions
 
-    def get_buying_power(self) -> float:
-        """Get available buying power."""
+    def get_buying_power(self, account_number: str | None = None) -> float:
+        """Get available buying power.
+
+        Args:
+            account_number: Specific account number (e.g. IRA account).
+                If provided, fetches directly from the account URL
+                (bypasses /accounts/ which doesn't show IRA accounts).
+        """
+        if account_number:
+            data = self._session.get(
+                f"https://api.robinhood.com/accounts/{account_number}/"
+            )
+            return float(data.get("buying_power", 0))
+
         data = self._session.get_paginated(urls.ACCOUNTS)
         if data:
             return float(data[0].get("buying_power", 0))
@@ -483,18 +513,18 @@ class PyhoodClient:
     # ── Orders ──────────────────────────────────────────────────────────
 
     def _get_account_url(self, account_number: str | None = None) -> str:
-        """Get the account URL from ACCOUNTS endpoint."""
+        """Get the account URL.
+
+        If account_number is provided, constructs the URL directly
+        (bypasses /accounts/ which doesn't show IRA accounts).
+        Otherwise falls back to the first account from /accounts/.
+        """
+        if account_number:
+            return f"https://api.robinhood.com/accounts/{account_number}/"
+
         data = self._session.get_paginated(urls.ACCOUNTS)
         if not data:
             raise OrderError("No accounts found")
-
-        if account_number:
-            for account in data:
-                if account.get("account_number") == account_number:
-                    return account.get("url", "")
-            raise OrderError(f"Account {account_number} not found")
-
-        # Use the first account if no account_number specified
         return data[0].get("url", "")
 
     def _get_instrument_url(self, symbol: str) -> str:
@@ -531,6 +561,7 @@ class PyhoodClient:
         stop_price: float | None = None,
         time_in_force: str = "gtc",
         extended_hours: bool = False,
+        account_number: str | None = None,
     ) -> Order:
         """Buy stock shares.
 
@@ -541,6 +572,7 @@ class PyhoodClient:
             stop_price: Stop price for stop/stop-limit orders.
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
             extended_hours: Whether to allow extended hours trading.
+            account_number: Specific account (e.g. IRA). None = default.
 
         Returns:
             Order object with details.
@@ -553,6 +585,7 @@ class PyhoodClient:
             stop_price=stop_price,
             time_in_force=time_in_force,
             extended_hours=extended_hours,
+            account_number=account_number,
         )
 
     def sell_stock(
@@ -563,6 +596,7 @@ class PyhoodClient:
         stop_price: float | None = None,
         time_in_force: str = "gtc",
         extended_hours: bool = False,
+        account_number: str | None = None,
     ) -> Order:
         """Sell stock shares.
 
@@ -573,6 +607,7 @@ class PyhoodClient:
             stop_price: Stop price for stop/stop-limit orders.
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
             extended_hours: Whether to allow extended hours trading.
+            account_number: Specific account (e.g. IRA). None = default.
 
         Returns:
             Order object with details.
@@ -585,6 +620,7 @@ class PyhoodClient:
             stop_price=stop_price,
             time_in_force=time_in_force,
             extended_hours=extended_hours,
+            account_number=account_number,
         )
 
     def order_stock(
@@ -596,6 +632,7 @@ class PyhoodClient:
         stop_price: float | None = None,
         time_in_force: str = "gtc",
         extended_hours: bool = False,
+        account_number: str | None = None,
     ) -> Order:
         """Place a stock order (core method).
 
@@ -607,6 +644,7 @@ class PyhoodClient:
             stop_price: Stop price for stop/stop-limit orders.
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
             extended_hours: Whether to allow extended hours trading.
+            account_number: Specific account (e.g. IRA). None = default.
 
         Returns:
             Order object with details.
@@ -627,7 +665,7 @@ class PyhoodClient:
             trigger = "stop"
 
         payload = {
-            "account": self._get_account_url(),
+            "account": self._get_account_url(account_number),
             "instrument": self._get_instrument_url(symbol),
             "symbol": symbol.upper(),
             "price": str(price) if price else None,
@@ -695,6 +733,7 @@ class PyhoodClient:
         price: float,
         position_effect: str = "open",
         time_in_force: str = "gtc",
+        account_number: str | None = None,
     ) -> Order:
         """Buy option contracts.
 
@@ -707,6 +746,7 @@ class PyhoodClient:
             price: Limit price per contract.
             position_effect: 'open' or 'close'.
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
+            account_number: Specific account (e.g. IRA). None = default.
 
         Returns:
             Order object with details.
@@ -721,6 +761,7 @@ class PyhoodClient:
             side="buy",
             position_effect=position_effect,
             time_in_force=time_in_force,
+            account_number=account_number,
         )
 
     def sell_option(
@@ -733,6 +774,7 @@ class PyhoodClient:
         price: float,
         position_effect: str = "close",
         time_in_force: str = "gtc",
+        account_number: str | None = None,
     ) -> Order:
         """Sell option contracts.
 
@@ -745,6 +787,7 @@ class PyhoodClient:
             price: Limit price per contract.
             position_effect: 'open' or 'close'.
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
+            account_number: Specific account (e.g. IRA). None = default.
 
         Returns:
             Order object with details.
@@ -759,6 +802,7 @@ class PyhoodClient:
             side="sell",
             position_effect=position_effect,
             time_in_force=time_in_force,
+            account_number=account_number,
         )
 
     def order_option(
@@ -771,8 +815,9 @@ class PyhoodClient:
         price: float,
         side: str,
         position_effect: str,
-        credit_or_debit: str = "debit",
+        credit_or_debit: str | None = None,
         time_in_force: str = "gtc",
+        account_number: str | None = None,
     ) -> Order:
         """Place an option order (core method).
 
@@ -785,13 +830,19 @@ class PyhoodClient:
             price: Limit price per contract.
             side: 'buy' or 'sell'.
             position_effect: 'open' or 'close'.
-            credit_or_debit: 'debit' or 'credit'.
+            credit_or_debit: 'debit' or 'credit'. Auto-determined from
+                side if not provided (buy→debit, sell→credit).
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
+            account_number: Specific account (e.g. IRA). None = default.
 
         Returns:
             Order object with details.
         """
         option_instrument_url = self._get_option_id(symbol, expiration, strike, option_type)
+
+        # Auto-determine direction from side if not explicitly provided
+        if credit_or_debit is None:
+            credit_or_debit = "debit" if side == "buy" else "credit"
 
         legs = [{
             "position_effect": position_effect,
@@ -801,11 +852,11 @@ class PyhoodClient:
         }]
 
         payload = {
-            "account": self._get_account_url(),
+            "account": self._get_account_url(account_number),
             "legs": legs,
             "price": str(price),
             "quantity": str(quantity),
-            "side": credit_or_debit,
+            "direction": credit_or_debit,
             "time_in_force": time_in_force,
             "trigger": "immediate",
             "type": "limit",
