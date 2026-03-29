@@ -525,7 +525,8 @@ class PyhoodClient:
 
             symbol = pos.get("symbol", "")
             strategy = pos.get("strategy", "")
-            avg_open = float(pos.get("average_open_price", 0)) / 100  # API returns per-contract, convert to per-share
+            # API returns per-contract, convert to per-share
+            avg_open = float(pos.get("average_open_price", 0)) / 100
 
             # Extract details from legs
             legs = pos.get("legs", [])

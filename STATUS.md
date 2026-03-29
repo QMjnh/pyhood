@@ -65,6 +65,15 @@ Modern Robinhood API client library. Public package on PyPI replacing abandoned 
 - **NEVER retry without human confirmation** of device approval
 - **Refresh tokens work!** — Key differentiator from robin_stocks
 
+## IRA Support (v0.3.0)
+- **Roth IRA Account:** 915060792 (ira_roth, cash account, option_level_2)
+- **Individual Account:** 946351343 (margin)
+- **Discovery:** `get_all_accounts()` via bonfire `/accounts/unified/`
+- **IRA Positions:** Use `account_number` param for stocks, `account_numbers` (plural) for options
+- **IRA Orders:** Standard endpoints work with IRA account URL in payload
+- **Docs:** `docs/ira-api-notes.md` — full reverse-engineering notes
+- **Key gotcha:** `/accounts/` never shows IRA — must use bonfire or direct URL
+
 ## Current Projects
 
 ### Strategy Intelligence Engine (~/scripts/tv_scraper/)

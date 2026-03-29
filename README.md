@@ -184,16 +184,10 @@ order = crypto.place_order(
 Generate your API keys at [robinhood.com/account/crypto](https://robinhood.com/account/crypto). See the [Crypto documentation](https://jamestford.github.io/pyhood/crypto/) for full details.
 
 ## Development Status
-
-🚧 **Early development**
-
 - ✅ Stocks/options market data (unofficial API) — functional
 - ✅ Crypto trading (official API) — functional
 - ✅ Authentication with automatic token refresh — functional
 - ✅ Full order management for stocks/options — functional
-- ✅ Backtesting engine with built-in strategies — functional
-- 📋 Pine Script strategy integration — planned
-- 💡 Shared base client refactor — under consideration
 
 ## Acknowledgments
 

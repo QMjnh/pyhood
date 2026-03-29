@@ -1,13 +1,11 @@
-"""hood — A modern, reliable Python client for the Robinhood API."""
+"""pyhood — A modern, reliable Python client for the Robinhood API."""
 
-__version__ = "0.2.0"
+__version__ = "0.3.3"
 
 from pyhood.auth import login, logout, refresh
-from pyhood.backtest import Backtester, BacktestResult
 from pyhood.client import PyhoodClient
 from pyhood.crypto import CryptoClient
 
 __all__ = [
     "login", "logout", "refresh", "PyhoodClient", "CryptoClient",
-    "Backtester", "BacktestResult"
 ]
