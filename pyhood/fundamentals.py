@@ -1,7 +1,6 @@
-"""Fundamental data integration for stock screening and strategy filtering.
+"""Fundamental data integration for stock screening.
 
-Provides FundamentalData for fetching/caching fundamental ratios via yfinance,
-and fundamental_filter for wrapping any strategy with a fundamental pre-screen.
+Provides FundamentalData for fetching/caching fundamental ratios via yfinance.
 """
 
 from __future__ import annotations
@@ -154,43 +153,3 @@ class FundamentalData:
             if 'max' in constraints and val > constraints['max']:
                 return False
         return True
-
-
-def fundamental_filter(strategy_fn, ticker: str, filters: dict):
-    """Wrap any strategy with fundamental pre-screening.
-
-    If the ticker doesn't pass fundamental filters, the wrapped strategy
-    never generates signals (always returns None).
-
-    This is a STATIC filter — checks fundamentals once at creation time,
-    not dynamically during the backtest.
-
-    Args:
-        strategy_fn: A strategy callable ``(candles, position) -> signal``.
-            This is the already-called factory result, not the factory itself.
-        ticker: Ticker symbol to check fundamentals for.
-        filters: Fundamental filter dict (same format as
-            ``FundamentalData.passes_filter``).
-
-    Returns:
-        A strategy callable that delegates to *strategy_fn* if fundamentals
-        pass, or always returns None if they don't.
-
-    Example::
-
-        strategy = fundamental_filter(
-            ema_crossover(fast=9, slow=21),
-            ticker='AAPL',
-            filters={'pe_ratio': {'max': 30}, 'revenue_growth': {'min': 0.05}}
-        )
-        result = bt.run(strategy, "EMA + Fundamentals")
-    """
-    fd = FundamentalData(ticker)
-    passes = fd.passes_filter(filters)
-
-    if passes:
-        return strategy_fn
-    else:
-        def _blocked(candles, position):
-            return None
-        return _blocked

@@ -1,8 +1,6 @@
 """Tests for fundamental data module — all mocked, no yfinance calls."""
 
-from unittest.mock import patch
-
-from pyhood.fundamentals import FundamentalData, fundamental_filter
+from pyhood.fundamentals import FundamentalData
 
 # Sample yfinance-like info dict for mocking
 MOCK_INFO = {
@@ -211,75 +209,3 @@ class TestPassesFilter:
         assert fd.passes_filter({
             'sector': {'min': 'A'},
         }) is True
-
-
-class TestFundamentalFilter:
-    """Test the fundamental_filter wrapper."""
-
-    def test_passes_delegates_to_inner_strategy(self):
-        """When fundamentals pass, the inner strategy is called."""
-        inner_called = []
-
-        def mock_strategy(candles, position):
-            inner_called.append(True)
-            return 'buy'
-
-        fd = FundamentalData('AAPL')
-        fd._info = dict(MOCK_INFO)
-
-        with patch('pyhood.fundamentals.FundamentalData', return_value=fd):
-            wrapped = fundamental_filter(
-                mock_strategy, 'AAPL',
-                filters={'pe_ratio': {'max': 50}}
-            )
-            result = wrapped([], None)
-
-        assert result == 'buy'
-        assert len(inner_called) == 1
-
-    def test_fails_returns_none(self):
-        """When fundamentals fail, always returns None."""
-        def mock_strategy(candles, position):
-            return 'buy'
-
-        fd = FundamentalData('AAPL')
-        fd._info = dict(MOCK_INFO)
-
-        with patch('pyhood.fundamentals.FundamentalData', return_value=fd):
-            wrapped = fundamental_filter(
-                mock_strategy, 'AAPL',
-                filters={'pe_ratio': {'max': 10}}  # 28.5 > 10 → fail
-            )
-            result = wrapped([], None)
-
-        assert result is None
-
-    def test_filter_is_static(self):
-        """Filter checks fundamentals once at creation, not per call."""
-        call_count = [0]
-
-        original_init = FundamentalData.__init__
-
-        def counting_init(self, ticker):
-            call_count[0] += 1
-            original_init(self, ticker)
-            self._info = dict(MOCK_INFO)
-
-        with patch.object(FundamentalData, '__init__', counting_init):
-            def mock_strategy(candles, position):
-                return 'buy'
-
-            wrapped = fundamental_filter(
-                mock_strategy, 'AAPL',
-                filters={'pe_ratio': {'max': 50}}
-            )
-
-        init_count = call_count[0]
-
-        # Call the wrapped strategy multiple times
-        wrapped([], None)
-        wrapped([], None)
-        wrapped([], None)
-
-        # FundamentalData should not be re-created on each call
-        assert call_count[0] == init_count

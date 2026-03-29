@@ -1,8 +1,7 @@
 # Fundamental Data Integration
 
 Pyhood provides fundamental data integration via the `FundamentalData` class,
-allowing you to screen stocks by financial ratios and combine fundamental
-analysis with technical backtesting strategies.
+allowing you to screen stocks by financial ratios.
 
 ## FundamentalData Class
 
@@ -66,28 +65,3 @@ passes = fd.passes_filter({
 Each key is a property name. The value is a dict with `'min'` and/or `'max'`.
 If data for a property is missing (None), that filter is skipped (not failed).
 
-## FundamentalFilter — Strategy Wrapper
-
-Wrap any backtesting strategy so it only trades tickers that pass
-fundamental checks:
-
-```python
-from pyhood.fundamentals import fundamental_filter
-from pyhood.backtest.strategies import ema_crossover
-
-# Only trade AAPL if it has PE < 30 and revenue growth > 5%
-strategy = fundamental_filter(
-    ema_crossover(fast=9, slow=21),
-    ticker='AAPL',
-    filters={'pe_ratio': {'max': 30}, 'revenue_growth': {'min': 0.05}}
-)
-
-bt = Backtester.from_yfinance('AAPL', period='5y')
-result = bt.run(strategy, "EMA + Fundamentals")
-```
-
-This is a **static** filter — fundamentals are checked once when the
-strategy is created, not on every bar. If the ticker fails the filter,
-the strategy always returns `None` (no trades). This is appropriate for
-backtesting where you're asking "should we trade this ticker at all?"
-rather than "should we trade on this specific day?"

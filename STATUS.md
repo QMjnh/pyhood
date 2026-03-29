@@ -38,20 +38,6 @@ Modern Robinhood API client library. Public package on PyPI replacing abandoned 
 - **Full trading support:** Orders, quotes, portfolios
 - **Keys stored separately:** Crypto keys in pyhood config
 
-### Backtesting Engine
-- **Built-in strategies:** 10+ implemented
-- **Market regime classifier:** 200-SMA based (bull/bear/recovery/correction)
-- **Slippage modeling:** Realistic transaction costs
-- **Train/test split:** Prevents overfitting
-- **Performance metrics:** Sharpe, Sortino, max drawdown, profit factor
-
-### Autoresearch Engine
-- **Automated strategy discovery:** Parameter optimization
-- **SQLite memory:** Experiment tracking and caching
-- **Cross-validation:** Train/validation/test splits
-- **Continuous mode:** `run_overnight.py` for long optimization runs
-- **Multi-ticker support:** Parallel strategy testing
-
 ## Testing & Quality
 - **Test Coverage:** ~79% (58 tests passing)
 - **CI Pipeline:** GitHub Actions on Python 3.10-3.13
@@ -76,12 +62,6 @@ Modern Robinhood API client library. Public package on PyPI replacing abandoned 
 
 ## Current Projects
 
-### Strategy Intelligence Engine (~/scripts/tv_scraper/)
-- **Phase 1 ✅:** 1,000 TradingView strategies scraped
-- **Phase 1.5 🔨:** Metadata enrichment in progress
-- **Goal:** Community-validated strategies, classified by market regime
-- **Integration:** Uses pyhood backtester for validation
-
 ### Nightly Scanner Integration
 - **Challenge:** Scanner broken due to pyhood OptionContract model changes
 - **Solution:** Migrate scanner from robin_stocks to pyhood
@@ -104,7 +84,5 @@ Modern Robinhood API client library. Public package on PyPI replacing abandoned 
 - robin_stocks never implemented this critical feature
 
 ## Recent Fixes
-- **Experiment key bug:** Fixed ticker isolation in autoresearch
 - **Linting:** All ruff failures resolved
-- **Git ignore:** Added autoresearch_results/ to prevent huge data commits
 - **CI status:** All tests passing across Python 3.10-3.13

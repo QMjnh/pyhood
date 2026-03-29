@@ -135,26 +135,3 @@ class StockScreener:
 
         return results[:max_results]
 
-    def screen_for_autoresearch(
-        self,
-        filters: dict,
-        max_tickers: int = 10,
-        sort_by: str = 'market_cap',
-    ) -> list[str]:
-        """Screen and return just ticker symbols for autoresearch.
-
-        Convenience method that returns ``['AAPL', 'MSFT', ...]`` ready
-        to feed into ``AutoResearcher``.
-
-        Args:
-            filters: Fundamental filter dict.
-            max_tickers: Maximum tickers to return.
-            sort_by: Fundamental to sort by (default ``'market_cap'``).
-
-        Returns:
-            List of ticker symbol strings.
-        """
-        results = self.screen(
-            filters, max_results=max_tickers, sort_by=sort_by
-        )
-        return [r['ticker'] for r in results]

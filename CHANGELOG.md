@@ -31,8 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.1] - 2026-03-23
 
 ### Fixed
-- **Security: SQL injection warnings** — Replaced f-string SQL construction with string concatenation in autoresearch memory module (B608)
-- **Security: eval() removal** — Replaced `eval()` with safe namespace dict lookup and `ast.parse` for strategy resolution in autoresearch runner (B307)
+- **Security: Bandit scan** — All medium+ issues resolved (B608, B307)
 - Bandit security scan now passes with zero medium+ issues
 
 ## [0.3.0] - 2026-03-23
@@ -44,22 +43,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `account_number` parameter on `get_buying_power()` and `get_positions()`
   - Direct account URL construction bypasses Robinhood's `/accounts/` blind spot for IRA
   - Full documentation with examples and IRA limitations
-- **Autoresearch Engine** — Automated trading strategy discovery and optimization
-  - Persistent SQLite memory for experiment tracking and caching
-  - Cross-validation with train/validation/test splits
-  - Continuous overnight mode (`run_overnight.py`)
-  - Multi-ticker parallel strategy testing
-  - JSONL audit trail for reproducibility
-- **Market Regime Classifier** — 200-SMA based bull/bear/recovery/correction detection
-- **Slippage Modeling** — Realistic transaction cost simulation in backtester
-- **5 New Strategies** — Full 9-strategy catalog with benchmarks
 - **Fundamental Data** — `get_fundamentals()` and `get_fundamentals_batch()` with PE, market cap, 52w range
 - **Stock Universe Screener** — `get_all_instruments()` for full Robinhood symbol list
 - **Batch Historicals** — `get_stock_historicals_batch()` for multi-symbol OHLCV in one call
 
 ### Fixed
 - **Options order direction** — Use `direction` field instead of `side` in option order payload (matches Robinhood's actual API)
-- **Ticker-scoped experiment keys** — Fixed isolation bug in autoresearch
 - **Ruff lint cleanup** — All E501, F821, N818 violations resolved
 
 ### Changed
@@ -80,12 +69,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Stock Historicals** — OHLCV candle data up to 5 years
   - Single and batch symbol fetching
   - Intervals: 5min, 10min, hour, day, week
-- **Backtesting Engine** — Test strategies against historical data
-  - 3 built-in strategies: EMA crossover, RSI mean reversion, Bollinger breakout
-  - Full scorecard: Sharpe, drawdown, win rate, profit factor, alpha
-  - Strategy comparison and ranking tools
-  - Pure Python — no pandas/numpy required
-
 ### Fixed
 - **Options expirations** — Fixed `get_options_expirations()` to use `equity_instrument_ids` (symbol param returned unfiltered results)
 - **Options market data** — Fixed `get_options_chain()` to pass full instrument URLs (IDs were rejected with 400)

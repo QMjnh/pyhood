@@ -35,6 +35,3 @@ htmlcov/
 
 # Docs build
 site/
-
-# Autoresearch output
-autoresearch_results/

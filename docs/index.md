@@ -41,24 +41,6 @@ print(f"AAPL: ${quote.price:.2f} ({quote.change_pct:+.1f}%)")
 - [Crypto Trading](crypto.md) — Official crypto API with API key auth
 - [Fundamentals](fundamentals.md) — Fundamental data and screening
 
-### Backtesting
-- [Backtesting](backtesting.md) — Core backtesting engine, strategies, and metrics
-- [Slippage Modeling](slippage.md) — Realistic execution cost simulation
-- [Market Regime Classification](regime-awareness.md) — Bull/bear/recovery/correction tagging
-- [SPY Benchmark & Verdict System](benchmarking.md) — Compare strategies against the S&P 500
-
-### Strategies
-- [Built-in Strategies](strategies/index.md) — All 11 strategy implementations
-- [Parameter Sensitivity](strategies/parameter-sensitivity.md) — Testing parameter robustness
-
-### Research & Automation
-- [AutoResearch](autoresearch.md) — Automated strategy discovery engine
-- [Cross-Validation](cross-validation.md) — Multi-ticker robustness testing
-- [Overnight Runner](overnight-runner.md) — Unattended overnight research execution
-
-### Analysis
-- [Dexter Analysis](dexter-analysis.md) — AI-powered strategy analysis
-
 ### Reference
 - [API Reference](api/client.md) — Full API docs
 - [Error Handling](error-handling.md) — Exception reference
