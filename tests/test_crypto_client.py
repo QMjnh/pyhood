@@ -9,6 +9,7 @@ from pyhood.crypto.auth import generate_keypair
 from pyhood.crypto.client import CryptoClient, TokenBucket
 from pyhood.crypto.models import (
     CryptoAccount,
+    CryptoCandle,
     CryptoHolding,
     CryptoOrder,
     CryptoQuote,
@@ -20,6 +21,7 @@ from pyhood.crypto.urls import (
     CRYPTO_BASE,
     CRYPTO_BEST_BID_ASK,
     CRYPTO_ESTIMATED_PRICE,
+    CRYPTO_HISTORICALS,
     CRYPTO_HOLDINGS,
     CRYPTO_ORDERS,
     CRYPTO_TRADING_PAIRS,
@@ -204,6 +206,71 @@ class TestCryptoClient:
         assert price.bid_price == 45000.00
         assert price.ask_price == 45100.00
         assert price.fee == 1.50
+
+    @responses.activate
+    def test_get_historicals(self):
+        """Test getting crypto historicals."""
+        responses.add(
+            responses.GET,
+            f"{CRYPTO_HISTORICALS}BTC-USD/",
+            json={
+                "data_points": [
+                    {
+                        "begins_at": "2023-10-30T11:00:00Z",
+                        "open_price": "34100.00",
+                        "close_price": "34200.00",
+                        "high_price": "34250.00",
+                        "low_price": "34050.00",
+                        "volume": "123.45",
+                    },
+                    {
+                        "begins_at": "2023-10-30T12:00:00Z",
+                        "open_price": "34200.00",
+                        "close_price": "34300.00",
+                        "high_price": "34350.00",
+                        "low_price": "34150.00",
+                        "volume": "98.76",
+                    },
+                ]
+            },
+            status=200,
+        )
+
+        candles = self.client.get_historicals("BTC-USD", interval="hour", span="day")
+
+        assert len(candles) == 2
+        c = candles[0]
+        assert isinstance(c, CryptoCandle)
+        assert c.symbol == "BTC-USD"
+        assert c.begins_at == "2023-10-30T11:00:00Z"
+        assert c.open_price == 34100.00
+        assert c.close_price == 34200.00
+        assert c.high_price == 34250.00
+        assert c.low_price == 34050.00
+        assert c.volume == 123.45
+
+    def test_get_historicals_invalid_interval(self):
+        """Test invalid interval raises ValueError."""
+        with pytest.raises(ValueError, match="interval must be one of"):
+            self.client.get_historicals("BTC-USD", interval="1minute")
+
+    def test_get_historicals_invalid_span(self):
+        """Test invalid span raises ValueError."""
+        with pytest.raises(ValueError, match="span must be one of"):
+            self.client.get_historicals("BTC-USD", span="10year")
+
+    @responses.activate
+    def test_get_historicals_empty(self):
+        """Test empty historicals response."""
+        responses.add(
+            responses.GET,
+            f"{CRYPTO_HISTORICALS}DOGE-USD/",
+            json={"data_points": []},
+            status=200,
+        )
+
+        candles = self.client.get_historicals("DOGE-USD")
+        assert candles == []
 
     @responses.activate
     def test_get_holdings(self):

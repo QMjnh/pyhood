@@ -16,6 +16,7 @@ import requests
 from pyhood.crypto.auth import sign_request
 from pyhood.crypto.models import (
     CryptoAccount,
+    CryptoCandle,
     CryptoHolding,
     CryptoOrder,
     CryptoQuote,
@@ -27,6 +28,7 @@ from pyhood.crypto.urls import (
     CRYPTO_BASE,
     CRYPTO_BEST_BID_ASK,
     CRYPTO_ESTIMATED_PRICE,
+    CRYPTO_HISTORICALS,
     CRYPTO_HOLDINGS,
     CRYPTO_ORDERS,
     CRYPTO_TRADING_PAIRS,
@@ -355,6 +357,59 @@ class CryptoClient:
             ask_price=float(data.get('ask_price', 0)),
             fee=float(data.get('fee', 0)),
         )
+
+    # ── Historicals ──────────────────────────────────────────────────────
+
+    def get_historicals(
+        self,
+        symbol: str,
+        interval: str = "hour",
+        span: str = "week",
+    ) -> list[CryptoCandle]:
+        """Get historical OHLCV data for a crypto asset.
+
+        Args:
+            symbol: Crypto symbol (e.g., 'BTC-USD').
+            interval: Candle interval. One of '15second', 'minute',
+                '5minute', '10minute', 'hour', 'day', 'week'. Default: 'hour'.
+            span: Time range. One of 'hour', 'day', 'week', 'month',
+                '3month', 'year', '5year'. Default: 'week'.
+
+        Returns:
+            List of CryptoCandle dataclasses with OHLCV data.
+        """
+        valid_intervals = ("15second", "minute", "5minute", "10minute", "hour", "day", "week")
+        valid_spans = ("hour", "day", "week", "month", "3month", "year", "5year")
+
+        if interval not in valid_intervals:
+            raise ValueError(
+                f"interval must be one of {valid_intervals}, got '{interval}'"
+            )
+        if span not in valid_spans:
+            raise ValueError(
+                f"span must be one of {valid_spans}, got '{span}'"
+            )
+
+        path = f"{CRYPTO_HISTORICALS}{symbol}/".replace(CRYPTO_BASE, '')
+        data = self.make_request('GET', path, params={
+            "interval": interval,
+            "span": span,
+            "bounds": "24_7",
+        })
+
+        candles = []
+        for h in data.get("data_points", []):
+            candles.append(CryptoCandle(
+                symbol=symbol,
+                begins_at=h.get("begins_at", ""),
+                open_price=float(h.get("open_price", 0)),
+                close_price=float(h.get("close_price", 0)),
+                high_price=float(h.get("high_price", 0)),
+                low_price=float(h.get("low_price", 0)),
+                volume=float(h.get("volume", 0)),
+            ))
+
+        return candles
 
     # ── Holdings ─────────────────────────────────────────────────────────
 

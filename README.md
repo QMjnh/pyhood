@@ -168,6 +168,11 @@ crypto = CryptoClient(api_key="rh-api-...", private_key_base64="...")
 quotes = crypto.get_best_bid_ask("BTC-USD", "ETH-USD")
 price = crypto.get_estimated_price("BTC-USD", "buy", 0.001)
 
+# Historical OHLCV data
+candles = crypto.get_historicals("BTC-USD", interval="hour", span="week")
+for c in candles:
+    print(f"{c.begins_at}  O:{c.open_price}  H:{c.high_price}  L:{c.low_price}  C:{c.close_price}")
+
 # Account & holdings
 account = crypto.get_account()
 holdings = crypto.get_holdings(account.account_number, "BTC")

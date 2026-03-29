@@ -13,5 +13,8 @@ CRYPTO_ESTIMATED_PRICE = f"{CRYPTO_BASE}/api/v2/crypto/trading/estimated_price/"
 # Holdings endpoints
 CRYPTO_HOLDINGS = f"{CRYPTO_BASE}/api/v2/crypto/trading/holdings/"
 
+# Historicals endpoints
+CRYPTO_HISTORICALS = f"{CRYPTO_BASE}/api/v2/crypto/marketdata/historicals/"
+
 # Order endpoints
 CRYPTO_ORDERS = f"{CRYPTO_BASE}/api/v2/crypto/trading/orders/"

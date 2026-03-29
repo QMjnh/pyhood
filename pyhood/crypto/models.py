@@ -57,6 +57,18 @@ class EstimatedPrice:
 
 
 @dataclass(frozen=True)
+class CryptoCandle:
+    """Single OHLCV price candle for a crypto asset."""
+    symbol: str
+    begins_at: str
+    open_price: float
+    close_price: float
+    high_price: float
+    low_price: float
+    volume: float
+
+
+@dataclass(frozen=True)
 class CryptoOrder:
     """Crypto order information."""
     order_id: str
