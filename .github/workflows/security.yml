@@ -48,13 +48,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Audit runtime dependencies only
         run: |
+          python -m venv /tmp/audit-env
+          /tmp/audit-env/bin/pip install .
+          /tmp/audit-env/bin/pip freeze > runtime-reqs.txt
           pip install pip-audit
-          pip install requests python-dotenv cryptography
-
-      - name: Run pip-audit
-        run: pip-audit --strict --desc
+          pip-audit --strict --desc -r runtime-reqs.txt
 
   codeql:
     name: CodeQL (Static Analysis)
