@@ -138,3 +138,59 @@ class Earnings:
     timing: str | None = None  # 'am', 'pm'
     eps_estimate: float | None = None
     eps_actual: float | None = None
+
+
+# ── Futures ──────────────────────────────────────────────────────────
+
+
+@dataclass(frozen=True)
+class FuturesContract:
+    """Futures contract details."""
+    symbol: str
+    name: str
+    contract_id: str
+    expiration: str
+    tick_size: float
+    multiplier: float
+    status: str = "active"
+    underlying: str = ""
+    asset_class: str = ""
+
+
+@dataclass(frozen=True)
+class FuturesQuote:
+    """Real-time futures quote."""
+    symbol: str
+    last_price: float
+    bid: float = 0.0
+    ask: float = 0.0
+    high: float = 0.0
+    low: float = 0.0
+    prev_close: float = 0.0
+    volume: int = 0
+    open_interest: int = 0
+    contract_id: str = ""
+
+
+@dataclass(frozen=True)
+class FuturesPnL:
+    """P&L extracted from a futures order."""
+    realized_pnl: float
+    direction: str  # 'OPENING' or 'CLOSING'
+    order_id: str = ""
+
+
+@dataclass(frozen=True)
+class FuturesOrder:
+    """Futures order with status and P&L."""
+    order_id: str
+    symbol: str
+    side: str  # 'buy' or 'sell'
+    order_type: str
+    quantity: float
+    price: float | None
+    status: str
+    created_at: str = ""
+    direction: str = ""  # 'OPENING' or 'CLOSING'
+    realized_pnl: float | None = None
+    account_id: str = ""

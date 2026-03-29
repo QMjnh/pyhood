@@ -11,8 +11,9 @@ Built for automated trading — with auth that doesn't break, proper error handl
 - 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly.
 - 🛡️ **Built-in rate limiting** — Automatic request throttling and retry logic.
 - 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration.
+- 📈 **Futures trading** — Contract details, real-time quotes, order history, and P&L calculation for futures.
 - 🪙 **Dual API support** — Wraps both Robinhood's unofficial stocks/options API and their official Crypto Trading API.
-- 🧪 **Tested and maintained** — 86+ tests, CI across Python 3.10-3.13, linted with ruff.
+- 🧪 **Tested and maintained** — 170+ tests, CI across Python 3.10-3.13, linted with ruff.
 
 ## Quick Example
 
@@ -36,6 +37,7 @@ print(f"AAPL: ${quote.price:.2f} ({quote.change_pct:+.1f}%)")
 ### Market Data
 - [Stock Quotes](quotes.md) — Fetching market data
 - [Options Chains](options.md) — Options with Greeks
+- [Futures Trading](futures.md) — Contracts, quotes, orders, and P&L
 - [Crypto Trading](crypto.md) — Official crypto API with API key auth
 - [Fundamentals](fundamentals.md) — Fundamental data and screening
 

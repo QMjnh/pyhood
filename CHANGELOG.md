@@ -5,6 +5,19 @@ All notable changes to pyhood will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-03-28
+
+### Added
+- **Futures Trading Support** — Full access to Robinhood's futures trading API
+  - `get_futures_contract()` and `get_futures_contracts()` for contract details (symbol, expiration, tick size, multiplier)
+  - `get_futures_quote()` and `get_futures_quotes()` for real-time bid/ask/last prices
+  - `get_futures_orders()` and `get_filled_futures_orders()` with automatic cursor-based pagination
+  - `get_futures_account_id()` for auto-discovering the futures account via Ceres API
+  - `calculate_futures_pnl()` for aggregating realized P&L across closing orders
+  - Typed models: `FuturesContract`, `FuturesQuote`, `FuturesOrder`, `FuturesPnL`
+  - Handles `Rh-Contract-Protected` header automatically
+  - 21 new tests covering contracts, quotes, account discovery, orders, pagination, and P&L
+
 ## [0.3.2] - 2026-03-26
 
 ### Added

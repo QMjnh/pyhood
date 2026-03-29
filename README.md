@@ -28,8 +28,9 @@ Built for automated trading — with auth that doesn't break, proper error handl
 - 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly. No more guessing what's in a dict.
 - 🛡️ **Built-in rate limiting** — Automatic request throttling and retry logic so you don't get locked out.
 - 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration.
+- 📈 **Futures trading** — Contract details, real-time quotes, order history, and P&L calculation for Robinhood futures.
 - 🏦 **IRA/Retirement accounts** — Trade stocks and options in Traditional and Roth IRAs. The only Python Robinhood library with retirement account support.
-- 🧪 **Tested and maintained** — 86+ tests, CI across Python 3.10-3.13, linted with ruff. If it breaks, we know immediately.
+- 🧪 **Tested and maintained** — 170+ tests, CI across Python 3.10-3.13, linted with ruff. If it breaks, we know immediately.
 
 ## Quick Start
 
@@ -183,8 +184,31 @@ order = crypto.place_order(
 
 Generate your API keys at [robinhood.com/account/crypto](https://robinhood.com/account/crypto). See the [Crypto documentation](https://jamestford.github.io/pyhood/crypto/) for full details.
 
+## Futures Trading
+
+pyhood supports Robinhood's futures API — contracts, quotes, orders, and P&L tracking.
+
+```python
+client = PyhoodClient(session)
+
+# Contract details
+contract = client.get_futures_contract("ESH26")
+print(f"{contract.name} — multiplier: {contract.multiplier}")
+
+# Real-time quote
+quote = client.get_futures_quote("ESH26")
+print(f"Last: {quote.last_price}  Bid: {quote.bid}  Ask: {quote.ask}")
+
+# P&L across all closed futures trades
+pnl = client.calculate_futures_pnl()
+print(f"Realized P&L: ${pnl:.2f}")
+```
+
+See the [Futures documentation](https://jamestford.github.io/pyhood/futures/) for full details.
+
 ## Development Status
 - ✅ Stocks/options market data (unofficial API) — functional
+- ✅ Futures trading (contracts, quotes, orders, P&L) — functional
 - ✅ Crypto trading (official API) — functional
 - ✅ Authentication with automatic token refresh — functional
 - ✅ Full order management for stocks/options — functional

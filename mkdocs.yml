@@ -41,6 +41,7 @@ nav:
   - Usage:
     - Stock Quotes: quotes.md
     - Options Chains: options.md
+    - Futures Trading: futures.md
     - Account & Positions: account.md
     - Crypto Trading: crypto.md
   - Error Handling: error-handling.md

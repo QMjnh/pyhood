@@ -53,3 +53,18 @@ INVESTMENT_PROFILE = f"{BASE}/user/investment_profile/"
 
 # Dividends
 DIVIDENDS = f"{BASE}/dividends/"
+
+# Futures
+FUTURES_CONTRACTS = f"{BASE}/arsenal/v1/futures/contracts/"
+FUTURES_QUOTES = f"{BASE}/marketdata/futures/quotes/v1/"
+FUTURES_ACCOUNTS = f"{BASE}/ceres/v1/accounts/"
+
+
+def futures_contract_url(symbol: str) -> str:
+    """URL for a single futures contract by symbol (e.g. 'ESH26')."""
+    return f"{FUTURES_CONTRACTS}symbol/{symbol}/"
+
+
+def futures_orders_url(account_id: str) -> str:
+    """URL for futures orders on a specific account."""
+    return f"{FUTURES_ACCOUNTS}{account_id}/orders/"

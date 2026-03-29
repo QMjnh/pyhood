@@ -410,6 +410,104 @@ Basic account information (user ID, URLs).
 
 ---
 
+## Futures
+
+### GET /arsenal/v1/futures/contracts/symbol/{symbol}/
+
+Contract details for a single futures symbol.
+
+```
+GET /arsenal/v1/futures/contracts/symbol/ESH26/
+```
+
+!!! note
+    Requires `Rh-Contract-Protected: true` header (set automatically by pyhood).
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Contract UUID |
+| `symbol` | string | Futures symbol (e.g. `ESH26`) |
+| `simple_name` | string | Human-readable name |
+| `expiration_date` | string | Expiration date (YYYY-MM-DD) |
+| `tick_size` | string | Minimum price increment |
+| `multiplier` | string | Contract multiplier |
+| `state` | string | `active`, `expired` |
+| `underlying_symbol` | string | Root symbol (e.g. `ES`) |
+| `asset_class` | string | Asset class (e.g. `equity_index`) |
+
+---
+
+### GET /marketdata/futures/quotes/v1/
+
+Real-time quotes for futures contracts.
+
+```
+GET /marketdata/futures/quotes/v1/?ids={contract_id}
+```
+
+**Parameters:**
+
+| Param | Description |
+|-------|-------------|
+| `ids` | Contract UUID (from contract lookup) |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `last_trade_price` | string | Last trade price |
+| `bid_price` | string | Current bid |
+| `ask_price` | string | Current ask |
+| `high_price` | string | Session high |
+| `low_price` | string | Session low |
+| `previous_close` | string | Previous close |
+| `volume` | string | Trading volume |
+| `open_interest` | string | Open interest |
+
+---
+
+### GET /ceres/v1/accounts/
+
+Futures account discovery. Filter by `accountType == 'FUTURES'` to find the futures account ID.
+
+```
+GET /ceres/v1/accounts/
+```
+
+**Returns:** List of accounts with `id`, `accountType` fields.
+
+---
+
+### GET /ceres/v1/accounts/{account_id}/orders/
+
+Historical futures orders with cursor-based pagination.
+
+```
+GET /ceres/v1/accounts/{account_id}/orders/
+```
+
+**Paginated:** Yes (cursor-based, uses `next` URL)
+
+**Returns (per order):**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Order UUID |
+| `symbol` | string | Futures symbol |
+| `side` | string | `buy` or `sell` |
+| `type` | string | Order type |
+| `quantity` | string | Number of contracts |
+| `price` | string | Order price |
+| `state` | string | `filled`, `pending`, `cancelled` |
+| `created_at` | string | Timestamp |
+| `opening_strategy` | string | Set on opening orders |
+| `closing_strategy` | string | Set on closing orders |
+| `legs[].executions[].settlement.realized_pnl` | string | P&L (nested, closing orders only) |
+
+---
+
 ## Authentication
 
 ### POST /oauth2/token/

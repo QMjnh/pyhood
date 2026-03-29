@@ -17,6 +17,10 @@ from pyhood.http import Session
 from pyhood.models import (
     Candle,
     Earnings,
+    FuturesContract,
+    FuturesOrder,
+    FuturesPnL,
+    FuturesQuote,
     OptionContract,
     OptionPosition,
     OptionsChain,
@@ -1279,6 +1283,236 @@ class PyhoodClient:
                     results.append({"error": str(e), "order_id": order.order_id})
 
         return results
+
+    # ── Futures ──────────────────────────────────────────────────────────
+
+    def _set_futures_header(self) -> None:
+        """Set the Rh-Contract-Protected header required by futures endpoints."""
+        self._session._session.headers["Rh-Contract-Protected"] = "true"
+
+    def get_futures_account_id(self) -> str:
+        """Auto-discover the futures account ID.
+
+        Fetches all Ceres accounts and returns the first with
+        accountType == 'FUTURES'.
+
+        Returns:
+            The futures account ID string.
+
+        Raises:
+            APIError: If no futures account is found.
+        """
+        from pyhood.exceptions import APIError
+
+        self._set_futures_header()
+        data = self._session.get(urls.FUTURES_ACCOUNTS)
+        for account in data.get("results", []):
+            if account.get("accountType") == "FUTURES":
+                return account.get("id", "")
+        raise APIError("No futures account found")
+
+    def get_futures_contract(self, symbol: str) -> FuturesContract:
+        """Get futures contract details by symbol.
+
+        Args:
+            symbol: Futures symbol (e.g. 'ESH26' for E-mini S&P 500 Mar 2026).
+
+        Returns:
+            FuturesContract with contract details.
+
+        Raises:
+            SymbolNotFound: If symbol not recognized.
+        """
+        self._set_futures_header()
+        data = self._session.get(urls.futures_contract_url(symbol.upper()))
+        if not data or "id" not in data:
+            raise SymbolNotFound(f"No futures contract for {symbol}")
+
+        return FuturesContract(
+            symbol=data.get("symbol", symbol.upper()),
+            name=data.get("simple_name", "") or data.get("name", ""),
+            contract_id=data.get("id", ""),
+            expiration=data.get("expiration_date", ""),
+            tick_size=float(data.get("tick_size", 0) or 0),
+            multiplier=float(data.get("multiplier", 0) or 0),
+            status=data.get("state", "active"),
+            underlying=data.get("underlying_symbol", ""),
+            asset_class=data.get("asset_class", ""),
+        )
+
+    def get_futures_contracts(self, symbols: list[str]) -> dict[str, FuturesContract]:
+        """Get futures contract details for multiple symbols.
+
+        Args:
+            symbols: List of futures symbols (e.g. ['ESH26', 'NQH26']).
+
+        Returns:
+            Dict mapping symbol to FuturesContract.
+        """
+        results: dict[str, FuturesContract] = {}
+        for sym in symbols:
+            try:
+                results[sym.upper()] = self.get_futures_contract(sym)
+            except Exception:
+                logger.warning(f"Failed to fetch futures contract for {sym}")
+        return results
+
+    def get_futures_quote(self, symbol: str) -> FuturesQuote:
+        """Get a real-time futures quote.
+
+        Args:
+            symbol: Futures symbol (e.g. 'ESH26').
+
+        Returns:
+            FuturesQuote with bid/ask/last price.
+
+        Raises:
+            SymbolNotFound: If symbol not recognized.
+        """
+        self._set_futures_header()
+        # Resolve symbol to contract ID first
+        contract = self.get_futures_contract(symbol)
+        data = self._session.get(
+            urls.FUTURES_QUOTES, params={"ids": contract.contract_id}
+        )
+        results = data.get("results", [])
+        if not results:
+            raise SymbolNotFound(f"No futures quote for {symbol}")
+
+        q = results[0]
+        return FuturesQuote(
+            symbol=symbol.upper(),
+            last_price=float(q.get("last_trade_price", 0) or 0),
+            bid=float(q.get("bid_price", 0) or 0),
+            ask=float(q.get("ask_price", 0) or 0),
+            high=float(q.get("high_price", 0) or 0),
+            low=float(q.get("low_price", 0) or 0),
+            prev_close=float(q.get("previous_close", 0) or 0),
+            volume=int(float(q.get("volume", 0) or 0)),
+            open_interest=int(float(q.get("open_interest", 0) or 0)),
+            contract_id=contract.contract_id,
+        )
+
+    def get_futures_quotes(self, symbols: list[str]) -> dict[str, FuturesQuote]:
+        """Get real-time futures quotes for multiple symbols.
+
+        Args:
+            symbols: List of futures symbols.
+
+        Returns:
+            Dict mapping symbol to FuturesQuote.
+        """
+        results: dict[str, FuturesQuote] = {}
+        for sym in symbols:
+            try:
+                results[sym.upper()] = self.get_futures_quote(sym)
+            except Exception:
+                logger.warning(f"Failed to fetch futures quote for {sym}")
+        return results
+
+    def get_futures_orders(
+        self, account_id: str | None = None,
+    ) -> list[FuturesOrder]:
+        """Get all historical futures orders.
+
+        Uses cursor-based pagination (different from standard Robinhood
+        pagination). Automatically discovers futures account if not provided.
+
+        Args:
+            account_id: Futures account ID. Auto-discovered if None.
+
+        Returns:
+            List of FuturesOrder objects.
+        """
+        if not account_id:
+            account_id = self.get_futures_account_id()
+
+        self._set_futures_header()
+        orders: list[FuturesOrder] = []
+        url: str | None = urls.futures_orders_url(account_id)
+
+        while url:
+            data = self._session.get(url)
+            for item in data.get("results", []):
+                pnl = self._extract_futures_pnl(item)
+                orders.append(FuturesOrder(
+                    order_id=item.get("id", ""),
+                    symbol=item.get("symbol", ""),
+                    side=item.get("side", ""),
+                    order_type=item.get("type", ""),
+                    quantity=float(item.get("quantity", 0) or 0),
+                    price=float(item["price"]) if item.get("price") else None,
+                    status=item.get("state", "unknown"),
+                    created_at=item.get("created_at", ""),
+                    direction=item.get("opening_strategy", "")
+                    or item.get("closing_strategy", ""),
+                    realized_pnl=pnl.realized_pnl if pnl else None,
+                    account_id=account_id,
+                ))
+            # Cursor-based pagination
+            url = data.get("next")
+
+        return orders
+
+    def get_filled_futures_orders(
+        self, account_id: str | None = None,
+    ) -> list[FuturesOrder]:
+        """Get only filled futures orders.
+
+        Args:
+            account_id: Futures account ID. Auto-discovered if None.
+
+        Returns:
+            List of filled FuturesOrder objects.
+        """
+        all_orders = self.get_futures_orders(account_id=account_id)
+        return [o for o in all_orders if o.status == "filled"]
+
+    @staticmethod
+    def _extract_futures_pnl(order: dict) -> FuturesPnL | None:
+        """Extract P&L from a futures order's nested structure.
+
+        Robinhood nests P&L inside order → legs → executions → settlement.
+        Returns None if no P&L data found.
+        """
+        try:
+            legs = order.get("legs", [])
+            if not legs:
+                return None
+            executions = legs[0].get("executions", [])
+            if not executions:
+                return None
+            settlement = executions[0].get("settlement", {})
+            pnl = float(settlement.get("realized_pnl", 0) or 0)
+            return FuturesPnL(
+                realized_pnl=pnl,
+                direction="CLOSING" if order.get("closing_strategy") else "OPENING",
+                order_id=order.get("id", ""),
+            )
+        except (KeyError, IndexError, TypeError, ValueError):
+            return None
+
+    def calculate_futures_pnl(
+        self, orders: list[FuturesOrder] | None = None, account_id: str | None = None,
+    ) -> float:
+        """Calculate total realized P&L across futures orders.
+
+        Only counts CLOSING orders to avoid double-counting.
+
+        Args:
+            orders: Pre-fetched orders. If None, fetches all filled orders.
+            account_id: Futures account ID (used if orders is None).
+
+        Returns:
+            Total realized P&L as a float.
+        """
+        if orders is None:
+            orders = self.get_filled_futures_orders(account_id=account_id)
+        return sum(
+            o.realized_pnl
+            for o in orders
+            if o.realized_pnl is not None and "CLOS" in (o.direction or "").upper()
+        )
 
 
 def _safe_float(val: Any) -> float | None:
