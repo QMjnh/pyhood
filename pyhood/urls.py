@@ -21,6 +21,7 @@ PORTFOLIOS = f"{BASE}/portfolios/"
 # Stocks — Market Data
 QUOTES = f"{BASE}/quotes/"
 INSTRUMENTS = f"{BASE}/instruments/"
+INDEXES = f"{BASE}/indexes/"
 FUNDAMENTALS = f"{BASE}/fundamentals/"
 HISTORICALS = f"{BASE}/marketdata/historicals/"
 RATINGS = f"{BASE}/midlands/ratings/"
@@ -58,6 +59,11 @@ DIVIDENDS = f"{BASE}/dividends/"
 FUTURES_CONTRACTS = f"{BASE}/arsenal/v1/futures/contracts/"
 FUTURES_QUOTES = f"{BASE}/marketdata/futures/quotes/v1/"
 FUTURES_ACCOUNTS = f"{BASE}/ceres/v1/accounts/"
+
+
+def index_market_data_url(index_id: str) -> str:
+    """URL for index market data (e.g. SPX, NDX)."""
+    return f"{BASE}/marketdata/indexes/values/v1/{index_id}/"
 
 
 def futures_contract_url(symbol: str) -> str:

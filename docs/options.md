@@ -55,6 +55,40 @@ print(f"Vol/OI: {call.vol_oi_ratio:.2f}")
 print(f"Cost: ${call.cost_per_contract:.2f}")
 ```
 
+## Index Options (SPX, NDX, VIX, RUT)
+
+pyhood supports index options out of the box. Use the base index symbol — pyhood handles the API differences automatically.
+
+Index options use different Robinhood API paths than equity options: instrument lookup goes through `/indexes/` instead of `/instruments/`, chains return `tradable_chain_ids` (plural) instead of `tradable_chain_id`, and the `chain_symbol` sent to `/options/instruments/` is a variant of the ticker (e.g. `SPXW` for SPX weekly options, `NDXP` for NDX).
+
+You don't need to worry about any of this — just pass the base symbol:
+
+```python
+# Index options work exactly like equity options
+chain = client.get_options_chain("SPX", expiration="2026-04-17")
+for call in chain.calls:
+    print(f"  {call.strike} call | IV: {call.iv:.0%} | Delta: {call.delta:.2f}")
+
+# Expirations
+expirations = client.get_options_expirations("SPX")
+
+# Order placement
+order = client.buy_option(
+    symbol="SPX", strike=5800.0, expiration="2026-04-17",
+    option_type="call", quantity=1, price=42.50,
+)
+```
+
+**Supported index symbols:** SPX, NDX, VIX, RUT, XSP
+
+| Index Symbol | Chain Symbol (internal) | Description |
+|--------------|------------------------|-------------|
+| `SPX` | `SPXW` | S&P 500 Index (weekly) |
+| `NDX` | `NDXP` | Nasdaq-100 Index |
+| `VIX` | `VIXW` | CBOE Volatility Index (weekly) |
+| `RUT` | `RUTW` | Russell 2000 Index (weekly) |
+| `XSP` | `XSP` | Mini-SPX Index |
+
 ## Filtering by Type
 
 ```python

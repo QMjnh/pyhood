@@ -4,7 +4,7 @@ import pytest
 import responses
 
 from pyhood import urls
-from pyhood.client import PyhoodClient
+from pyhood.client import INDEX_CHAIN_SYMBOLS, PyhoodClient
 from pyhood.exceptions import OrderError, SymbolNotFoundError
 from pyhood.http import Session
 from pyhood.models import OptionContract, OptionsChain, Order, Quote
@@ -215,6 +215,119 @@ class TestGetOptionsChain:
         put = chain.puts[0]
         assert put.strike == 190.0
         assert put.option_type == "put"
+
+
+class TestIndexOptions:
+    """Tests for index options (SPX, NDX, etc.) support."""
+
+    def test_resolve_chain_symbol_index(self, client):
+        assert client._resolve_chain_symbol("SPX") == "SPXW"
+        assert client._resolve_chain_symbol("NDX") == "NDXP"
+        assert client._resolve_chain_symbol("VIX") == "VIXW"
+        assert client._resolve_chain_symbol("RUT") == "RUTW"
+        assert client._resolve_chain_symbol("XSP") == "XSP"
+
+    def test_resolve_chain_symbol_equity(self, client):
+        assert client._resolve_chain_symbol("AAPL") == "AAPL"
+        assert client._resolve_chain_symbol("SPY") == "SPY"
+
+    def test_is_index(self, client):
+        assert client._is_index("SPX") is True
+        assert client._is_index("spx") is True
+        assert client._is_index("AAPL") is False
+
+    @responses.activate
+    def test_index_options_expirations(self, client):
+        """Index expirations use /indexes/ + tradable_chain_ids (plural)."""
+        responses.add(
+            responses.GET,
+            urls.INDEXES,
+            json={
+                "results": [
+                    {
+                        "id": "idx-1",
+                        "symbol": "SPX",
+                        "tradable_chain_ids": ["chain-b", "chain-a"],
+                    }
+                ]
+            },
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.OPTIONS_CHAINS,
+            json={
+                "results": [
+                    {
+                        "id": "chain-a",
+                        "expiration_dates": ["2026-04-17", "2026-04-24"],
+                    }
+                ]
+            },
+            status=200,
+        )
+
+        expirations = client.get_options_expirations("SPX")
+        assert expirations == ["2026-04-17", "2026-04-24"]
+
+        # Verify /indexes/ was called instead of /instruments/
+        assert urls.INDEXES in responses.calls[0].request.url
+        # Verify chain lookup used first sorted chain ID
+        assert "chain-a" in responses.calls[1].request.url
+
+    @responses.activate
+    def test_index_options_chain(self, client):
+        """Index chain passes mapped chain_symbol (SPXW) to instruments endpoint."""
+        responses.add(
+            responses.GET,
+            urls.OPTIONS_INSTRUMENTS,
+            json={
+                "results": [
+                    {
+                        "id": "spx-opt-1",
+                        "url": "https://api.robinhood.com/options/instruments/spx-opt-1/",
+                        "type": "call",
+                        "strike_price": "5800.00",
+                        "expiration_date": "2026-04-17",
+                    },
+                ],
+                "next": None,
+            },
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.OPTIONS_MARKET_DATA,
+            json={
+                "results": [
+                    {
+                        "instrument_id": "spx-opt-1",
+                        "adjusted_mark_price": "42.50",
+                        "bid_price": "42.00",
+                        "ask_price": "43.00",
+                        "implied_volatility": "0.18",
+                        "delta": "0.50",
+                        "gamma": "0.001",
+                        "theta": "-0.80",
+                        "vega": "2.50",
+                        "volume": "12000",
+                        "open_interest": "45000",
+                    },
+                ]
+            },
+            status=200,
+        )
+
+        chain = client.get_options_chain("SPX", expiration="2026-04-17")
+        assert isinstance(chain, OptionsChain)
+        assert chain.symbol == "SPX"
+        assert len(chain.calls) == 1
+        assert chain.calls[0].strike == 5800.0
+        assert chain.calls[0].mark == 42.50
+
+        # Verify chain_symbol was mapped to SPXW
+        instruments_request = responses.calls[0].request
+        assert "chain_symbol=SPXW" in instruments_request.url
 
 
 class TestGetEarnings:

@@ -5,6 +5,16 @@ All notable changes to pyhood will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-03-28
+
+### Added
+- **Index Options Support** — SPX, NDX, VIX, RUT, and XSP index options now work with all options methods
+  - `get_options_expirations()` uses `/indexes/` endpoint and `tradable_chain_ids` for index symbols
+  - `get_options_chain()` and `_get_option_id()` map index symbols to Robinhood's chain symbols (SPX → SPXW, NDX → NDXP, VIX → VIXW, RUT → RUTW)
+  - `buy_option()` / `sell_option()` work with index symbols transparently
+  - New `INDEX_CHAIN_SYMBOLS` constant and `_is_index()` / `_resolve_chain_symbol()` helpers
+  - 5 new tests covering symbol mapping, index expirations, and index chain fetching
+
 ## [0.4.0] - 2026-03-28
 
 ### Added

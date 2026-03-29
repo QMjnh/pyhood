@@ -25,7 +25,7 @@ Modern Robinhood API client library. Public package on PyPI replacing abandoned 
 
 ### Trading Features
 - Stocks/options quotes with Greeks
-- Options chains with full contract details
+- Options chains with full contract details (equity + index options: SPX, NDX, VIX, RUT, XSP)
 - Stock historical data (5-year lookback)
 - Order placement (market/limit/stop/stop-limit)
 - Options orders

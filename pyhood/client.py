@@ -31,6 +31,17 @@ from pyhood.models import (
 
 logger = logging.getLogger("pyhood")
 
+# Index options use different API paths and chain symbols than equity options.
+# Keys are the base index symbol; values are the chain_symbol Robinhood expects
+# when querying /options/instruments/.
+INDEX_CHAIN_SYMBOLS: dict[str, str] = {
+    "SPX": "SPXW",
+    "NDX": "NDXP",
+    "VIX": "VIXW",
+    "RUT": "RUTW",
+    "XSP": "XSP",
+}
+
 
 class PyhoodClient:
     """High-level Robinhood API client.
@@ -167,11 +178,48 @@ class PyhoodClient:
 
     # ── Options ─────────────────────────────────────────────────────────
 
+    @staticmethod
+    def _is_index(symbol: str) -> bool:
+        """Check if a symbol is an index option (SPX, NDX, etc.)."""
+        return symbol.upper() in INDEX_CHAIN_SYMBOLS
+
+    @staticmethod
+    def _resolve_chain_symbol(symbol: str) -> str:
+        """Map index symbols to the chain_symbol Robinhood expects.
+
+        Equity options use the ticker as-is (e.g. "AAPL").
+        Index options use a variant (e.g. SPX → SPXW, NDX → NDXP).
+        """
+        return INDEX_CHAIN_SYMBOLS.get(symbol.upper(), symbol.upper())
+
     def get_options_expirations(self, symbol: str) -> list[str]:
-        """Get available options expiration dates for a symbol."""
-        # Get instrument ID first
+        """Get available options expiration dates for a symbol.
+
+        Works for both equity options (AAPL, SPY) and index options (SPX, NDX, VIX, RUT).
+        """
+        sym = symbol.upper()
+
+        if self._is_index(sym):
+            # Index options: lookup via /indexes/, chain uses tradable_chain_ids (plural)
+            idx_data = self._session.get(urls.INDEXES, params={"symbol": sym})
+            idx_results = idx_data.get("results", [])
+            if not idx_results:
+                return []
+            chain_ids = idx_results[0].get("tradable_chain_ids", [])
+            if not chain_ids:
+                return []
+            # Use first chain ID (primary chain for major indexes)
+            chains = self._session.get(
+                urls.OPTIONS_CHAINS, params={"ids": sorted(chain_ids)[0]},
+            )
+            results = chains.get("results", [])
+            if results:
+                return results[0].get("expiration_dates", [])
+            return []
+
+        # Equity options: lookup via /instruments/
         inst_data = self._session.get(
-            urls.INSTRUMENTS, params={"symbol": symbol.upper()}
+            urls.INSTRUMENTS, params={"symbol": sym}
         )
         inst_results = inst_data.get("results", [])
         if not inst_results:
@@ -181,7 +229,6 @@ class PyhoodClient:
         if not inst_id:
             return []
 
-        # Get chains using instrument ID
         chains = self._session.get(
             urls.OPTIONS_CHAINS,
             params={"equity_instrument_ids": inst_id},
@@ -199,13 +246,15 @@ class PyhoodClient:
     ) -> OptionsChain:
         """Get the full options chain for a symbol + expiration.
 
+        Works for both equity options (AAPL, SPY) and index options (SPX, NDX, VIX, RUT).
+
         Args:
-            symbol: Ticker symbol.
+            symbol: Ticker symbol (e.g. "AAPL", "SPX").
             expiration: Expiration date (YYYY-MM-DD).
             option_type: Filter by 'call' or 'put'. None = both.
         """
         params: dict[str, str] = {
-            "chain_symbol": symbol.upper(),
+            "chain_symbol": self._resolve_chain_symbol(symbol),
             "expiration_dates": expiration,
             "state": "active",
         }
@@ -632,9 +681,9 @@ class PyhoodClient:
         return results[0].get("url", "")
 
     def _get_option_id(self, symbol: str, expiration: str, strike: float, option_type: str) -> str:
-        """Find option instrument ID."""
+        """Find option instrument ID. Works for equity and index options."""
         params = {
-            "chain_symbol": symbol.upper(),
+            "chain_symbol": self._resolve_chain_symbol(symbol),
             "expiration_dates": expiration,
             "type": option_type.lower(),
             "strike_price": str(strike),

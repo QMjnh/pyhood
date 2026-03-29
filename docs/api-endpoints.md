@@ -179,6 +179,38 @@ GET /midlands/news/?symbol=AAPL
 
 ---
 
+## Indexes
+
+### GET /indexes/
+
+Instrument lookup for index symbols (SPX, NDX, VIX, RUT, XSP). Used instead of `/instruments/` when fetching index option chains.
+
+```
+GET /indexes/?symbol=SPX
+```
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Index instrument UUID |
+| `symbol` | string | Index symbol |
+| `tradable_chain_ids` | list | Options chain IDs (plural — indexes can have multiple chains) |
+
+---
+
+### GET /marketdata/indexes/values/v1/{id}/
+
+Market data (quote) for an index instrument.
+
+```
+GET /marketdata/indexes/values/v1/{index_id}/
+```
+
+**Returns:** Same fields as `/marketdata/quotes/` — `last_trade_price`, `bid_price`, `ask_price`, etc.
+
+---
+
 ## Options
 
 ### GET /options/chains/
@@ -187,10 +219,12 @@ Available options expiration dates for a symbol.
 
 ```
 GET /options/chains/?equity_instrument_ids={instrument_id}
+GET /options/chains/?ids={chain_id}
 ```
 
 !!! warning
-    Use `equity_instrument_ids` param, not `symbol`. Get the instrument ID from `/instruments/?symbol=AAPL` first.
+    For **equity options**: use `equity_instrument_ids` param. Get the instrument ID from `/instruments/?symbol=AAPL` first.
+    For **index options**: use `ids` param with a chain ID from `/indexes/?symbol=SPX` → `tradable_chain_ids[0]`.
 
 **Returns:**
 
@@ -208,7 +242,11 @@ Option contracts filtered by symbol, expiration, and type.
 
 ```
 GET /options/instruments/?chain_symbol=AAPL&expiration_dates=2026-04-17&state=active&type=call
+GET /options/instruments/?chain_symbol=SPXW&expiration_dates=2026-04-17&state=active&type=call
 ```
+
+!!! note
+    For index options, use the mapped chain symbol: SPX → `SPXW`, NDX → `NDXP`, VIX → `VIXW`, RUT → `RUTW`. pyhood handles this mapping automatically.
 
 **Returns (per contract):**
 

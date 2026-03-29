@@ -27,7 +27,7 @@ Built for automated trading — with auth that doesn't break, proper error handl
 - 🔄 **Automatic token refresh** — pyhood uses OAuth refresh tokens to renew your session silently — no credentials, no device approval, no human in the loop. Built for unattended automation.
 - 🏷️ **Type hints everywhere** — Full type annotations, dataclass responses, IDE-friendly. No more guessing what's in a dict.
 - 🛡️ **Built-in rate limiting** — Automatic request throttling and retry logic so you don't get locked out.
-- 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration.
+- 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration. Supports both equity and index options (SPX, NDX, VIX, RUT).
 - 📈 **Futures trading** — Contract details, real-time quotes, order history, and P&L calculation for Robinhood futures.
 - 🏦 **IRA/Retirement accounts** — Trade stocks and options in Traditional and Roth IRAs. The only Python Robinhood library with retirement account support.
 - 🧪 **Tested and maintained** — 170+ tests, CI across Python 3.10-3.13, linted with ruff. If it breaks, we know immediately.
@@ -46,8 +46,8 @@ client = PyhoodClient(session)
 quote = client.get_quote("AAPL")
 print(f"AAPL: ${quote.price:.2f} ({quote.change_pct:+.1f}%)")
 
-# Options chains
-chain = client.get_options_chain("AAPL", expiration="2026-04-17")
+# Options chains (works for equities and indexes)
+chain = client.get_options_chain("SPX", expiration="2026-04-17")
 for option in chain.calls:
     print(f"  {option.strike} call | IV: {option.iv:.0%} | Delta: {option.delta:.2f}")
 
@@ -207,7 +207,7 @@ print(f"Realized P&L: ${pnl:.2f}")
 See the [Futures documentation](https://jamestford.github.io/pyhood/futures/) for full details.
 
 ## Development Status
-- ✅ Stocks/options market data (unofficial API) — functional
+- ✅ Stocks/options market data (unofficial API) — functional (equity + index options)
 - ✅ Futures trading (contracts, quotes, orders, P&L) — functional
 - ✅ Crypto trading (official API) — functional
 - ✅ Authentication with automatic token refresh — functional
