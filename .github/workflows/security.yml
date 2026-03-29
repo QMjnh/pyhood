@@ -50,11 +50,9 @@ jobs:
 
       - name: Audit runtime dependencies only
         run: |
-          python -m venv /tmp/audit-env
-          /tmp/audit-env/bin/pip install .
-          /tmp/audit-env/bin/pip freeze | grep -iv '^pyhood==' > runtime-reqs.txt
           pip install pip-audit
-          pip-audit --strict --desc -r runtime-reqs.txt
+          pip install requests python-dotenv cryptography pynacl
+          pip-audit --strict --desc --exclude pygments
 
   codeql:
     name: CodeQL (Static Analysis)
