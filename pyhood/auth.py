@@ -327,7 +327,7 @@ def login(
 
     # Set timeout alarm (Unix only)
     original_handler = None
-    if timeout > 0:
+    if timeout > 0 and hasattr(signal, 'SIGALRM'):
         def _timeout_handler(signum, frame):
             raise LoginTimeout(
                 f"Login timed out after {timeout}s. "
@@ -373,7 +373,7 @@ def login(
 
     finally:
         # Clear alarm
-        if timeout > 0:
+        if timeout > 0 and hasattr(signal, 'SIGALRM'):
             signal.alarm(0)
             if original_handler is not None:
                 signal.signal(signal.SIGALRM, original_handler)
