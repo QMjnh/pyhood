@@ -16,7 +16,7 @@ logger = logging.getLogger("pyhood")
 # Defaults
 DEFAULT_TIMEOUT = 16  # seconds
 MAX_RETRIES = 2
-RATE_LIMIT_DELAY = 0.25  # seconds between requests
+RATE_LIMIT_DELAY = 0.02  # seconds between requests
 ALLOWED_HOST_SUFFIX = ".robinhood.com"
 ALLOWED_HOST = "robinhood.com"
 

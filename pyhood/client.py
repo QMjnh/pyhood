@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import logging
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -981,6 +982,14 @@ class PyhoodClient:
         data = self._session.get("https://bonfire.robinhood.com/accounts/unified/")
         return data.get("results", [])
 
+    def _fetch_instrument_symbol(self, url: str) -> tuple[str, str]:
+        """Helper to fetch an instrument URL and return its symbol."""
+        try:
+            inst_data = self._session.get(url)
+            return url, inst_data.get("symbol", "")
+        except Exception:
+            return url, ""
+
     def get_positions(
         self, nonzero: bool = True, account_number: str | None = None,
     ) -> list[Position]:
@@ -997,24 +1006,39 @@ class PyhoodClient:
             params["account_number"] = account_number
         data = self._session.get_paginated(urls.POSITIONS, params=params)
 
-        positions: list[Position] = []
+        valid_items = []
+        instrument_urls = set()
         for item in data:
             qty = float(item.get("quantity", 0))
             if qty == 0 and nonzero:
                 continue
+            valid_items.append(item)
+            if item.get("instrument"):
+                instrument_urls.add(item.get("instrument"))
+
+        # Resolve instruments concurrently
+        instrument_to_symbol = {}
+
+        if instrument_urls:
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                for url, sym in executor.map(self._fetch_instrument_symbol, instrument_urls):
+                    if sym:
+                        instrument_to_symbol[url] = sym
+
+        # Batch fetch quotes
+        symbols = list(set(instrument_to_symbol.values()))
+        quotes_dict = self.get_quotes(symbols) if symbols else {}
+
+        positions: list[Position] = []
+        for item in valid_items:
+            qty = float(item.get("quantity", 0))
             avg_cost = float(item.get("average_buy_price", 0))
 
-            # Get current price from the instrument
             instrument_url = item.get("instrument", "")
-            current_price = 0.0
-            if instrument_url:
-                try:
-                    inst_data = self._session.get(instrument_url)
-                    symbol = inst_data.get("symbol", "")
-                    quote = self.get_quote(symbol)
-                    current_price = quote.price
-                except Exception:
-                    symbol = ""
+            symbol = instrument_to_symbol.get(instrument_url, "")
+            
+            quote = quotes_dict.get(symbol)
+            current_price = quote.price if quote else 0.0
 
             equity = qty * current_price
             cost_basis = qty * avg_cost
