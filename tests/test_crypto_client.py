@@ -517,6 +517,29 @@ class TestCryptoClient:
         with pytest.raises(AuthError, match="Failed to sign request"):
             client.make_request("GET", "/test")
 
+    def test_blocks_non_whitelisted_host(self):
+        with pytest.raises(APIError, match="non-whitelisted host"):
+            self.client.make_request("GET", "https://evil.example.com/test", retries=0)
+
+    def test_blocks_non_https_url(self):
+        with pytest.raises(APIError, match="non-HTTPS"):
+            self.client.make_request("GET", "http://trading.robinhood.com/test", retries=0)
+
+    @responses.activate
+    def test_blocks_untrusted_pagination_next_url(self):
+        responses.add(
+            responses.GET,
+            CRYPTO_TRADING_PAIRS,
+            json={
+                "results": [],
+                "next": "https://evil.example.com/api/v2/crypto/trading/trading_pairs/?cursor=x",
+            },
+            status=200,
+        )
+
+        with pytest.raises(APIError, match="non-whitelisted host"):
+            self.client.get_trading_pairs()
+
     def test_client_rate_limiter(self):
         """Test client's built-in rate limiter."""
         # Create client with very restrictive rate limits for testing

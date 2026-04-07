@@ -174,6 +174,28 @@ class TestSession:
         # Should have waited at least some time (RATE_LIMIT_DELAY = 0.25)
         assert elapsed >= 0.2
 
+    def test_blocks_non_whitelisted_host(self):
+        with pytest.raises(APIError, match="non-whitelisted host"):
+            self.session.get("https://evil.example.com/test/")
+
+    def test_blocks_non_https_url(self):
+        with pytest.raises(APIError, match="non-HTTPS"):
+            self.session.get("http://api.robinhood.com/test/")
+
+    @responses.activate
+    def test_blocks_untrusted_pagination_next_url(self):
+        responses.add(
+            responses.GET,
+            f"{BASE}/list/",
+            json={
+                "results": [{"id": 1}],
+                "next": "https://evil.example.com/list/?cursor=page2",
+            },
+            status=200,
+        )
+        with pytest.raises(APIError, match="non-whitelisted host"):
+            self.session.get_paginated(f"{BASE}/list/")
+
     @responses.activate
     def test_server_error_retries(self):
         """Connection errors should retry."""

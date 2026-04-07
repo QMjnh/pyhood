@@ -36,6 +36,8 @@ from pyhood.crypto.urls import (
 from pyhood.exceptions import APIError, AuthError, RateLimitError
 
 logger = logging.getLogger("pyhood.crypto")
+ALLOWED_HOST_SUFFIX = ".robinhood.com"
+ALLOWED_HOST = "robinhood.com"
 
 
 class TokenBucket:
@@ -99,6 +101,29 @@ class CryptoClient:
             'Content-Type': 'application/json',
         })
 
+    @staticmethod
+    def _is_allowed_host(hostname: str | None) -> bool:
+        """Allow only robinhood.com and its subdomains."""
+        if not hostname:
+            return False
+        host = hostname.lower().rstrip(".")
+        return host == ALLOWED_HOST or host.endswith(ALLOWED_HOST_SUFFIX)
+
+    def _build_and_validate_url(self, path: str) -> str:
+        """Build a request URL from path and enforce host policy."""
+        # Allow absolute URLs for pagination links, but validate strictly.
+        if path.startswith("http://") or path.startswith("https://"):
+            candidate = path
+        else:
+            candidate = self.base_url.rstrip('/') + '/' + path.lstrip('/')
+
+        parsed = urlparse(candidate)
+        if parsed.scheme != "https":
+            raise APIError(f"Blocked non-HTTPS request URL: {candidate}")
+        if not self._is_allowed_host(parsed.hostname):
+            raise APIError(f"Blocked request to non-whitelisted host: {candidate}")
+        return candidate
+
     def make_request(
         self,
         method: str,
@@ -143,7 +168,7 @@ class CryptoClient:
             raise AuthError(f"Failed to sign request: {e}") from e
 
         # Prepare request
-        url = self.base_url.rstrip('/') + '/' + path.lstrip('/')
+        url = self._build_and_validate_url(path)
         headers = {
             'x-api-key': api_key_header,
             'x-signature': signature,
@@ -229,8 +254,9 @@ class CryptoClient:
             # Get next page URL
             next_url = data.get('next')
             if next_url:
-                # Extract path with query string from next URL
-                parsed = urlparse(next_url)
+                # Validate and normalize pagination destination.
+                validated_next = self._build_and_validate_url(next_url)
+                parsed = urlparse(validated_next)
                 query = f"?{parsed.query}" if parsed.query else ""
                 path = f"{parsed.path}{query}"
                 # Reset params - pagination URLs include their own query params

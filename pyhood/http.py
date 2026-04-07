@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import time
 from typing import Any
+from urllib.parse import urlparse
 
 import requests
 
@@ -16,6 +17,8 @@ logger = logging.getLogger("pyhood")
 DEFAULT_TIMEOUT = 16  # seconds
 MAX_RETRIES = 2
 RATE_LIMIT_DELAY = 0.25  # seconds between requests
+ALLOWED_HOST_SUFFIX = ".robinhood.com"
+ALLOWED_HOST = "robinhood.com"
 
 
 class Session:
@@ -68,6 +71,7 @@ class Session:
         accept_codes: tuple[int, ...] | None = None,
     ) -> dict[str, Any]:
         """Make an HTTP request with rate limiting and retries."""
+        self._validate_request_url(url)
         self._rate_limit()
 
         last_error: Exception | None = None
@@ -153,7 +157,26 @@ class Session:
             params = None  # Only pass params on the first request
             if isinstance(data, dict):
                 results.extend(data.get("results", []))
-                url = data.get("next")
+                next_url = data.get("next")
+                if next_url:
+                    self._validate_request_url(next_url)
+                url = next_url
             else:
                 break
         return results
+
+    @staticmethod
+    def _is_allowed_host(hostname: str | None) -> bool:
+        """Allow only robinhood.com and its subdomains."""
+        if not hostname:
+            return False
+        host = hostname.lower().rstrip(".")
+        return host == ALLOWED_HOST or host.endswith(ALLOWED_HOST_SUFFIX)
+
+    def _validate_request_url(self, url: str) -> None:
+        """Reject non-HTTPS and non-robinhood destinations."""
+        parsed = urlparse(url)
+        if parsed.scheme != "https":
+            raise APIError(f"Blocked non-HTTPS request URL: {url}")
+        if not self._is_allowed_host(parsed.hostname):
+            raise APIError(f"Blocked request to non-whitelisted host: {url}")
