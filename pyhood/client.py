@@ -239,7 +239,8 @@ class PyhoodClient:
         if not inst_results:
             return []
 
-        inst_id = inst_results[0].get("id", "")
+        inst = inst_results[0]
+        inst_id = inst.get("id", "")
         if not inst_id:
             return []
 
@@ -248,8 +249,22 @@ class PyhoodClient:
             params={"equity_instrument_ids": inst_id},
         )
         results = chains.get("results", [])
-        if results:
+        if results and results[0].get("expiration_dates"):
             return results[0].get("expiration_dates", [])
+
+        # Fallback: some equities return an empty chain lookup even though
+        # the instrument carries a tradable chain ID and Robinhood has valid
+        # expiration dates available.
+        chain_id = inst.get("tradable_chain_id")
+        if chain_id:
+            chains = self._session.get(
+                urls.OPTIONS_CHAINS,
+                params={"ids": chain_id},
+            )
+            results = chains.get("results", [])
+            if results:
+                return results[0].get("expiration_dates", [])
+
         return []
 
     def get_options_chain(
@@ -486,15 +501,22 @@ class PyhoodClient:
         cutoff = (datetime.now() + timedelta(days=lookahead_days)).strftime("%Y-%m-%d")
 
         for entry in results:
-            report = entry.get("report", {})
+            report = entry.get("report") or {}
+            if not isinstance(report, dict):
+                continue
+
+            eps = entry.get("eps") or {}
+            if not isinstance(eps, dict):
+                eps = {}
+
             date = report.get("date", "")
             if today <= date <= cutoff:
                 return Earnings(
                     symbol=symbol.upper(),
                     date=date,
                     timing=report.get("timing"),
-                    eps_estimate=_safe_float(entry.get("eps", {}).get("estimate")),
-                    eps_actual=_safe_float(entry.get("eps", {}).get("actual")),
+                    eps_estimate=_safe_float(eps.get("estimate")),
+                    eps_actual=_safe_float(eps.get("actual")),
                 )
         return None
 

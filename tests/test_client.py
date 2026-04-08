@@ -349,6 +349,47 @@ class TestIndexOptions:
         assert "chain_symbol=SPXW" in instruments_request.url
 
 
+class TestGetOptionsExpirations:
+    @responses.activate
+    def test_equity_options_expirations_fallback_to_tradable_chain_id(self, client):
+        responses.add(
+            responses.GET,
+            urls.INSTRUMENTS,
+            json={
+                "results": [
+                    {
+                        "id": "inst-1",
+                        "symbol": "SNDK",
+                        "tradable_chain_id": "chain-123",
+                    }
+                ]
+            },
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.OPTIONS_CHAINS,
+            json={"results": []},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.OPTIONS_CHAINS,
+            json={
+                "results": [
+                    {
+                        "id": "chain-123",
+                        "expiration_dates": ["2026-04-10", "2026-04-17"],
+                    }
+                ]
+            },
+            status=200,
+        )
+
+        expirations = client.get_options_expirations("SNDK")
+        assert expirations == ["2026-04-10", "2026-04-17"]
+
+
 class TestGetEarnings:
     @responses.activate
     def test_upcoming_earnings(self, client):
@@ -407,6 +448,32 @@ class TestGetEarnings:
 
         earnings = client.get_earnings("AAPL")
         assert earnings is None
+
+    @responses.activate
+    def test_earnings_with_null_eps_payload(self, client):
+        from datetime import datetime, timedelta
+        future = (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
+
+        responses.add(
+            responses.GET,
+            urls.EARNINGS,
+            json={
+                "results": [
+                    {
+                        "report": {"date": future, "timing": "pm"},
+                        "eps": None,
+                    }
+                ]
+            },
+            status=200,
+        )
+
+        earnings = client.get_earnings("SNDK")
+        assert earnings is not None
+        assert earnings.symbol == "SNDK"
+        assert earnings.date == future
+        assert earnings.eps_estimate is None
+        assert earnings.eps_actual is None
 
 
 class TestGetBuyingPower:
