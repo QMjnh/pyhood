@@ -1039,11 +1039,15 @@ class PyhoodClient:
             
             quote = quotes_dict.get(symbol)
             current_price = quote.price if quote else 0.0
+            prev_close = quote.prev_close if quote else current_price
 
             equity = qty * current_price
             cost_basis = qty * avg_cost
             unrealized_pl = equity - cost_basis
             unrealized_pl_pct = (unrealized_pl / cost_basis * 100) if cost_basis > 0 else 0.0
+            
+            today_return = (current_price - prev_close) * qty
+            today_return_pct = ((current_price - prev_close) / prev_close * 100) if prev_close > 0 else 0.0
 
             positions.append(Position(
                 symbol=symbol,
@@ -1053,6 +1057,8 @@ class PyhoodClient:
                 equity=round(equity, 2),
                 unrealized_pl=round(unrealized_pl, 2),
                 unrealized_pl_pct=round(unrealized_pl_pct, 2),
+                today_return=round(today_return, 2),
+                today_return_pct=round(today_return_pct, 2),
             ))
 
         return positions

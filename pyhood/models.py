@@ -70,6 +70,8 @@ class Position:
     equity: float
     unrealized_pl: float
     unrealized_pl_pct: float
+    today_return: float = 0.0
+    today_return_pct: float = 0.0
     instrument_type: str = "stock"  # 'stock' or 'option'
 
 
