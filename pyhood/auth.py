@@ -13,6 +13,7 @@ import json
 import logging
 import secrets
 import signal
+import threading
 import time
 from pathlib import Path
 from typing import Any
@@ -325,9 +326,10 @@ def login(
     if mfa_code:
         login_payload["mfa_code"] = mfa_code
 
-    # Set timeout alarm (Unix only)
+    # Set timeout alarm (Unix only, and only from main thread)
     original_handler = None
-    if timeout > 0 and hasattr(signal, 'SIGALRM'):
+    is_main_thread = threading.current_thread() is threading.main_thread()
+    if timeout > 0 and hasattr(signal, 'SIGALRM') and is_main_thread:
         def _timeout_handler(signum, frame):
             raise LoginTimeout(
                 f"Login timed out after {timeout}s. "
@@ -372,8 +374,8 @@ def login(
         return session
 
     finally:
-        # Clear alarm
-        if timeout > 0 and hasattr(signal, 'SIGALRM'):
+        # Clear alarm if it was set
+        if timeout > 0 and hasattr(signal, 'SIGALRM') and is_main_thread:
             signal.alarm(0)
             if original_handler is not None:
                 signal.signal(signal.SIGALRM, original_handler)
