@@ -30,7 +30,7 @@ Built for automated trading — with auth that doesn't break, proper error handl
 - 📊 **Options-first** — Deep options chain support with Greeks, volume/OI analysis, and earnings integration. Supports both equity and index options (SPX, NDX, VIX, RUT).
 - 📈 **Futures trading** — Contract details, real-time quotes, order history, and P&L calculation for Robinhood futures.
 - 🏦 **IRA/Retirement accounts** — Trade stocks and options in Traditional and Roth IRAs. The only Python Robinhood library with retirement account support.
-- 💰 **Banking & dividends** — Query ACH transfers, linked bank accounts, and dividend history.
+- 💰 **Banking & dividends** — Query ACH transfers, linked bank accounts, debit card transactions, and dividend history.
 - 📋 **Watchlists** — Create, manage, and modify your Robinhood watchlists programmatically.
 - 🔍 **Research & discovery** — Analyst ratings, news feed, S&P 500 movers, trending stocks, instrument popularity, and stock splits.
 - 📑 **Portfolio & documents** — Portfolio historicals, option historicals, account statements, and trade confirmations.
@@ -230,6 +230,10 @@ transfer = client.initiate_transfer(
     direction="deposit",
     ach_relationship_url=accounts[0].url,
 )
+
+# Debit card transactions (Cash Management)
+txns = client.get_card_transactions()
+pending = client.get_card_transactions(card_type="pending")
 
 # Dividend history
 dividends = client.get_dividends()

@@ -54,6 +54,9 @@ ACH_RELATIONSHIPS = f"{BASE}/ach/relationships/"
 ACH_TRANSFERS = f"{BASE}/ach/transfers/"
 ACH_DEPOSIT_SCHEDULES = f"{BASE}/ach/deposit_schedules/"
 
+# Debit Card (Cash Management)
+CARD_TRANSACTIONS = "https://minerva.robinhood.com/history/transactions/"
+
 # Profile & Settings
 USER = f"{BASE}/user/"
 INVESTMENT_PROFILE = f"{BASE}/user/investment_profile/"

@@ -18,6 +18,7 @@ from pyhood.models import (
     ACHTransfer,
     BankAccount,
     Candle,
+    CardTransaction,
     Dividend,
     Document,
     Earnings,
@@ -853,6 +854,39 @@ class PyhoodClient:
     def cancel_transfer(self, transfer_id: str) -> dict:
         """Cancel a pending ACH transfer."""
         return self._session.post(f"{urls.ACH_TRANSFERS}{transfer_id}/cancel/")
+
+    # ── Debit Card ────────────────────────────────────────────────────
+
+    def get_card_transactions(
+        self, card_type: str | None = None,
+    ) -> list[CardTransaction]:
+        """Get debit card (Cash Management) transactions.
+
+        Args:
+            card_type: Filter by type — 'pending' or 'settled'.
+        """
+        params: dict[str, str] = {}
+        if card_type:
+            params["type"] = card_type
+        data = self._session.get_paginated(
+            urls.CARD_TRANSACTIONS, params=params or None,
+        )
+        return [
+            CardTransaction(
+                id=item.get("id", ""),
+                description=item.get("description", ""),
+                amount=float(item.get("amount", 0)),
+                category=item.get("category", ""),
+                direction=item.get("direction", ""),
+                state=item.get("state", ""),
+                initiated_at=item.get("initiated_at", ""),
+                completed_at=item.get("completed_at", ""),
+                merchant=item.get("merchant", {}).get("name", "")
+                if isinstance(item.get("merchant"), dict)
+                else item.get("merchant", ""),
+            )
+            for item in data
+        ]
 
     # ── Watchlists ────────────────────────────────────────────────────
 
