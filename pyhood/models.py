@@ -84,7 +84,7 @@ class Order:
     order_type: str  # 'market', 'limit', 'stop', 'stop_limit'
     quantity: float
     price: float | None
-    status: str  # 'pending', 'filled', 'cancelled', 'rejected'
+    status: str  # Robinhood order state, e.g. 'unconfirmed', 'pending', 'filled', 'cancelled', 'rejected'
     created_at: datetime | None = None
     filled_at: datetime | None = None
     stop_price: float | None = None
