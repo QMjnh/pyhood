@@ -79,6 +79,16 @@ class PyhoodClient:
             raise SymbolNotFound(f"No quote data for {symbol}")
 
         price = float(data.get("last_trade_price", 0))
+        reg_time = data.get("venue_last_trade_time", "")
+        
+        # Prefer the 24-hour overnight market price if available,
+        # fallback to the standard pre-market/after-hours (7:00-9:30 AM ET and 4:00-8:00 PM ET).
+        ext_price = data.get("last_non_reg_trade_price") or data.get("last_extended_hours_trade_price")
+        ext_time = data.get("venue_last_non_reg_trade_time", "")
+
+        if ext_price and ext_time > reg_time:
+            price = float(ext_price)
+
         prev_close = float(data.get("previous_close", 0))
         change_pct = ((price - prev_close) / prev_close * 100) if prev_close > 0 else 0.0
 
@@ -111,6 +121,16 @@ class PyhoodClient:
                     continue
                 sym = item["symbol"]
                 price = float(item.get("last_trade_price", 0))
+                reg_time = item.get("venue_last_trade_time", "")
+                
+                # Prefer the 24-hour overnight market price (last_non_reg_trade_price) if available,
+                # otherwise gracefully fallback to the standard pre-market/after-hours price.
+                ext_price = item.get("last_non_reg_trade_price") or item.get("last_extended_hours_trade_price")
+                ext_time = item.get("venue_last_non_reg_trade_time", "")
+
+                if ext_price and ext_time > reg_time:
+                    price = float(ext_price)
+
                 prev_close = float(item.get("previous_close", 0))
                 change_pct = ((price - prev_close) / prev_close * 100) if prev_close > 0 else 0.0
                 results[sym] = Quote(
