@@ -192,6 +192,23 @@ class ACHTransfer:
     ach_relationship: str = ""
 
 
+# ── Debit Card ──────────────────────────────────────────────────────
+
+
+@dataclass(frozen=True)
+class CardTransaction:
+    """Debit card (Cash Management) transaction."""
+    id: str
+    description: str
+    amount: float
+    category: str = ""
+    direction: str = ""  # 'debit' or 'credit'
+    state: str = ""  # 'completed', 'pending'
+    initiated_at: str = ""
+    completed_at: str = ""
+    merchant: str = ""
+
+
 # ── Watchlists ───────────────────────────────────────────────────────
 
 

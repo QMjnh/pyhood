@@ -546,6 +546,44 @@ GET /ceres/v1/accounts/{account_id}/orders/
 
 ---
 
+## Debit Card (Cash Management)
+
+### GET https://minerva.robinhood.com/history/transactions/
+
+Debit card transaction history. Uses a different base URL (`minerva.robinhood.com`) but the same OAuth bearer token.
+
+```
+GET https://minerva.robinhood.com/history/transactions/
+GET https://minerva.robinhood.com/history/transactions/?type=pending
+```
+
+**Parameters:**
+
+| Param | Values | Description |
+|-------|--------|-------------|
+| `type` | `pending`, `settled` | Filter by transaction state |
+
+**Paginated:** ✅ Standard `next`/`previous` pagination
+
+**Returns (per transaction):**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Transaction UUID |
+| `description` | string | Transaction description |
+| `amount` | string | Dollar amount |
+| `category` | string | Transaction category |
+| `direction` | string | `debit` or `credit` |
+| `state` | string | `completed`, `pending` |
+| `initiated_at` | string | Timestamp when initiated |
+| `completed_at` | string | Timestamp when settled |
+| `merchant` | object | Merchant details (includes `name`) |
+
+!!! warning
+    This is an undocumented internal API. It may change without notice. Requires an active Cash Management / debit card on the account.
+
+---
+
 ## Authentication
 
 ### POST /oauth2/token/

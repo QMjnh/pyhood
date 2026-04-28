@@ -5,6 +5,22 @@ All notable changes to pyhood will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.7.0] - 2026-04-09
+
+### Added
+- **Debit Card Transactions** — Query Cash Management debit card transaction history (re: [#14](https://github.com/jamestford/pyhood/issues/14))
+  - `get_card_transactions(card_type)` returns all debit card transactions, with optional `'pending'`/`'settled'` filter
+  - Uses the `minerva.robinhood.com/history/transactions/` endpoint (same auth token)
+  - Typed model: `CardTransaction` (id, description, amount, category, direction, state, initiated_at, completed_at, merchant)
+  - 3 new tests (217 total)
+
+### Fixed
+- **SNDK earnings edge case** — `get_earnings()` now handles `eps: null` payloads without raising an exception
+- **Equity options expiration fallback** — `get_options_expirations()` now falls back to an equity instrument's `tradable_chain_id` when the standard chain lookup returns no expiration dates
+- This fixes real-world symbol-specific failures like SNDK in downstream scanners
+
 ## [0.6.0] - 2026-03-29
 
 ### Added
