@@ -14,7 +14,7 @@ from pyhood.exceptions import APIError, RateLimitError
 logger = logging.getLogger("pyhood")
 
 # Defaults
-DEFAULT_TIMEOUT = 16  # seconds
+DEFAULT_TIMEOUT = 20  # seconds
 MAX_RETRIES = 2
 RATE_LIMIT_DELAY = 0.02  # seconds between requests
 ALLOWED_HOST_SUFFIX = ".robinhood.com"
