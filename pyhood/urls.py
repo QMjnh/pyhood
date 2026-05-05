@@ -94,6 +94,11 @@ def index_market_data_url(index_id: str) -> str:
     return f"{BASE}/marketdata/indexes/values/v1/{index_id}/"
 
 
+def index_historicals_url() -> str:
+    """URL for index historical candles (e.g. SPX, NDX)."""
+    return f"{BASE}/marketdata/indexes/historicals/v1/"
+
+
 def futures_contract_url(symbol: str) -> str:
     """URL for a single futures contract by symbol (e.g. 'ESH26')."""
     return f"{FUTURES_CONTRACTS}symbol/{symbol}/"

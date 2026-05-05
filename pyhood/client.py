@@ -510,6 +510,77 @@ class PyhoodClient:
 
         return result
 
+    def get_index_historicals(
+        self,
+        symbol: str,
+        start: str,
+        end: str,
+        interval: str = "day",
+    ) -> list[Candle]:
+        """Get historical OHLC data for an index symbol."""
+        return self.get_index_historicals_batch([symbol], start=start, end=end, interval=interval).get(symbol.upper(), [])
+
+    def get_index_historicals_batch(
+        self,
+        symbols: list[str],
+        start: str,
+        end: str,
+        interval: str = "day",
+    ) -> dict[str, list[Candle]]:
+        """Get historical OHLC data for index symbols.
+
+        Robinhood expects ISO datetime strings for start/end, and returns
+        close/open/high/low fields as *_value strings.
+        """
+        valid_intervals = ("day",)
+        if interval not in valid_intervals:
+            raise ValueError(
+                f"interval must be one of {valid_intervals}, got '{interval}'"
+            )
+
+        wanted = [s.upper() for s in symbols if s]
+        if not wanted:
+            return {}
+
+        data = self._session.get(
+            urls.index_historicals_url(),
+            params={
+                "symbols": ",".join(wanted),
+                "start": start,
+                "end": end,
+                "interval": interval,
+            },
+        )
+
+        result: dict[str, list[Candle]] = {}
+        for item in data.get("data", []):
+            if not isinstance(item, dict) or item.get("status") != "SUCCESS":
+                continue
+            payload = item.get("data") or {}
+            sym = str(payload.get("symbol") or "").upper()
+            if not sym:
+                continue
+
+            candles: list[Candle] = []
+            for point in payload.get("data_points", []) or []:
+                try:
+                    candles.append(Candle(
+                        symbol=sym,
+                        begins_at=point.get("begins_at", ""),
+                        open_price=float(point.get("open_value", 0)),
+                        close_price=float(point.get("close_value", 0)),
+                        high_price=float(point.get("high_value", 0)),
+                        low_price=float(point.get("low_value", 0)),
+                        volume=0,
+                        session="reg",
+                        interpolated=bool(point.get("interpolated", False)),
+                    ))
+                except (TypeError, ValueError):
+                    continue
+            result[sym] = candles
+
+        return result
+
     # ── Earnings ────────────────────────────────────────────────────────
 
     def get_earnings(

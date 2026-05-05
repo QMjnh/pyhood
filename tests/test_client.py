@@ -973,6 +973,72 @@ class TestStockHistoricals:
         assert result["AAPL"][0].close_price == 252.00
         assert result["MSFT"][0].close_price == 422.00
 
+    @responses.activate
+    def test_get_index_historicals_batch(self, client):
+        responses.add(
+            responses.GET,
+            urls.index_historicals_url(),
+            json={
+                "status": "SUCCESS",
+                "data": [
+                    {
+                        "status": "SUCCESS",
+                        "data": {
+                            "symbol": "SPX",
+                            "instrument_id": "idx-spx",
+                            "data_points": [
+                                {
+                                    "begins_at": "2026-04-01T00:00:00Z",
+                                    "open_value": "6556.56",
+                                    "close_value": "6575.32",
+                                    "high_value": "6609.67",
+                                    "low_value": "6554.29",
+                                    "interpolated": False,
+                                },
+                            ],
+                        },
+                    },
+                    {
+                        "status": "SUCCESS",
+                        "data": {
+                            "symbol": "RUT",
+                            "instrument_id": "idx-rut",
+                            "data_points": [
+                                {
+                                    "begins_at": "2026-04-01T00:00:00Z",
+                                    "open_value": "2140.00",
+                                    "close_value": "2150.00",
+                                    "high_value": "2160.00",
+                                    "low_value": "2130.00",
+                                    "interpolated": True,
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+            status=200,
+        )
+
+        result = client.get_index_historicals_batch(
+            ["SPX", "RUT"],
+            start="2026-04-01T00:00:00Z",
+            end="2026-05-05T00:00:00Z",
+        )
+
+        assert result["SPX"][0].symbol == "SPX"
+        assert result["SPX"][0].open_price == 6556.56
+        assert result["SPX"][0].close_price == 6575.32
+        assert result["SPX"][0].volume == 0
+        assert result["RUT"][0].interpolated is True
+        assert "symbols=SPX%2CRUT" in responses.calls[0].request.url
+        assert "start=2026-04-01T00%3A00%3A00Z" in responses.calls[0].request.url
+        assert "end=2026-05-05T00%3A00%3A00Z" in responses.calls[0].request.url
+
+    def test_index_historicals_interval_validation(self, client):
+        with pytest.raises(ValueError, match="interval must be"):
+            client.get_index_historicals("SPX", start="2026-04-01T00:00:00Z", end="2026-05-05T00:00:00Z", interval="hour")
+
     def test_invalid_interval(self, client):
         with pytest.raises(ValueError, match="interval must be"):
             client.get_stock_historicals("AAPL", interval="invalid")
