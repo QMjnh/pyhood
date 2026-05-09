@@ -1,4 +1,4 @@
-"""pyhood.crypto — Robinhood Crypto Trading API v2 client."""
+"""pyhood.crypto — Robinhood Crypto Trading API client."""
 
 from pyhood.crypto.client import CryptoClient
 

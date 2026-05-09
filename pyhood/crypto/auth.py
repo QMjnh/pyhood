@@ -40,7 +40,7 @@ def sign_request(
         api_key: Robinhood Crypto API key
         private_key_base64: Base64-encoded private key
         method: HTTP method (GET, POST, etc.)
-        path: URL path (e.g., '/api/v2/crypto/trading/accounts/')
+        path: URL path (e.g., '/api/v1/crypto/trading/accounts/')
         body: Request body JSON string (empty for GET requests)
 
     Returns:

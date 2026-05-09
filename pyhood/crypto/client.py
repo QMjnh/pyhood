@@ -1,4 +1,4 @@
-"""CryptoClient — Robinhood Crypto Trading API v2 client.
+"""CryptoClient — Robinhood Crypto Trading API client.
 
 Handles authentication, rate limiting, pagination, and typed responses.
 """
@@ -8,8 +8,9 @@ from __future__ import annotations
 import json
 import logging
 import time
+import uuid
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, urlencode, urlparse
 
 import requests
 
@@ -24,14 +25,20 @@ from pyhood.crypto.models import (
     TradingPair,
 )
 from pyhood.crypto.urls import (
-    CRYPTO_ACCOUNTS,
+    CRYPTO_ACCOUNTS_V1,
+    CRYPTO_ACCOUNTS_V2,
     CRYPTO_BASE,
-    CRYPTO_BEST_BID_ASK,
-    CRYPTO_ESTIMATED_PRICE,
+    CRYPTO_BEST_BID_ASK_V1,
+    CRYPTO_BEST_BID_ASK_V2,
+    CRYPTO_ESTIMATED_PRICE_V1,
+    CRYPTO_ESTIMATED_PRICE_V2,
     CRYPTO_HISTORICALS,
-    CRYPTO_HOLDINGS,
-    CRYPTO_ORDERS,
-    CRYPTO_TRADING_PAIRS,
+    CRYPTO_HOLDINGS_V1,
+    CRYPTO_HOLDINGS_V2,
+    CRYPTO_ORDERS_V1,
+    CRYPTO_ORDERS_V2,
+    CRYPTO_TRADING_PAIRS_V1,
+    CRYPTO_TRADING_PAIRS_V2,
 )
 from pyhood.exceptions import APIError, AuthError, RateLimitError
 
@@ -72,7 +79,7 @@ class TokenBucket:
 
 
 class CryptoClient:
-    """Robinhood Crypto Trading API v2 client.
+    """Robinhood Crypto Trading API client.
 
     Handles ED25519 authentication, rate limiting, and pagination.
 
@@ -82,18 +89,40 @@ class CryptoClient:
         quote = client.get_best_bid_ask("BTC-USD")
     """
 
-    def __init__(self, api_key: str, private_key_base64: str, timeout: float = 30.0):
+    def __init__(
+        self,
+        api_key: str,
+        private_key_base64: str,
+        timeout: float = 30.0,
+        api_version: str = "v2",
+    ):
         """Initialize crypto client with API credentials.
 
         Args:
             api_key: Robinhood Crypto API key
             private_key_base64: Base64-encoded ED25519 private key
             timeout: Request timeout in seconds
+            api_version: Crypto Trading API version, either "v1" or "v2"
         """
+        if api_version not in {"v1", "v2"}:
+            raise ValueError("api_version must be 'v1' or 'v2'")
         self.api_key = api_key
         self.private_key_base64 = private_key_base64
         self.timeout = timeout
+        self.api_version = api_version
         self.base_url = CRYPTO_BASE
+        self._accounts_url = CRYPTO_ACCOUNTS_V1 if api_version == "v1" else CRYPTO_ACCOUNTS_V2
+        self._trading_pairs_url = (
+            CRYPTO_TRADING_PAIRS_V1 if api_version == "v1" else CRYPTO_TRADING_PAIRS_V2
+        )
+        self._best_bid_ask_url = (
+            CRYPTO_BEST_BID_ASK_V1 if api_version == "v1" else CRYPTO_BEST_BID_ASK_V2
+        )
+        self._estimated_price_url = (
+            CRYPTO_ESTIMATED_PRICE_V1 if api_version == "v1" else CRYPTO_ESTIMATED_PRICE_V2
+        )
+        self._holdings_url = CRYPTO_HOLDINGS_V1 if api_version == "v1" else CRYPTO_HOLDINGS_V2
+        self._orders_url = CRYPTO_ORDERS_V1 if api_version == "v1" else CRYPTO_ORDERS_V2
         self.rate_limiter = TokenBucket()
         self.session = requests.Session()
         self.session.headers.update({
@@ -136,7 +165,7 @@ class CryptoClient:
 
         Args:
             method: HTTP method (GET, POST, etc.)
-            path: API path (e.g., '/api/v2/crypto/trading/accounts/')
+            path: API path (e.g., '/api/v1/crypto/trading/accounts/')
             body: Request body as JSON string
             params: Query parameters
             retries: Number of retries on rate limit/server errors
@@ -159,16 +188,18 @@ class CryptoClient:
             else:
                 raise RateLimitError(f"Rate limited, retry after {wait_time:.1f}s", wait_time)
 
+        request_path = self._path_with_query(path, params) if self.api_version == "v1" else path
+
         # Sign request
         try:
             api_key_header, signature, timestamp = sign_request(
-                self.api_key, self.private_key_base64, method.upper(), path, body
+                self.api_key, self.private_key_base64, method.upper(), request_path, body
             )
         except ValueError as e:
             raise AuthError(f"Failed to sign request: {e}") from e
 
         # Prepare request
-        url = self._build_and_validate_url(path)
+        url = self._build_and_validate_url(request_path)
         headers = {
             'x-api-key': api_key_header,
             'x-signature': signature,
@@ -182,7 +213,7 @@ class CryptoClient:
                 url=url,
                 headers=headers,
                 data=body if body else None,
-                params=params,
+                params=None if self.api_version == "v1" else params,
                 timeout=self.timeout,
             )
         except requests.RequestException as e:
@@ -223,6 +254,17 @@ class CryptoClient:
             return response.json()
         except json.JSONDecodeError as e:
             raise APIError(f"Invalid JSON response: {e}") from e
+
+    @staticmethod
+    def _path_with_query(path: str, params: dict[str, Any] | None = None) -> str:
+        """Return a path with encoded query params for request signing."""
+        if not params:
+            return path
+
+        parsed = urlparse(path)
+        existing_query = parse_qsl(parsed.query, keep_blank_values=True)
+        query = urlencode([*existing_query, *params.items()], doseq=True)
+        return f"{parsed.path}?{query}" if query else parsed.path
 
     def _paginate(
         self, initial_path: str, params: dict[str, Any] | None = None,
@@ -274,7 +316,7 @@ class CryptoClient:
         Returns:
             CryptoAccount with account details
         """
-        path = CRYPTO_ACCOUNTS.replace(CRYPTO_BASE, '')
+        path = self._accounts_url.replace(CRYPTO_BASE, '')
         data = self.make_request('GET', path)
 
         # Handle both single account and list responses
@@ -303,10 +345,10 @@ class CryptoClient:
         Returns:
             List of TradingPair objects
         """
-        path = CRYPTO_TRADING_PAIRS.replace(CRYPTO_BASE, '')
+        path = self._trading_pairs_url.replace(CRYPTO_BASE, '')
         params = {}
         if symbols:
-            params['symbols'] = ','.join(symbols)
+            params['symbol' if self.api_version == "v1" else 'symbols'] = ','.join(symbols)
 
         items = self._paginate(path, params)
 
@@ -334,10 +376,10 @@ class CryptoClient:
         Returns:
             List of CryptoQuote objects
         """
-        path = CRYPTO_BEST_BID_ASK.replace(CRYPTO_BASE, '')
+        path = self._best_bid_ask_url.replace(CRYPTO_BASE, '')
         params = {}
         if symbols:
-            params['symbols'] = ','.join(symbols)
+            params['symbol' if self.api_version == "v1" else 'symbols'] = ','.join(symbols)
 
         items = self._paginate(path, params)
 
@@ -366,22 +408,39 @@ class CryptoClient:
         Returns:
             EstimatedPrice object
         """
-        path = CRYPTO_ESTIMATED_PRICE.replace(CRYPTO_BASE, '')
+        path = self._estimated_price_url.replace(CRYPTO_BASE, '')
         params = {
             'symbol': symbol,
-            'side': side,
+            'side': 'both' if self.api_version == "v1" else side,
             'quantity': str(quantity),
         }
 
         data = self.make_request('GET', path, params=params)
+        response_data = data if isinstance(data, dict) else {}
+        estimates = response_data.get('results', data if isinstance(data, list) else [response_data])
+        bid_price = response_data.get('bid_price', response_data.get('bid', 0))
+        ask_price = response_data.get('ask_price', response_data.get('ask', 0))
+
+        for item in estimates:
+            if not isinstance(item, dict):
+                continue
+            item_side = item.get('side')
+            price = item.get('price', item.get('estimated_price'))
+            if item_side == 'bid' and price is not None:
+                bid_price = price
+            elif item_side == 'ask' and price is not None:
+                ask_price = price
+            else:
+                bid_price = item.get('bid_price', item.get('bid', bid_price))
+                ask_price = item.get('ask_price', item.get('ask', ask_price))
 
         return EstimatedPrice(
-            symbol=data.get('symbol', symbol),
-            side=data.get('side', side),
-            quantity=float(data.get('quantity', quantity)),
-            bid_price=float(data.get('bid_price', 0)),
-            ask_price=float(data.get('ask_price', 0)),
-            fee=float(data.get('fee', 0)),
+            symbol=response_data.get('symbol', symbol),
+            side=response_data.get('side', side),
+            quantity=float(response_data.get('quantity', quantity)),
+            bid_price=float(bid_price),
+            ask_price=float(ask_price),
+            fee=float(response_data.get('fee', 0)),
         )
 
     # ── Historicals ──────────────────────────────────────────────────────
@@ -449,10 +508,10 @@ class CryptoClient:
         Returns:
             List of CryptoHolding objects
         """
-        path = CRYPTO_HOLDINGS.replace(CRYPTO_BASE, '')
-        params = {'account_number': account_number}
+        path = self._holdings_url.replace(CRYPTO_BASE, '')
+        params = {} if self.api_version == "v1" else {'account_number': account_number}
         if asset_codes:
-            params['asset_codes'] = ','.join(asset_codes)
+            params['asset_code' if self.api_version == "v1" else 'asset_codes'] = ','.join(asset_codes)
 
         items = self._paginate(path, params)
 
@@ -475,6 +534,7 @@ class CryptoClient:
         order_type: str,
         symbol: str,
         order_config: dict[str, Any],
+        client_order_id: str | None = None,
     ) -> CryptoOrder:
         """Place a crypto order.
 
@@ -484,46 +544,34 @@ class CryptoClient:
             order_type: 'market' or 'limit'
             symbol: Crypto symbol (e.g., 'BTC-USD')
             order_config: Order-specific configuration
+            client_order_id: Optional client-supplied UUID
 
         Returns:
             CryptoOrder object
         """
-        path = CRYPTO_ORDERS.replace(CRYPTO_BASE, '')
+        path = self._orders_url.replace(CRYPTO_BASE, '')
 
-        payload = {
-            'account_number': account_number,
-            'side': side,
-            'type': order_type,
-            'symbol': symbol,
-            **order_config,
-        }
+        if self.api_version == "v1":
+            payload = {
+                'client_order_id': client_order_id or str(uuid.uuid4()),
+                'side': side,
+                'type': order_type,
+                'symbol': symbol,
+                f'{order_type}_order_config': order_config,
+            }
+        else:
+            payload = {
+                'account_number': account_number,
+                'side': side,
+                'type': order_type,
+                'symbol': symbol,
+                **order_config,
+            }
 
         body = json.dumps(payload)
         data = self.make_request('POST', path, body=body)
 
-        from datetime import datetime
-        created_at = datetime.fromisoformat(data.get('created_at', '').replace('Z', '+00:00'))
-        updated_at = datetime.fromisoformat(data.get('updated_at', '').replace('Z', '+00:00'))
-
-        return CryptoOrder(
-            order_id=data.get('id', ''),
-            client_order_id=data.get('client_order_id'),
-            side=data.get('side', side),
-            order_type=data.get('type', order_type),
-            symbol=data.get('symbol', symbol),
-            status=data.get('status', ''),
-            price=float(data['price']) if data.get('price') is not None else None,
-            quantity=float(data.get('quantity', 0)),
-            filled_quantity=float(data.get('filled_quantity', 0)),
-            remaining_quantity=float(data.get('remaining_quantity', 0)),
-            average_filled_price=(
-                float(data['average_filled_price'])
-                if data.get('average_filled_price') is not None else None
-            ),
-            fee=float(data['fee']) if data.get('fee') is not None else None,
-            created_at=created_at,
-            updated_at=updated_at,
-        )
+        return self._parse_order(data, side=side, order_type=order_type, symbol=symbol)
 
     def get_order(self, account_number: str, order_id: str) -> CryptoOrder:
         """Get a specific crypto order.
@@ -535,34 +583,11 @@ class CryptoClient:
         Returns:
             CryptoOrder object
         """
-        path = f"{CRYPTO_ORDERS.replace(CRYPTO_BASE, '')}{order_id}/"
-        params = {'account_number': account_number}
-
+        path = f"{self._orders_url.replace(CRYPTO_BASE, '')}{order_id}/"
+        params = None if self.api_version == "v1" else {'account_number': account_number}
         data = self.make_request('GET', path, params=params)
 
-        from datetime import datetime
-        created_at = datetime.fromisoformat(data.get('created_at', '').replace('Z', '+00:00'))
-        updated_at = datetime.fromisoformat(data.get('updated_at', '').replace('Z', '+00:00'))
-
-        return CryptoOrder(
-            order_id=data.get('id', order_id),
-            client_order_id=data.get('client_order_id'),
-            side=data.get('side', ''),
-            order_type=data.get('type', ''),
-            symbol=data.get('symbol', ''),
-            status=data.get('status', ''),
-            price=float(data['price']) if data.get('price') is not None else None,
-            quantity=float(data.get('quantity', 0)),
-            filled_quantity=float(data.get('filled_quantity', 0)),
-            remaining_quantity=float(data.get('remaining_quantity', 0)),
-            average_filled_price=(
-                float(data['average_filled_price'])
-                if data.get('average_filled_price') is not None else None
-            ),
-            fee=float(data['fee']) if data.get('fee') is not None else None,
-            created_at=created_at,
-            updated_at=updated_at,
-        )
+        return self._parse_order(data, order_id=order_id)
 
     def get_orders(self, account_number: str) -> list[CryptoOrder]:
         """Get all crypto orders for account.
@@ -573,38 +598,56 @@ class CryptoClient:
         Returns:
             List of CryptoOrder objects
         """
-        path = CRYPTO_ORDERS.replace(CRYPTO_BASE, '')
-        params = {'account_number': account_number}
-
+        path = self._orders_url.replace(CRYPTO_BASE, '')
+        params = None if self.api_version == "v1" else {'account_number': account_number}
         items = self._paginate(path, params)
 
         orders = []
         for item in items:
-            from datetime import datetime
-            created_at = datetime.fromisoformat(item.get('created_at', '').replace('Z', '+00:00'))
-            updated_at = datetime.fromisoformat(item.get('updated_at', '').replace('Z', '+00:00'))
-
-            orders.append(CryptoOrder(
-                order_id=item.get('id', ''),
-                client_order_id=item.get('client_order_id'),
-                side=item.get('side', ''),
-                order_type=item.get('type', ''),
-                symbol=item.get('symbol', ''),
-                status=item.get('status', ''),
-                price=float(item['price']) if item.get('price') is not None else None,
-                quantity=float(item.get('quantity', 0)),
-                filled_quantity=float(item.get('filled_quantity', 0)),
-                remaining_quantity=float(item.get('remaining_quantity', 0)),
-                average_filled_price=(
-                    float(item['average_filled_price'])
-                    if item.get('average_filled_price') is not None else None
-                ),
-                fee=float(item['fee']) if item.get('fee') is not None else None,
-                created_at=created_at,
-                updated_at=updated_at,
-            ))
+            orders.append(self._parse_order(item))
 
         return orders
+
+    @staticmethod
+    def _parse_order(
+        data: dict[str, Any],
+        order_id: str = '',
+        side: str = '',
+        order_type: str = '',
+        symbol: str = '',
+    ) -> CryptoOrder:
+        """Parse crypto order response shapes into CryptoOrder."""
+        from datetime import datetime
+
+        parsed_type = data.get('type', order_type)
+        config = data.get(f'{parsed_type}_order_config', {})
+        quantity = data.get('quantity', config.get('asset_quantity', 0))
+        filled_quantity = data.get('filled_quantity', data.get('filled_asset_quantity', 0))
+        remaining_quantity = data.get('remaining_quantity')
+        if remaining_quantity is None:
+            remaining_quantity = max(float(quantity or 0) - float(filled_quantity or 0), 0)
+
+        average_price = data.get('average_filled_price', data.get('average_price'))
+        price = data.get('price', config.get('limit_price'))
+        created_at = datetime.fromisoformat(data.get('created_at', '').replace('Z', '+00:00'))
+        updated_at = datetime.fromisoformat(data.get('updated_at', '').replace('Z', '+00:00'))
+
+        return CryptoOrder(
+            order_id=data.get('id', order_id),
+            client_order_id=data.get('client_order_id'),
+            side=data.get('side', side),
+            order_type=parsed_type,
+            symbol=data.get('symbol', symbol),
+            status=data.get('status', data.get('state', '')),
+            price=float(price) if price is not None else None,
+            quantity=float(quantity or 0),
+            filled_quantity=float(filled_quantity or 0),
+            remaining_quantity=float(remaining_quantity or 0),
+            average_filled_price=float(average_price) if average_price is not None else None,
+            fee=float(data['fee']) if data.get('fee') is not None else None,
+            created_at=created_at,
+            updated_at=updated_at,
+        )
 
     def cancel_order(self, order_id: str) -> dict[str, Any]:
         """Cancel a crypto order.
@@ -615,7 +658,7 @@ class CryptoClient:
         Returns:
             API response data
         """
-        path = f"{CRYPTO_ORDERS.replace(CRYPTO_BASE, '')}{order_id}/cancel/"
+        path = f"{self._orders_url.replace(CRYPTO_BASE, '')}{order_id}/cancel/"
 
         data = self.make_request('POST', path)
         return data

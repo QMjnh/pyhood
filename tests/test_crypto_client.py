@@ -1,5 +1,6 @@
 """Tests for crypto client module."""
 
+import json
 from datetime import datetime
 
 import pytest
@@ -20,10 +21,14 @@ from pyhood.crypto.urls import (
     CRYPTO_ACCOUNTS,
     CRYPTO_BASE,
     CRYPTO_BEST_BID_ASK,
+    CRYPTO_BEST_BID_ASK_V1,
     CRYPTO_ESTIMATED_PRICE,
+    CRYPTO_ESTIMATED_PRICE_V1,
     CRYPTO_HISTORICALS,
     CRYPTO_HOLDINGS,
+    CRYPTO_HOLDINGS_V1,
     CRYPTO_ORDERS,
+    CRYPTO_ORDERS_V1,
     CRYPTO_TRADING_PAIRS,
 )
 from pyhood.exceptions import APIError, AuthError, RateLimitError
@@ -75,6 +80,11 @@ class TestCryptoClient:
         self.client = CryptoClient(self.api_key, self.private_key, timeout=5)
         self.client.rate_limiter.tokens = 999999
         self.client.rate_limiter.capacity = 999999
+
+    def test_invalid_api_version(self):
+        """Test invalid crypto API version fails fast."""
+        with pytest.raises(ValueError, match="api_version"):
+            CryptoClient(self.api_key, self.private_key, api_version="v3")
 
     @responses.activate
     def test_get_account(self):
@@ -206,6 +216,101 @@ class TestCryptoClient:
         assert price.bid_price == 45000.00
         assert price.ask_price == 45100.00
         assert price.fee == 1.50
+
+    @responses.activate
+    def test_v1_client_uses_v1_read_endpoints(self):
+        """Test v1 client uses v1 paths and query names."""
+        client = CryptoClient(self.api_key, self.private_key, api_version="v1")
+        client.rate_limiter.tokens = 999999
+        client.rate_limiter.capacity = 999999
+
+        responses.add(
+            responses.GET,
+            f"{CRYPTO_BEST_BID_ASK_V1}?symbol=BTC-USD",
+            json={
+                "results": [{
+                    "symbol": "BTC-USD",
+                    "bid_price": "45000.00",
+                    "ask_price": "45100.00",
+                    "timestamp": "2023-10-30T12:00:00Z",
+                }]
+            },
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"{CRYPTO_ESTIMATED_PRICE_V1}?symbol=BTC-USD&side=both&quantity=0.001",
+            json={
+                "results": [
+                    {"symbol": "BTC-USD", "side": "bid", "quantity": "0.001", "price": "45000.00"},
+                    {"symbol": "BTC-USD", "side": "ask", "quantity": "0.001", "price": "45100.00"},
+                ]
+            },
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"{CRYPTO_HOLDINGS_V1}?asset_code=BTC",
+            json={
+                "results": [{
+                    "asset_code": "BTC",
+                    "quantity": "0.001",
+                    "available_quantity": "0.0009",
+                }]
+            },
+            status=200,
+        )
+
+        quote = client.get_best_bid_ask("BTC-USD")[0]
+        price = client.get_estimated_price("BTC-USD", "buy", 0.001)
+        holding = client.get_holdings("ignored-by-v1", "BTC")[0]
+
+        assert quote.bid == 45000.00
+        assert price.bid_price == 45000.00
+        assert price.ask_price == 45100.00
+        assert holding.asset_code == "BTC"
+
+    @responses.activate
+    def test_v1_client_uses_v1_order_shape(self):
+        """Test v1 client wraps order config and parses v1 order fields."""
+        client = CryptoClient(self.api_key, self.private_key, api_version="v1")
+        client.rate_limiter.tokens = 999999
+        client.rate_limiter.capacity = 999999
+
+        responses.add(
+            responses.POST,
+            CRYPTO_ORDERS_V1,
+            json={
+                "id": "order-123",
+                "client_order_id": "client-123",
+                "side": "buy",
+                "type": "market",
+                "symbol": "BTC-USD",
+                "state": "filled",
+                "filled_asset_quantity": "0.001",
+                "average_price": "45000.00",
+                "created_at": "2023-10-30T12:00:00Z",
+                "updated_at": "2023-10-30T12:00:00Z",
+                "market_order_config": {"asset_quantity": "0.001"},
+            },
+            status=200,
+        )
+
+        order = client.place_order(
+            account_number="ignored-by-v1",
+            side="buy",
+            order_type="market",
+            symbol="BTC-USD",
+            order_config={"asset_quantity": "0.001"},
+            client_order_id="client-123",
+        )
+
+        request_body = json.loads(responses.calls[0].request.body)
+        assert "account_number" not in request_body
+        assert request_body["market_order_config"] == {"asset_quantity": "0.001"}
+        assert order.status == "filled"
+        assert order.quantity == 0.001
+        assert order.average_filled_price == 45000.00
 
     @responses.activate
     def test_get_historicals(self):
