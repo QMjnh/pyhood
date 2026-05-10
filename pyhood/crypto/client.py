@@ -40,6 +40,14 @@ from pyhood.crypto.urls import (
     CRYPTO_TRADING_PAIRS_V1,
     CRYPTO_TRADING_PAIRS_V2,
 )
+
+
+def _order_side_to_quote_side(side: str) -> str:
+    if side == "buy":
+        return "ask"
+    if side == "sell":
+        return "bid"
+    return side
 from pyhood.exceptions import APIError, AuthError, RateLimitError
 
 logger = logging.getLogger("pyhood.crypto")
@@ -188,7 +196,7 @@ class CryptoClient:
             else:
                 raise RateLimitError(f"Rate limited, retry after {wait_time:.1f}s", wait_time)
 
-        request_path = self._path_with_query(path, params) if self.api_version == "v1" else path
+        request_path = self._path_with_query(path, params)
 
         # Sign request
         try:
@@ -213,7 +221,7 @@ class CryptoClient:
                 url=url,
                 headers=headers,
                 data=body if body else None,
-                params=None if self.api_version == "v1" else params,
+                params=None,
                 timeout=self.timeout,
             )
         except requests.RequestException as e:
@@ -256,18 +264,21 @@ class CryptoClient:
             raise APIError(f"Invalid JSON response: {e}") from e
 
     @staticmethod
-    def _path_with_query(path: str, params: dict[str, Any] | None = None) -> str:
+    def _path_with_query(
+        path: str, params: dict[str, Any] | list[tuple[str, Any]] | None = None
+    ) -> str:
         """Return a path with encoded query params for request signing."""
         if not params:
             return path
 
         parsed = urlparse(path)
         existing_query = parse_qsl(parsed.query, keep_blank_values=True)
-        query = urlencode([*existing_query, *params.items()], doseq=True)
+        param_items = params.items() if isinstance(params, dict) else params
+        query = urlencode([*existing_query, *param_items], doseq=True)
         return f"{parsed.path}?{query}" if query else parsed.path
 
     def _paginate(
-        self, initial_path: str, params: dict[str, Any] | None = None,
+        self, initial_path: str, params: dict[str, Any] | list[tuple[str, Any]] | None = None,
     ) -> list[dict[str, Any]]:
         """Handle cursor-based pagination for list endpoints.
 
@@ -346,9 +357,9 @@ class CryptoClient:
             List of TradingPair objects
         """
         path = self._trading_pairs_url.replace(CRYPTO_BASE, '')
-        params = {}
+        params: dict[str, str] | list[tuple[str, str]] = {}
         if symbols:
-            params['symbol' if self.api_version == "v1" else 'symbols'] = ','.join(symbols)
+            params = [('symbol', symbol) for symbol in symbols]
 
         items = self._paginate(path, params)
 
@@ -377,9 +388,9 @@ class CryptoClient:
             List of CryptoQuote objects
         """
         path = self._best_bid_ask_url.replace(CRYPTO_BASE, '')
-        params = {}
+        params: dict[str, str] | list[tuple[str, str]] = {}
         if symbols:
-            params['symbol' if self.api_version == "v1" else 'symbols'] = ','.join(symbols)
+            params = [('symbol', symbol) for symbol in symbols]
 
         items = self._paginate(path, params)
 
@@ -390,8 +401,18 @@ class CryptoClient:
 
             quotes.append(CryptoQuote(
                 symbol=item.get('symbol', ''),
-                bid=float(item.get('bid_price', 0)),
-                ask=float(item.get('ask_price', 0)),
+                bid=float(
+                    item.get('bid_price')
+                    or item.get('bid')
+                    or item.get('bid_inclusive_of_sell_spread')
+                    or 0
+                ),
+                ask=float(
+                    item.get('ask_price')
+                    or item.get('ask')
+                    or item.get('ask_inclusive_of_buy_spread')
+                    or 0
+                ),
                 timestamp=timestamp,
             ))
 
@@ -411,7 +432,7 @@ class CryptoClient:
         path = self._estimated_price_url.replace(CRYPTO_BASE, '')
         params = {
             'symbol': symbol,
-            'side': 'both' if self.api_version == "v1" else side,
+            'side': 'both' if self.api_version == "v1" else _order_side_to_quote_side(side),
             'quantity': str(quantity),
         }
 
@@ -431,8 +452,14 @@ class CryptoClient:
             elif item_side == 'ask' and price is not None:
                 ask_price = price
             else:
-                bid_price = item.get('bid_price', item.get('bid', bid_price))
-                ask_price = item.get('ask_price', item.get('ask', ask_price))
+                bid_price = item.get(
+                    'bid_price',
+                    item.get('bid', item.get('bid_inclusive_of_sell_spread', bid_price)),
+                )
+                ask_price = item.get(
+                    'ask_price',
+                    item.get('ask', item.get('ask_inclusive_of_buy_spread', ask_price)),
+                )
 
         return EstimatedPrice(
             symbol=response_data.get('symbol', symbol),

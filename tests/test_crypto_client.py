@@ -168,12 +168,12 @@ class TestCryptoClient:
         """Test getting best bid/ask quotes."""
         responses.add(
             responses.GET,
-            CRYPTO_BEST_BID_ASK,
+            f"{CRYPTO_BEST_BID_ASK}?symbol=BTC-USD",
             json={
                 "results": [{
                     "symbol": "BTC-USD",
-                    "bid_price": "45000.00",
-                    "ask_price": "45100.00",
+                    "bid_inclusive_of_sell_spread": "45000.00",
+                    "ask_inclusive_of_buy_spread": "45100.00",
                     "timestamp": "2023-10-30T12:00:00Z",
                 }]
             },
@@ -195,14 +195,15 @@ class TestCryptoClient:
         """Test getting estimated price for a trade."""
         responses.add(
             responses.GET,
-            CRYPTO_ESTIMATED_PRICE,
+            f"{CRYPTO_ESTIMATED_PRICE}?symbol=BTC-USD&side=ask&quantity=0.001",
             json={
-                "symbol": "BTC-USD",
-                "side": "buy",
-                "quantity": "0.001",
-                "bid_price": "45000.00",
-                "ask_price": "45100.00",
-                "fee": "1.50",
+                "results": [{
+                    "symbol": "BTC-USD",
+                    "side": "ask",
+                    "quantity": "0.001",
+                    "ask": "45100.00",
+                    "est_fee": "1.50",
+                }],
             },
             status=200
         )
@@ -213,9 +214,9 @@ class TestCryptoClient:
         assert price.symbol == "BTC-USD"
         assert price.side == "buy"
         assert price.quantity == 0.001
-        assert price.bid_price == 45000.00
+        assert price.bid_price == 0
         assert price.ask_price == 45100.00
-        assert price.fee == 1.50
+        assert price.fee == 0
 
     @responses.activate
     def test_v1_client_uses_v1_read_endpoints(self):
@@ -230,8 +231,8 @@ class TestCryptoClient:
             json={
                 "results": [{
                     "symbol": "BTC-USD",
-                    "bid_price": "45000.00",
-                    "ask_price": "45100.00",
+                    "bid": "45000.00",
+                    "ask": "45100.00",
                     "timestamp": "2023-10-30T12:00:00Z",
                 }]
             },
@@ -242,8 +243,18 @@ class TestCryptoClient:
             f"{CRYPTO_ESTIMATED_PRICE_V1}?symbol=BTC-USD&side=both&quantity=0.001",
             json={
                 "results": [
-                    {"symbol": "BTC-USD", "side": "bid", "quantity": "0.001", "price": "45000.00"},
-                    {"symbol": "BTC-USD", "side": "ask", "quantity": "0.001", "price": "45100.00"},
+                    {
+                        "symbol": "BTC-USD",
+                        "side": "bid",
+                        "quantity": "0.001",
+                        "bid_inclusive_of_sell_spread": "45000.00",
+                    },
+                    {
+                        "symbol": "BTC-USD",
+                        "side": "ask",
+                        "quantity": "0.001",
+                        "ask_inclusive_of_buy_spread": "45100.00",
+                    },
                 ]
             },
             status=200,
