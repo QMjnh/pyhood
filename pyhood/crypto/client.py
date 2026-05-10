@@ -544,10 +544,15 @@ class CryptoClient:
 
         holdings = []
         for item in items:
+            quantity = item.get('quantity', item.get('total_quantity', 0))
+            available_quantity = item.get(
+                'available_quantity',
+                item.get('quantity_available_for_trading', 0),
+            )
             holdings.append(CryptoHolding(
                 asset_code=item.get('asset_code', ''),
-                quantity=float(item.get('quantity', 0)),
-                available_quantity=float(item.get('available_quantity', 0)),
+                quantity=float(quantity),
+                available_quantity=float(available_quantity),
             ))
 
         return holdings
