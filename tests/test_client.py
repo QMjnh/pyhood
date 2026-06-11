@@ -233,6 +233,59 @@ class TestGetPositions:
         assert positions["MRVL"].today_return == 13.61
         assert positions["MRVL"].today_return_pct == 3.98
 
+    @pytest.mark.parametrize(
+        ("position_type", "clearing_direction"),
+        [
+            ("", ""),
+            ("short", "debit"),
+        ],
+    )
+    @responses.activate
+    def test_stock_positions_reject_missing_or_conflicting_direction(
+        self,
+        client,
+        position_type,
+        clearing_direction,
+    ):
+        instrument = f"{BASE}/instruments/aapl-id/"
+        responses.add(
+            responses.GET,
+            urls.POSITIONS,
+            json={
+                "results": [{
+                    "instrument": instrument,
+                    "quantity": "10.00000000",
+                    "clearing_average_cost": "100.00",
+                    "clearing_cost_basis": "1000.00",
+                    "type": position_type,
+                    "clearing_direction": clearing_direction,
+                }],
+                "next": None,
+            },
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            instrument,
+            json={"symbol": "AAPL"},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.QUOTES,
+            json={
+                "results": [{
+                    "symbol": "AAPL",
+                    "last_trade_price": "110.00",
+                    "previous_close": "105.00",
+                }]
+            },
+            status=200,
+        )
+
+        with pytest.raises(ValueError, match="Quantity 10.0 is not valid"):
+            client.get_positions()
+
 
 class TestGetOptionsChain:
     @responses.activate

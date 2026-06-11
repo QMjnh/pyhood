@@ -1184,14 +1184,22 @@ class PyhoodClient:
             clearing_direction = str(item.get("clearing_direction") or "").lower()
 
             direction = 0 if qty == 0 else (1 if qty > 0 else -1)
+            # Validate direction matches position type and clearing direction.
             expected_type = "long" if direction > 0 else "short"
             expected_clearing_direction = "debit" if direction > 0 else "credit"
-            if direction and (
+            has_matching_direction = (
+                position_type == expected_type
+                or clearing_direction == expected_clearing_direction
+            )
+            has_conflicting_direction = (
                 (position_type and position_type != expected_type)
                 or (
                     clearing_direction
                     and clearing_direction != expected_clearing_direction
                 )
+            )
+            if direction and (
+                not has_matching_direction or has_conflicting_direction
             ):
                 raise ValueError(
                     f"Quantity {qty} is not valid for position type "
@@ -1204,7 +1212,7 @@ class PyhoodClient:
             current_price = quote.price if quote else 0.0
             prev_close = quote.prev_close if quote else current_price
 
-            # long/debit : qty>0, short/credit : qty<0.
+            # long/debit: qty > 0, short/credit: qty < 0.
             equity = qty * current_price
             cost_basis = float(item["clearing_cost_basis"])
             unrealized_pl = equity - cost_basis
