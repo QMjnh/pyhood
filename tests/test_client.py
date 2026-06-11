@@ -22,6 +22,7 @@ from pyhood.models import (
     OptionsChain,
     Order,
     PortfolioCandle,
+    Position,
     Quote,
     Rating,
     StockSplit,
@@ -150,6 +151,87 @@ class TestGetQuotes:
         quotes = client.get_quotes(["AAPL", "INVALID"])
         assert len(quotes) == 1
         assert "AAPL" in quotes
+
+
+class TestGetPositions:
+    @responses.activate
+    def test_stock_positions_use_clearing_cost_and_robinhood_direction(self, client):
+        aapl_instrument = f"{BASE}/instruments/aapl-id/"
+        mrvl_instrument = f"{BASE}/instruments/mrvl-id/"
+        responses.add(
+            responses.GET,
+            urls.POSITIONS,
+            json={
+                "results": [
+                    {
+                        "instrument": aapl_instrument,
+                        "quantity": "2.00000000",
+                        "average_buy_price": "99.0000",
+                        "clearing_average_cost": "100.00",
+                        "clearing_cost_basis": "200.00",
+                        "type": "long",
+                        "clearing_direction": "debit",
+                    },
+                    {
+                        "instrument": mrvl_instrument,
+                        "quantity": "-2.00000000",
+                        "average_buy_price": "0.0000",
+                        "clearing_average_cost": "147.40",
+                        "clearing_cost_basis": "-294.80",
+                        "type": "short",
+                        "clearing_direction": "credit",
+                    },
+                ],
+                "next": None,
+            },
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            aapl_instrument,
+            json={"symbol": "AAPL"},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            mrvl_instrument,
+            json={"symbol": "MRVL"},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.QUOTES,
+            json={
+                "results": [
+                    {
+                        "symbol": "AAPL",
+                        "last_trade_price": "110.00",
+                        "previous_close": "105.00",
+                    },
+                    {
+                        "symbol": "MRVL",
+                        "last_trade_price": "164.035",
+                        "previous_close": "170.84",
+                    },
+                ]
+            },
+            status=200,
+        )
+
+        positions = {position.symbol: position for position in client.get_positions()}
+
+        assert isinstance(positions["AAPL"], Position)
+        assert positions["AAPL"].average_cost == 100.00
+        assert positions["AAPL"].equity == 220.00
+        assert positions["AAPL"].unrealized_pl == 20.00
+        assert positions["AAPL"].today_return == 10.00
+        assert positions["AAPL"].today_return_pct == 4.76
+
+        assert positions["MRVL"].average_cost == 147.40
+        assert positions["MRVL"].equity == -328.07
+        assert positions["MRVL"].unrealized_pl == -33.27
+        assert positions["MRVL"].today_return == 13.61
+        assert positions["MRVL"].today_return_pct == 3.98
 
 
 class TestGetOptionsChain:

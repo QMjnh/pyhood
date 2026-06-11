@@ -1156,7 +1156,7 @@ class PyhoodClient:
         valid_items = []
         instrument_urls = set()
         for item in data:
-            qty = float(item.get("quantity", 0))
+            qty = float(item["quantity"])
             if qty == 0 and nonzero:
                 continue
             valid_items.append(item)
@@ -1178,41 +1178,46 @@ class PyhoodClient:
 
         positions: list[Position] = []
         for item in valid_items:
-            qty = float(item.get("quantity", 0))
-            avg_cost = float(item.get("average_buy_price", 0))
-            is_short = qty < 0
+            qty = float(item["quantity"])
+            avg_cost = float(item["clearing_average_cost"])
+            position_type = str(item.get("type") or "").lower()
+            clearing_direction = str(item.get("clearing_direction") or "").lower()
 
-            # For short positions, average_buy_price is 0; use
-            # clearing_average_cost which the API provides for shorts.
-            if avg_cost == 0 and is_short:
-                avg_cost = float(item.get("clearing_average_cost", 0))
+            direction = 0 if qty == 0 else (1 if qty > 0 else -1)
+            expected_type = "long" if direction > 0 else "short"
+            expected_clearing_direction = "debit" if direction > 0 else "credit"
+            if direction and (
+                (position_type and position_type != expected_type)
+                or (
+                    clearing_direction
+                    and clearing_direction != expected_clearing_direction
+                )
+            ):
+                raise ValueError(
+                    f"Quantity {qty} is not valid for position type "
+                    f"{position_type} and clearing direction {clearing_direction}"
+                )
 
-            instrument_url = item.get("instrument", "")
-            symbol = instrument_to_symbol.get(instrument_url, "")
-            
+            symbol = instrument_to_symbol.get(item.get("instrument", ""), "")
+
             quote = quotes_dict.get(symbol)
             current_price = quote.price if quote else 0.0
             prev_close = quote.prev_close if quote else current_price
 
+            # long/debit : qty>0, short/credit : qty<0.
             equity = qty * current_price
-            cost_basis = qty * avg_cost
+            cost_basis = float(item["clearing_cost_basis"])
             unrealized_pl = equity - cost_basis
-            # Use abs(cost_basis) to get a meaningful percentage for
-            # both long and short positions.
-            abs_cost_basis = abs(cost_basis)
             unrealized_pl_pct = (
-                (unrealized_pl / abs_cost_basis * 100)
-                if abs_cost_basis > 0 else 0.0
+                (unrealized_pl / abs(cost_basis) * 100)
+                if cost_basis != 0 else 0.0
             )
-            
+
             today_return = (current_price - prev_close) * qty
-            # Percentage reflects position direction: positive when
-            # the position gains value (price down for shorts).
-            stock_pct = (
-                ((current_price - prev_close) / prev_close * 100)
+            today_return_pct = (
+                ((current_price - prev_close) / prev_close * 100) * direction
                 if prev_close > 0 else 0.0
             )
-            today_return_pct = -stock_pct if is_short else stock_pct
 
             positions.append(Position(
                 symbol=symbol,
