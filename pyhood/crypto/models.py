@@ -21,6 +21,7 @@ class CryptoHolding:
     asset_code: str
     quantity: float
     available_quantity: float
+    average_buy_price: float | None = None
 
 
 @dataclass(frozen=True)

@@ -541,6 +541,7 @@ class CryptoClient:
             params['asset_code' if self.api_version == "v1" else 'asset_codes'] = ','.join(asset_codes)
 
         items = self._paginate(path, params)
+        average_price_by_asset = self._load_legacy_average_buy_price(*asset_codes)
 
         holdings = []
         for item in items:
@@ -549,13 +550,68 @@ class CryptoClient:
                 'available_quantity',
                 item.get('quantity_available_for_trading', 0),
             )
+            asset_code = item.get('asset_code', '')
+            average_buy_price = item.get(
+                'average_buy_price',
+                item.get('cost_basis_average_buy_price'),
+            )
+            if average_buy_price is None and asset_code:
+                average_buy_price = average_price_by_asset.get(str(asset_code).upper())
             holdings.append(CryptoHolding(
-                asset_code=item.get('asset_code', ''),
+                asset_code=asset_code,
                 quantity=float(quantity),
                 available_quantity=float(available_quantity),
+                average_buy_price=float(average_buy_price) if average_buy_price is not None else None,
             ))
 
         return holdings
+
+    def _load_legacy_average_buy_price(self, *asset_codes: str) -> dict[str, float]:
+        """Load per-asset average buy prices from Robinhood crypto holdings endpoint."""
+        query = [('currency_code', code) for code in asset_codes] if asset_codes else None
+        try:
+            data = self.make_request(
+                'GET',
+                'https://api.robinhood.com/crypto/holdings/',
+                params=query,
+            )
+        except Exception:
+            return {}
+
+        items: list[dict[str, Any]] = []
+        if isinstance(data, dict):
+            raw_items = data.get('results', [])
+            if isinstance(raw_items, list):
+                items = [item for item in raw_items if isinstance(item, dict)]
+        elif isinstance(data, list):
+            items = [item for item in data if isinstance(item, dict)]
+
+        average_price_by_asset: dict[str, float] = {}
+        for item in items:
+            currency = item.get('currency')
+            if isinstance(currency, dict):
+                asset_code = str(currency.get('code', '')).upper()
+            else:
+                asset_code = str(item.get('asset_code', '')).upper()
+            if not asset_code:
+                continue
+
+            avg_price = item.get('average_buy_price')
+            if avg_price is None:
+                cost_basis = item.get('cost_basis')
+                quantity = item.get('quantity')
+                try:
+                    qty = float(quantity)
+                    if qty > 0:
+                        avg_price = float(cost_basis) / qty
+                except (TypeError, ValueError, ZeroDivisionError):
+                    avg_price = None
+            try:
+                if avg_price is not None:
+                    average_price_by_asset[asset_code] = float(avg_price)
+            except (TypeError, ValueError):
+                continue
+        return average_price_by_asset
 
     # ── Orders ───────────────────────────────────────────────────────────
 
