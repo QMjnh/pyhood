@@ -1508,13 +1508,16 @@ class PyhoodClient:
         if side not in ("buy", "sell"):
             raise OrderError(f"side must be 'buy' or 'sell', got '{side}'")
 
-        # Robinhood requires a price for market buy orders
-        if order_type == "market" and side == "buy":
+        # Market orders are submitted as 1% collar limits; Robinhood needs a reference price.
+        if order_type == "market":
             quote = self.get_quote(symbol)
-            price = float(quote.get("ask_price") or quote.get("last_trade_price") or quote.get("bid_price"))        
-        if not price:
-            raise OrderError(f"Market buy failed: no valid price found for {symbol.upper()}")
-        order_type, preset_percent_limit = "limit", "0.01" # change to limit order with 1% collar
+            if side == "buy":
+                price = float(quote.ask or quote.price or quote.bid)
+            else:
+                price = float(quote.bid or quote.price or quote.ask)
+            if not price:
+                raise OrderError(f"Market order failed: no valid price found for {symbol.upper()}")
+            order_type, preset_percent_limit = "limit", "0.01"
 
         payload = {
             "account": self._get_account_url(account_number),

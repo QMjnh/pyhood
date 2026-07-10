@@ -1,5 +1,7 @@
 """Tests for PyhoodClient — quotes, options, positions, earnings."""
 
+from urllib.parse import parse_qs
+
 import pytest
 import responses
 
@@ -661,6 +663,21 @@ class TestStockOrders:
             status=200,
         )
 
+        # Mock quote used to collar the market order
+        responses.add(
+            responses.GET,
+            f"{urls.QUOTES}AAPL/",
+            json={
+                "symbol": "AAPL",
+                "last_trade_price": "195.50",
+                "previous_close": "193.00",
+                "bid_price": "195.40",
+                "ask_price": "195.60",
+                "last_trade_volume": "50000000",
+            },
+            status=200,
+        )
+
         # Mock order placement
         responses.add(
             responses.POST,
@@ -669,8 +686,9 @@ class TestStockOrders:
                 "id": "order-12345",
                 "symbol": "AAPL",
                 "side": "buy",
-                "type": "market",
+                "type": "limit",
                 "quantity": "10",
+                "price": "195.60",
                 "state": "pending",
                 "created_at": "2024-01-01T12:00:00Z",
             },
@@ -682,11 +700,18 @@ class TestStockOrders:
         assert order.order_id == "order-12345"
         assert order.symbol == "AAPL"
         assert order.side == "buy"
-        assert order.order_type == "market"
+        assert order.order_type == "limit"
         assert order.quantity == 10
-        assert order.price is None
+        assert order.price == 195.60
         assert order.status == "pending"
         assert order.instrument_type == "stock"
+
+        order_call = next(c for c in responses.calls if c.request.method == "POST")
+        body = parse_qs(order_call.request.body)
+        assert body["type"] == ["limit"]
+        assert body["preset_percent_limit"] == ["0.01"]
+        assert body["price"] == ["195.6"]
+        assert body["side"] == ["buy"]
 
     @responses.activate
     def test_buy_stock_limit(self, client):
@@ -735,6 +760,12 @@ class TestStockOrders:
         assert order.status == "pending"
         assert order.instrument_type == "stock"
 
+        order_call = next(c for c in responses.calls if c.request.method == "POST")
+        body = parse_qs(order_call.request.body)
+        assert body["type"] == ["limit"]
+        assert body["price"] == ["150.0"]
+        assert "preset_percent_limit" not in body
+
     @responses.activate
     def test_sell_stock_market(self, client):
         """Test placing a market sell order for stock."""
@@ -754,6 +785,21 @@ class TestStockOrders:
             status=200,
         )
 
+        # Mock quote used to collar the market order
+        responses.add(
+            responses.GET,
+            f"{urls.QUOTES}TSLA/",
+            json={
+                "symbol": "TSLA",
+                "last_trade_price": "200.50",
+                "previous_close": "198.00",
+                "bid_price": "200.40",
+                "ask_price": "200.60",
+                "last_trade_volume": "30000000",
+            },
+            status=200,
+        )
+
         # Mock order placement
         responses.add(
             responses.POST,
@@ -762,8 +808,9 @@ class TestStockOrders:
                 "id": "order-54321",
                 "symbol": "TSLA",
                 "side": "sell",
-                "type": "market",
+                "type": "limit",
                 "quantity": "20",
+                "price": "200.40",
                 "state": "filled",
                 "created_at": "2024-01-01T12:00:00Z",
                 "updated_at": "2024-01-01T12:05:00Z",
@@ -777,11 +824,18 @@ class TestStockOrders:
         assert order.order_id == "order-54321"
         assert order.symbol == "TSLA"
         assert order.side == "sell"
-        assert order.order_type == "market"
+        assert order.order_type == "limit"
         assert order.quantity == 20
-        assert order.price is None
+        assert order.price == 200.40
         assert order.status == "filled"
         assert order.instrument_type == "stock"
+
+        order_call = next(c for c in responses.calls if c.request.method == "POST")
+        body = parse_qs(order_call.request.body)
+        assert body["type"] == ["limit"]
+        assert body["preset_percent_limit"] == ["0.01"]
+        assert body["price"] == ["200.4"]
+        assert body["side"] == ["sell"]
 
 
 class TestOptionOrders:
