@@ -1068,6 +1068,47 @@ class TestOrderManagement:
         with pytest.raises(OrderError, match="Insufficient buying power"):
             client.buy_stock("AAPL", 100000, price=150.00)
 
+    @responses.activate
+    def test_order_field_error_without_detail_raises(self, client):
+        """Field-level 400 bodies without detail/error must not become empty Orders."""
+        responses.add(
+            responses.GET,
+            urls.ACCOUNTS,
+            json={"results": [{"url": f"{BASE}/accounts/12345/", "account_number": "12345"}]},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.INSTRUMENTS,
+            json={"results": [{"url": f"{BASE}/instruments/abc123/", "symbol": "PANW"}]},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"{urls.QUOTES}PANW/",
+            json={
+                "symbol": "PANW",
+                "last_trade_price": "180.00",
+                "previous_close": "179.00",
+                "bid_price": "179.90",
+                "ask_price": "180.10",
+                "last_trade_volume": "1000000",
+            },
+            status=200,
+        )
+        responses.add(
+            responses.POST,
+            urls.ORDERS,
+            json={
+                "quantity": ["Fractional share quantity exceeds available shares."],
+                "non_field_errors": ["Order rejected by risk checks."],
+            },
+            status=400,
+        )
+
+        with pytest.raises(OrderError, match="Fractional share quantity exceeds available shares"):
+            client.sell_stock("PANW", 0.022624)
+
 
 class TestStockHistoricals:
     @responses.activate

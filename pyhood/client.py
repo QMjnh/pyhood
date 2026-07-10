@@ -1551,10 +1551,10 @@ class PyhoodClient:
                     raise OrderError(f"Order failed: {detail}") from e
             raise OrderError(f"Order failed: {e}") from e
 
-        # Check for error response
-        if "detail" in data or "error" in data:
-            error_msg = data.get("detail") or data.get("error") or "Unknown order error"
-            raise OrderError(f"Order rejected: {error_msg}")
+        # 400 bodies often use field errors without detail/error; require a real order id.
+        order_id = data.get("id") or ""
+        if not order_id:
+            raise OrderError(f"Order rejected: {data.get('detail') or data.get('error') or data}")
 
         # Parse successful response
         created_at = None
@@ -1565,7 +1565,7 @@ class PyhoodClient:
                 pass
 
         return Order(
-            order_id=data.get("id", ""),
+            order_id=order_id,
             symbol=symbol.upper(),
             side=side,
             order_type=order_type,
@@ -1731,10 +1731,11 @@ class PyhoodClient:
                     raise OrderError(f"Option order failed: {detail}") from e
             raise OrderError(f"Option order failed: {e}") from e
 
-        # Check for error response
-        if "detail" in data or "error" in data:
-            error_msg = data.get("detail") or data.get("error") or "Unknown option order error"
-            raise OrderError(f"Option order rejected: {error_msg}")
+        order_id = data.get("id") or ""
+        if not order_id:
+            raise OrderError(
+                f"Option order rejected: {data.get('detail') or data.get('error') or data}"
+            )
 
         # Parse successful response
         created_at = None
@@ -1745,7 +1746,7 @@ class PyhoodClient:
                 pass
 
         return Order(
-            order_id=data.get("id", ""),
+            order_id=order_id,
             symbol=symbol.upper(),
             side=side,
             order_type="limit",
