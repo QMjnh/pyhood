@@ -1508,8 +1508,9 @@ class PyhoodClient:
         if side not in ("buy", "sell"):
             raise OrderError(f"side must be 'buy' or 'sell', got '{side}'")
 
-        # Market orders are submitted as 1% collar limits; Robinhood needs a reference price.
-        if order_type == "market":
+        # Whole-share market orders are submitted as 1% collar limits.
+        # Fractional shares cannot use limit orders on Robinhood, so keep type=market.
+        if order_type == "market" and float(quantity) == int(float(quantity)):
             quote = self.get_quote(symbol)
             if side == "buy":
                 price = float(quote.ask or quote.price or quote.bid)
