@@ -9,6 +9,7 @@ import logging
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
+from decimal import Decimal, ROUND_DOWN
 from typing import Any
 
 from pyhood import urls
@@ -1508,6 +1509,14 @@ class PyhoodClient:
         if side not in ("buy", "sell"):
             raise OrderError(f"side must be 'buy' or 'sell', got '{side}'")
 
+        # Robinhood rejects quantities with more than 8 decimal places.
+        quantity_dec = Decimal(str(quantity)).quantize(
+            Decimal("0.00000001"), rounding=ROUND_DOWN
+        )
+        if quantity_dec <= 0:
+            raise OrderError("quantity must be greater than 0")
+        quantity = float(quantity_dec)
+
         # Whole-share market orders are submitted as 1% collar limits.
         # Fractional shares cannot use limit orders on Robinhood, so keep type=market.
         if order_type == "market" and float(quantity) == int(float(quantity)):
@@ -1526,7 +1535,7 @@ class PyhoodClient:
             "symbol": symbol.upper(),
             "price": str(price) if price else None,
             "stop_price": str(stop_price) if stop_price else None,
-            "quantity": str(quantity),
+            "quantity": format(quantity_dec, "f"),
             "side": side,
             "time_in_force": time_in_force,
             "trigger": trigger,
