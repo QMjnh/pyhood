@@ -1,6 +1,6 @@
 """Tests for PyhoodClient — quotes, options, positions, earnings."""
 
-from urllib.parse import parse_qs
+import json
 
 import pytest
 import responses
@@ -646,39 +646,19 @@ class TestGetBuyingPower:
 class TestStockOrders:
     @responses.activate
     def test_buy_stock_market(self, client):
-        """Test placing a market buy order for stock."""
-        # Mock account endpoint
+        """Form v7 market buy stays type=market (no collar rewrite)."""
         responses.add(
             responses.GET,
             urls.ACCOUNTS,
             json={"results": [{"url": f"{BASE}/accounts/12345/", "account_number": "12345"}]},
             status=200,
         )
-
-        # Mock instrument endpoint
         responses.add(
             responses.GET,
             urls.INSTRUMENTS,
             json={"results": [{"url": f"{BASE}/instruments/abc123/", "symbol": "AAPL"}]},
             status=200,
         )
-
-        # Mock quote used to collar the market order
-        responses.add(
-            responses.GET,
-            f"{urls.QUOTES}AAPL/",
-            json={
-                "symbol": "AAPL",
-                "last_trade_price": "195.50",
-                "previous_close": "193.00",
-                "bid_price": "195.40",
-                "ask_price": "195.60",
-                "last_trade_volume": "50000000",
-            },
-            status=200,
-        )
-
-        # Mock order placement
         responses.add(
             responses.POST,
             urls.ORDERS,
@@ -686,9 +666,8 @@ class TestStockOrders:
                 "id": "order-12345",
                 "symbol": "AAPL",
                 "side": "buy",
-                "type": "limit",
+                "type": "market",
                 "quantity": "10",
-                "price": "195.60",
                 "state": "pending",
                 "created_at": "2024-01-01T12:00:00Z",
             },
@@ -700,39 +679,36 @@ class TestStockOrders:
         assert order.order_id == "order-12345"
         assert order.symbol == "AAPL"
         assert order.side == "buy"
-        assert order.order_type == "limit"
+        assert order.order_type == "market"
         assert order.quantity == 10
-        assert order.price == 195.60
+        assert order.price is None
         assert order.status == "pending"
         assert order.instrument_type == "stock"
 
         order_call = next(c for c in responses.calls if c.request.method == "POST")
-        body = parse_qs(order_call.request.body)
-        assert body["type"] == ["limit"]
-        assert body["preset_percent_limit"] == ["0.01"]
-        assert body["price"] == ["195.6"]
-        assert body["side"] == ["buy"]
+        body = json.loads(order_call.request.body)
+        assert body["type"] == "market"
+        assert body["side"] == "buy"
+        assert body["order_form_version"] == 7
+        assert body["market_hours"] == "regular_hours"
+        assert "price" not in body
+        assert "preset_percent_limit" not in body
 
     @responses.activate
     def test_buy_stock_limit(self, client):
         """Test placing a limit buy order for stock."""
-        # Mock account endpoint
         responses.add(
             responses.GET,
             urls.ACCOUNTS,
             json={"results": [{"url": f"{BASE}/accounts/12345/", "account_number": "12345"}]},
             status=200,
         )
-
-        # Mock instrument endpoint
         responses.add(
             responses.GET,
             urls.INSTRUMENTS,
             json={"results": [{"url": f"{BASE}/instruments/abc123/", "symbol": "AAPL"}]},
             status=200,
         )
-
-        # Mock order placement
         responses.add(
             responses.POST,
             urls.ORDERS,
@@ -761,46 +737,27 @@ class TestStockOrders:
         assert order.instrument_type == "stock"
 
         order_call = next(c for c in responses.calls if c.request.method == "POST")
-        body = parse_qs(order_call.request.body)
-        assert body["type"] == ["limit"]
-        assert body["price"] == ["150.0"]
+        body = json.loads(order_call.request.body)
+        assert body["type"] == "limit"
+        assert body["price"] == "150.0"
+        assert body["order_form_version"] == 7
         assert "preset_percent_limit" not in body
 
     @responses.activate
     def test_sell_stock_market(self, client):
-        """Test placing a market sell order for stock."""
-        # Mock account endpoint
+        """Form v7 market sell stays type=market (no collar rewrite)."""
         responses.add(
             responses.GET,
             urls.ACCOUNTS,
             json={"results": [{"url": f"{BASE}/accounts/12345/", "account_number": "12345"}]},
             status=200,
         )
-
-        # Mock instrument endpoint
         responses.add(
             responses.GET,
             urls.INSTRUMENTS,
             json={"results": [{"url": f"{BASE}/instruments/abc123/", "symbol": "TSLA"}]},
             status=200,
         )
-
-        # Mock quote used to collar the market order
-        responses.add(
-            responses.GET,
-            f"{urls.QUOTES}TSLA/",
-            json={
-                "symbol": "TSLA",
-                "last_trade_price": "200.50",
-                "previous_close": "198.00",
-                "bid_price": "200.40",
-                "ask_price": "200.60",
-                "last_trade_volume": "30000000",
-            },
-            status=200,
-        )
-
-        # Mock order placement
         responses.add(
             responses.POST,
             urls.ORDERS,
@@ -808,9 +765,8 @@ class TestStockOrders:
                 "id": "order-54321",
                 "symbol": "TSLA",
                 "side": "sell",
-                "type": "limit",
+                "type": "market",
                 "quantity": "20",
-                "price": "200.40",
                 "state": "filled",
                 "created_at": "2024-01-01T12:00:00Z",
                 "updated_at": "2024-01-01T12:05:00Z",
@@ -824,22 +780,23 @@ class TestStockOrders:
         assert order.order_id == "order-54321"
         assert order.symbol == "TSLA"
         assert order.side == "sell"
-        assert order.order_type == "limit"
+        assert order.order_type == "market"
         assert order.quantity == 20
-        assert order.price == 200.40
+        assert order.price is None
         assert order.status == "filled"
         assert order.instrument_type == "stock"
 
         order_call = next(c for c in responses.calls if c.request.method == "POST")
-        body = parse_qs(order_call.request.body)
-        assert body["type"] == ["limit"]
-        assert body["preset_percent_limit"] == ["0.01"]
-        assert body["price"] == ["200.4"]
-        assert body["side"] == ["sell"]
+        body = json.loads(order_call.request.body)
+        assert body["type"] == "market"
+        assert body["side"] == "sell"
+        assert body["order_form_version"] == 7
+        assert "price" not in body
+        assert "preset_percent_limit" not in body
 
     @responses.activate
     def test_sell_stock_market_fractional(self, client):
-        """Fractional market sells must stay type=market (no collar limit)."""
+        """Fractional market sells stay type=market under form v7."""
         responses.add(
             responses.GET,
             urls.ACCOUNTS,
@@ -874,16 +831,17 @@ class TestStockOrders:
         assert order.price is None
 
         order_call = next(c for c in responses.calls if c.request.method == "POST")
-        body = parse_qs(order_call.request.body)
-        assert body["type"] == ["market"]
-        assert body["quantity"] == ["0.022624"]
-        assert body["side"] == ["sell"]
+        body = json.loads(order_call.request.body)
+        assert body["type"] == "market"
+        assert body["quantity"] == "0.022624"
+        assert body["side"] == "sell"
+        assert body["order_form_version"] == 7
         assert "preset_percent_limit" not in body
         assert "price" not in body
 
     @responses.activate
-    def test_buy_stock_market_fractional_includes_price(self, client):
-        """Fractional market buys stay type=market but must include a reference price."""
+    def test_buy_stock_market_fractional_dollar_based(self, client):
+        """Dollar fractional buys include dollar_based_amount under form v7."""
         responses.add(
             responses.GET,
             urls.ACCOUNTS,
@@ -917,7 +875,7 @@ class TestStockOrders:
                 "symbol": "PEP",
                 "side": "buy",
                 "type": "market",
-                "quantity": "0.01455604",
+                "quantity": "0",
                 "price": "137.42",
                 "state": "filled",
                 "created_at": "2024-01-01T12:00:00Z",
@@ -925,19 +883,36 @@ class TestStockOrders:
             status=201,
         )
 
-        order = client.buy_stock("PEP", 0.01455604075691412)
+        # Caller may pass an estimated share qty; RH wants quantity "0" with dollars.
+        order = client.buy_stock("PEP", 0.01455604075691412, dollar_amount=2)
         assert order.order_id == "order-frac-buy-1"
         assert order.order_type == "market"
-        assert order.quantity == 0.01455604
+        assert order.quantity == 0.0
         assert order.price == 137.42
 
         order_call = next(c for c in responses.calls if c.request.method == "POST")
-        body = parse_qs(order_call.request.body)
-        assert body["type"] == ["market"]
-        assert body["quantity"] == ["0.01455604"]
-        assert body["side"] == ["buy"]
-        assert body["price"] == ["137.42"]
+        body = json.loads(order_call.request.body)
+        assert body["type"] == "market"
+        assert body["quantity"] == "0"
+        assert body["side"] == "buy"
+        assert body["price"] == "137.42"
+        assert body["order_form_version"] == 7
+        assert body["market_hours"] == "regular_hours"
+        assert body["dollar_based_amount"] == {
+            "amount": "2.00000000",
+            "currency_code": "USD",
+        }
         assert "preset_percent_limit" not in body
+
+    def test_buy_stock_limit_rejects_fractional(self, client):
+        """Fractional limit orders are rejected locally (Robinhood rule)."""
+        with pytest.raises(OrderError, match="fractional shares"):
+            client.buy_stock("PEP", 0.02, price=0.10)
+
+    def test_sell_stock_limit_rejects_fractional(self, client):
+        """Fractional limit sells are rejected locally (Robinhood rule)."""
+        with pytest.raises(OrderError, match="fractional shares"):
+            client.sell_stock("PEP", 0.02, price=9999.0)
 
 
 class TestOptionOrders:

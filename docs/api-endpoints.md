@@ -417,6 +417,12 @@ Account details with buying power and cash balances.
 
 Stock order history (paginated).
 
+### POST /orders/
+
+Place an equity order. pyhood always submits **form version 7** as JSON.
+
+See [Stock Orders](orders.md) for required fields (market vs limit, fractional vs whole, dollar-based buys).
+
 ### GET /options/orders/
 
 Options order history (paginated).

@@ -1402,6 +1402,7 @@ class PyhoodClient:
         time_in_force: str = "gtc",
         extended_hours: bool = False,
         account_number: str | None = None,
+        dollar_amount: float | None = None,
     ) -> Order:
         """Buy stock shares.
 
@@ -1413,6 +1414,7 @@ class PyhoodClient:
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
             extended_hours: Whether to allow extended hours trading.
             account_number: Specific account (e.g. IRA). None = default.
+            dollar_amount: Optional notional for dollar-based fractional market buys (≥ $1).
 
         Returns:
             Order object with details.
@@ -1426,6 +1428,7 @@ class PyhoodClient:
             time_in_force=time_in_force,
             extended_hours=extended_hours,
             account_number=account_number,
+            dollar_amount=dollar_amount,
         )
 
     def sell_stock(
@@ -1473,18 +1476,22 @@ class PyhoodClient:
         time_in_force: str = "gtc",
         extended_hours: bool = False,
         account_number: str | None = None,
+        dollar_amount: float | None = None,
     ) -> Order:
         """Place a stock order (core method).
 
+        Uses Robinhood order form version 7 (JSON). See docs/orders.md.
+
         Args:
             symbol: Stock ticker symbol.
-            quantity: Number of shares.
+            quantity: Number of shares (floored to 8 decimals). Use 0 with dollar_amount.
             side: 'buy' or 'sell'.
             price: Limit price. If None, places market order.
             stop_price: Stop price for stop/stop-limit orders.
             time_in_force: 'gtc' (good till cancelled), 'gtd', 'ioc', 'fok'.
             extended_hours: Whether to allow extended hours trading.
             account_number: Specific account (e.g. IRA). None = default.
+            dollar_amount: Optional notional for dollar-based fractional market buys (≥ $1).
 
         Returns:
             Order object with details.
@@ -1504,8 +1511,6 @@ class PyhoodClient:
             order_type = "limit"
             trigger = "stop"
 
-        preset_percent_limit = None
-
         if side not in ("buy", "sell"):
             raise OrderError(f"side must be 'buy' or 'sell', got '{side}'")
 
@@ -1513,33 +1518,54 @@ class PyhoodClient:
         quantity_dec = Decimal(str(quantity)).quantize(
             Decimal("0.00000001"), rounding=ROUND_DOWN
         )
-        if quantity_dec <= 0:
-            raise OrderError("quantity must be greater than 0")
-        quantity = float(quantity_dec)
 
-        # Whole-share market orders are submitted as 1% collar limits.
-        # Fractional sells stay type=market without price (limit not supported).
-        # Fractional buys must stay type=market but still include a reference price.
-        if order_type == "market":
-            is_whole_share = float(quantity) == int(float(quantity))
-            if is_whole_share or side == "buy":
+        # Form v7 JSON: market buys/sells use type=market (no collar rewrite).
+        # dollar_based_amount is for dollar-notional fractional market buys.
+        # When dollars are set, RH derives share qty — send quantity "0"
+        # (fractional estimates are rejected: "Order quantity cannot include fractional shares.").
+        dollar_based_amount = None
+        if dollar_amount is not None:
+            if order_type != "market" or side != "buy":
+                raise OrderError(
+                    "dollar_amount is only supported for market buy orders"
+                )
+            dollars = Decimal(str(dollar_amount)).quantize(
+                Decimal("0.01"), rounding=ROUND_DOWN
+            )
+            if dollars < 1:
+                raise OrderError("Dollar-based orders must be at least $1.")
+            dollar_based_amount = {
+                "amount": f"{dollars:.8f}",
+                "currency_code": "USD",
+            }
+            quantity_dec = Decimal("0")
+            if price is None:
                 quote = self.get_quote(symbol)
-                if side == "buy":
-                    price = float(quote.ask or quote.price or quote.bid)
-                else:
-                    price = float(quote.bid or quote.price or quote.ask)
+                price = float(quote.ask or quote.price or quote.bid)
                 if not price:
-                    raise OrderError(f"Market order failed: no valid price found for {symbol.upper()}")
-                if is_whole_share:
-                    order_type, preset_percent_limit = "limit", "0.01"
+                    raise OrderError(
+                        f"Market order failed: no valid price found for {symbol.upper()}"
+                    )
+        elif quantity_dec <= 0:
+            raise OrderError("quantity must be greater than 0")
 
+        quantity = float(quantity_dec)
+        is_fractional = quantity_dec != quantity_dec.to_integral_value()
+
+        # Limit orders require whole shares (Robinhood rejects fractional limits).
+        if order_type == "limit" and is_fractional:
+            raise OrderError(
+                "Limit order quantity cannot include fractional shares."
+            )
+
+        market_hours = "extended_hours" if extended_hours else "regular_hours"
         payload = {
             "account": self._get_account_url(account_number),
             "instrument": self._get_instrument_url(symbol),
             "symbol": symbol.upper(),
             "price": str(price) if price else None,
             "stop_price": str(stop_price) if stop_price else None,
-            "quantity": format(quantity_dec, "f").rstrip("0").rstrip("."),
+            "quantity": format(quantity_dec, "f").rstrip("0").rstrip(".") or "0",
             "side": side,
             "time_in_force": time_in_force,
             "trigger": trigger,
@@ -1547,7 +1573,9 @@ class PyhoodClient:
             "extended_hours": extended_hours,
             "override_day_trade_checks": False,
             "override_dtbp_checks": False,
-            "preset_percent_limit": preset_percent_limit,
+            "order_form_version": 7,
+            "market_hours": market_hours,
+            "dollar_based_amount": dollar_based_amount,
             "ref_id": str(uuid.uuid4()),
         }
 
@@ -1555,7 +1583,9 @@ class PyhoodClient:
         payload = {k: v for k, v in payload.items() if v is not None}
 
         try:
-            data = self._session.post(urls.ORDERS, data=payload, accept_codes=(400,))
+            data = self._session.post(
+                urls.ORDERS, json_data=payload, accept_codes=(400,)
+            )
         except Exception as e:
             if hasattr(e, 'response') and e.response:
                 error_details = e.response
