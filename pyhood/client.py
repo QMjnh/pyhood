@@ -1518,16 +1518,20 @@ class PyhoodClient:
         quantity = float(quantity_dec)
 
         # Whole-share market orders are submitted as 1% collar limits.
-        # Fractional shares cannot use limit orders on Robinhood, so keep type=market.
-        if order_type == "market" and float(quantity) == int(float(quantity)):
-            quote = self.get_quote(symbol)
-            if side == "buy":
-                price = float(quote.ask or quote.price or quote.bid)
-            else:
-                price = float(quote.bid or quote.price or quote.ask)
-            if not price:
-                raise OrderError(f"Market order failed: no valid price found for {symbol.upper()}")
-            order_type, preset_percent_limit = "limit", "0.01"
+        # Fractional sells stay type=market without price (limit not supported).
+        # Fractional buys must stay type=market but still include a reference price.
+        if order_type == "market":
+            is_whole_share = float(quantity) == int(float(quantity))
+            if is_whole_share or side == "buy":
+                quote = self.get_quote(symbol)
+                if side == "buy":
+                    price = float(quote.ask or quote.price or quote.bid)
+                else:
+                    price = float(quote.bid or quote.price or quote.ask)
+                if not price:
+                    raise OrderError(f"Market order failed: no valid price found for {symbol.upper()}")
+                if is_whole_share:
+                    order_type, preset_percent_limit = "limit", "0.01"
 
         payload = {
             "account": self._get_account_url(account_number),
@@ -1535,7 +1539,7 @@ class PyhoodClient:
             "symbol": symbol.upper(),
             "price": str(price) if price else None,
             "stop_price": str(stop_price) if stop_price else None,
-            "quantity": format(quantity_dec, "f"),
+            "quantity": format(quantity_dec, "f").rstrip("0").rstrip("."),
             "side": side,
             "time_in_force": time_in_force,
             "trigger": trigger,

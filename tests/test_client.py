@@ -881,6 +881,64 @@ class TestStockOrders:
         assert "preset_percent_limit" not in body
         assert "price" not in body
 
+    @responses.activate
+    def test_buy_stock_market_fractional_includes_price(self, client):
+        """Fractional market buys stay type=market but must include a reference price."""
+        responses.add(
+            responses.GET,
+            urls.ACCOUNTS,
+            json={"results": [{"url": f"{BASE}/accounts/12345/", "account_number": "12345"}]},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            urls.INSTRUMENTS,
+            json={"results": [{"url": f"{BASE}/instruments/abc123/", "symbol": "PEP"}]},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"{urls.QUOTES}PEP/",
+            json={
+                "symbol": "PEP",
+                "last_trade_price": "137.40",
+                "previous_close": "137.86",
+                "bid_price": "137.38",
+                "ask_price": "137.42",
+                "last_trade_volume": "9000000",
+            },
+            status=200,
+        )
+        responses.add(
+            responses.POST,
+            urls.ORDERS,
+            json={
+                "id": "order-frac-buy-1",
+                "symbol": "PEP",
+                "side": "buy",
+                "type": "market",
+                "quantity": "0.01455604",
+                "price": "137.42",
+                "state": "filled",
+                "created_at": "2024-01-01T12:00:00Z",
+            },
+            status=201,
+        )
+
+        order = client.buy_stock("PEP", 0.01455604075691412)
+        assert order.order_id == "order-frac-buy-1"
+        assert order.order_type == "market"
+        assert order.quantity == 0.01455604
+        assert order.price == 137.42
+
+        order_call = next(c for c in responses.calls if c.request.method == "POST")
+        body = parse_qs(order_call.request.body)
+        assert body["type"] == ["market"]
+        assert body["quantity"] == ["0.01455604"]
+        assert body["side"] == ["buy"]
+        assert body["price"] == ["137.42"]
+        assert "preset_percent_limit" not in body
+
 
 class TestOptionOrders:
     @responses.activate
